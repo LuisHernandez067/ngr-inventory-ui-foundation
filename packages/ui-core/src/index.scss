@@ -1,0 +1,68 @@
+// Estilos del paquete UI Core — paleta de avatares, variante dot de badge, y SweetAlert2
+
+// Paleta de colores para avatares — 8 colores determinísticos usando variables de Bootstrap
+:root {
+  --ngr-avatar-1: var(--bs-primary);
+  --ngr-avatar-2: var(--bs-success);
+  --ngr-avatar-3: var(--bs-info);
+  --ngr-avatar-4: var(--bs-warning);
+  --ngr-avatar-5: var(--bs-danger);
+  --ngr-avatar-6: var(--bs-purple, #6f42c1);
+  --ngr-avatar-7: var(--bs-teal, #20c997);
+  --ngr-avatar-8: var(--bs-orange, #fd7e14);
+}
+
+// Componente Avatar — círculo con iniciales o imagen de perfil
+.ngr-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 600;
+  color: white;
+
+  // Tamaño pequeño
+  &.ngr-avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  // Tamaño mediano (por defecto)
+  &.ngr-avatar-md {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+  }
+
+  // Tamaño grande
+  &.ngr-avatar-lg {
+    width: 56px;
+    height: 56px;
+    font-size: 1.125rem;
+  }
+
+  // Imagen de perfil dentro del avatar
+  img.ngr-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+// Variante dot del Badge — indicador circular sin texto
+.ngr-badge-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  padding: 0 !important;
+}
+
+// Encabezado de página
+.ngr-page-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+// Importar estilos de SweetAlert2 para los diálogos de confirmación
+@import 'sweetalert2/dist/sweetalert2.css';

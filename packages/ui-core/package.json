@@ -11,10 +11,18 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "dependencies": {
+    "sweetalert2": "^11.0.0"
+  },
   "devDependencies": {
+    "@ngr-inventory/bootstrap-theme": "*",
     "@ngr-inventory/design-tokens": "*",
     "@types/node": "^22.0.0",
+    "bootstrap": "^5.3.0",
     "typescript": "^5.7.3",
     "vitest": "^2.1.8"
+  },
+  "peerDependencies": {
+    "bootstrap": ">=5.3.0"
   }
 }
