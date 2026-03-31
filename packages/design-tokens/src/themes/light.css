@@ -1,0 +1,28 @@
+/* Tema claro — valores aplicados por defecto y con data-bs-theme="light" */
+:root,
+[data-bs-theme='light'] {
+  /* Fondos */
+  --color-bg-page: #f8fafc; /* Slate 50 */
+  --color-bg-surface: #fff;
+  --color-bg-surface-raised: #f1f5f9; /* Slate 100 */
+
+  /* Bordes */
+  --color-border-default: #e2e8f0; /* Slate 200 */
+  --color-border-strong: #cbd5e1; /* Slate 300 */
+
+  /* Texto */
+  --color-text-primary: #1e293b; /* Slate 800 */
+  --color-text-secondary: #475569; /* Slate 600 */
+  --color-text-muted: #94a3b8; /* Slate 400 */
+  --color-text-inverted: #fff;
+
+  /* Marca — paso activo en tema claro */
+  --color-brand-600: #1471a0;
+
+  /* Sombras — opacidad baja para tema claro */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 5%);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@ngr-inventory/design-tokens",
+  "version": "0.0.1",
+  "description": "Design tokens para NGR Inventory UI Foundation",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "sass": "./src/index.scss",
+      "style": "./src/custom-properties.css"
+    },
+    "./scss": "./src/tokens.scss",
+    "./css": "./src/custom-properties.css",
+    "./themes/*": "./src/themes/*.css"
+  },
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

@@ -1,0 +1,27 @@
+/* Tema cálido — matices cálidos sutiles, reutiliza sombras del tema claro */
+[data-bs-theme='warm'] {
+  /* Fondos */
+  --color-bg-page: #faf8f5;
+  --color-bg-surface: #fffdf7;
+  --color-bg-surface-raised: #f5f0e8;
+
+  /* Bordes */
+  --color-border-default: #e8e0d4;
+  --color-border-strong: #d4c8b8;
+
+  /* Texto */
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #57534e;
+  --color-text-muted: #a8a29e;
+  --color-text-inverted: #fff;
+
+  /* Marca — mismo paso que en tema claro */
+  --color-brand-600: #1471a0;
+
+  /* Sombras — mismos valores que tema claro */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 5%);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+}

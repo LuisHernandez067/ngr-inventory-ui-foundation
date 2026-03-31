@@ -1,0 +1,27 @@
+/* Tema oscuro — contraste invertido, sombras más opacas */
+[data-bs-theme='dark'] {
+  /* Fondos */
+  --color-bg-page: #0f172a; /* Slate 900 */
+  --color-bg-surface: #1e293b; /* Slate 800 */
+  --color-bg-surface-raised: #334155; /* Slate 700 */
+
+  /* Bordes */
+  --color-border-default: #475569; /* Slate 600 */
+  --color-border-strong: #64748b; /* Slate 500 */
+
+  /* Texto */
+  --color-text-primary: #f1f5f9; /* Slate 100 */
+  --color-text-secondary: #94a3b8; /* Slate 400 */
+  --color-text-muted: #64748b; /* Slate 500 */
+  --color-text-inverted: #0f172a;
+
+  /* Marca — sube a 400 para mantener contraste AA sobre superficies oscuras */
+  --color-brand-600: #3ea3ce; /* Brand 400 */
+
+  /* Sombras — mayor opacidad en tema oscuro */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 40%);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 50%), 0 1px 2px -1px rgb(0 0 0 / 50%);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 50%), 0 2px 4px -2px rgb(0 0 0 / 50%);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 60%), 0 4px 6px -4px rgb(0 0 0 / 60%);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 60%), 0 8px 10px -6px rgb(0 0 0 / 60%);
+}

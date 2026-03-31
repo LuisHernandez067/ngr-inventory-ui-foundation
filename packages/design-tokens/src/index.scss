@@ -1,0 +1,4 @@
+// Punto de entrada SCSS — reexporta todos los tokens de diseño
+// Uso: @use '@ngr-inventory/design-tokens' as tokens;
+// o:   @use '@ngr-inventory/design-tokens/scss' as tokens;
+@forward 'tokens';
