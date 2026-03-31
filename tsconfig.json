@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  // Configuración raíz del workspace — solo para typecheck de archivos de tooling (.js de config)
+  // Cada app y paquete extiende tsconfig.base.json con su propio tsconfig.json
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  // Solo verificar los archivos de configuración del workspace raíz
+  "include": ["eslint.config.js", "commitlint.config.js"],
+  "exclude": ["node_modules", "apps", "packages"]
+}

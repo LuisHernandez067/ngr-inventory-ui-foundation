@@ -1,0 +1,12 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "rules": {
+    "color-no-invalid-hex": true,
+    "color-named": "never",
+    "declaration-no-important": true,
+    "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+    "scss/at-import-partial-extension": null,
+    "import-notation": null
+  },
+  "ignoreFiles": ["node_modules/**", "dist/**", "build/**", "coverage/**", "storybook-static/**"]
+}

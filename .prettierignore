@@ -1,0 +1,19 @@
+# Artefactos de compilación — no formatear
+dist/
+build/
+out/
+coverage/
+storybook-static/
+.cache/
+
+# Dependencias
+node_modules/
+
+# Archivos generados automáticamente
+*.tsbuildinfo
+package-lock.json
+
+# Documentación de proyecto (no formatear con Prettier)
+docs/plan-ngr-inventory-ui-foundation.md
+docs/requerimiento-ngr-inventory-ui-foundation.md
+docs/instrucciones-sdd-ngr-inventory-ui-foundation.md

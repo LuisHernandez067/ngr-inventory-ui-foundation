@@ -1,0 +1,3 @@
+#!/bin/sh
+# Hook commit-msg: valida el mensaje de commit con commitlint
+npx --no -- commitlint --edit "$1"

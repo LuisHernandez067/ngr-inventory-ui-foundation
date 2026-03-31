@@ -1,0 +1,3 @@
+#!/bin/sh
+# Hook pre-commit: ejecuta lint-staged sobre los archivos en staging
+npx lint-staged
