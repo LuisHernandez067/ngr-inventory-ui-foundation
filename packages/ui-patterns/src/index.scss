@@ -1,0 +1,61 @@
+// Estilos para los patrones de composición UI — NGR Inventory
+
+// Overlay de carga — cubre el elemento raíz con fondo semitransparente
+.ngr-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--bs-body-bg-rgb, 255 255 255) / 0.75);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+// Barra de herramientas de tabla — flex row responsivo
+.ngr-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+// Badge de estado semántico — tipografía compacta
+.ngr-status-badge {
+  font-size: 0.8em;
+  letter-spacing: 0.02em;
+}
+
+// Wrapper de DataTable — permite scroll horizontal en móvil
+.ngr-datatable-wrapper {
+  overflow-x: auto;
+}
+
+// Columnas ordenables — cursor y espaciado para el ícono de orden
+th[data-sortable] {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+
+  // Indicador visual de dirección de orden
+  &[aria-sort='ascending']::after {
+    content: ' ↑';
+    font-size: 0.75em;
+    opacity: 0.7;
+  }
+
+  &[aria-sort='descending']::after {
+    content: ' ↓';
+    font-size: 0.75em;
+    opacity: 0.7;
+  }
+}
+
+// Filter chips — separación entre chips
+.ngr-filter-chips {
+  .badge {
+    font-size: 0.85em;
+  }
+}

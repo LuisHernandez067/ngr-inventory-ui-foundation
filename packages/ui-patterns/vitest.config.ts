@@ -6,8 +6,10 @@ export default mergeConfig(
   baseConfig,
   defineConfig({
     test: {
+      name: 'ui-patterns',
       environment: 'jsdom',
       include: ['src/**/*.test.ts'],
+      setupFiles: ['src/test-setup.ts'],
     },
   })
 );
