@@ -1,0 +1,42 @@
+// ============================================================
+// OVERRIDES DE FORMULARIOS — Densidad + estados de foco
+// ============================================================
+
+.form-control,
+.form-select {
+  padding: 0.375rem 0.75rem;
+  border-color: $border-color;
+  transition:
+    border-color $transition-base,
+    box-shadow $transition-base;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 $focus-ring-width rgba($primary, 0.25);
+    outline: none;
+  }
+}
+
+.form-control-sm,
+.form-select-sm {
+  padding: 0.25rem 0.5rem;
+}
+
+// Estado de validación — usa tokens semánticos
+.form-control.is-valid,
+.form-select.is-valid {
+  border-color: $success;
+
+  &:focus {
+    box-shadow: 0 0 0 $focus-ring-width rgba($success, 0.25);
+  }
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: $danger;
+
+  &:focus {
+    box-shadow: 0 0 0 $focus-ring-width rgba($danger, 0.25);
+  }
+}

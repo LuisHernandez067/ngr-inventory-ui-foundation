@@ -1,0 +1,25 @@
+// ============================================================
+// OVERRIDES DE TABLAS — Variante compacta para datos densos
+// ============================================================
+
+// Variante compacta — para listas de inventario y reportes
+.table-compact {
+  > :not(caption) > * > * {
+    padding: 0.25rem 0.5rem; // 4px 8px
+  }
+
+  // Encabezados más prominentes
+  > thead > tr > th {
+    font-weight: $font-weight-semibold;
+    color: $gray-700;
+    font-size: 0.75rem; // 12px — escala xs
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+}
+
+// Fila seleccionada — usa color brand suave
+.table > tbody > tr.table-active,
+.table > tbody > tr:hover.table-hover-active {
+  --bs-table-active-bg: #{rgba($primary, 0.08)};
+}

@@ -1,0 +1,31 @@
+// ============================================================
+// UTILIDADES PERSONALIZADAS NGR Inventory
+// ============================================================
+
+// Tipografía monoespaciada — para SKUs, precios, cantidades
+.font-mono {
+  // stylelint-disable-next-line value-keyword-case, declaration-no-important
+  font-family: $font-family-monospace !important;
+  font-size: 0.875rem; // text-sm — legible en tablas
+}
+
+// Truncado en celda de tabla (requiere width definido en el padre)
+.text-truncate-cell {
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Texto muted con el token correcto (no el gray-600 de Bootstrap por defecto)
+.text-muted-ngr {
+  // stylelint-disable-next-line declaration-no-important
+  color: $gray-500 !important; // Slate 500 — texto secundario
+}
+
+// Badge compacto — sin padding excesivo
+.badge-compact {
+  padding: 0.2em 0.5em;
+  font-size: 0.7rem;
+  font-weight: $font-weight-medium;
+}

@@ -1,0 +1,82 @@
+// ============================================================
+// OVERRIDES DE VARIABLES BOOTSTRAP — NGR Inventory
+// Importar ANTES de Bootstrap. Las variables sin !default aquí
+// sobreescriben los !default de Bootstrap porque se definen
+// antes de que Bootstrap las declare.
+// ============================================================
+
+@use '../../design-tokens/src/tokens' as tokens;
+
+// --- Colores semánticos ---
+$primary: tokens.$color-brand-600;
+$secondary: tokens.$color-slate-600;
+$success: tokens.$color-success-default;
+$warning: tokens.$color-warning-default;
+$danger: tokens.$color-danger-default;
+$info: tokens.$color-info-default;
+
+// Escala de grises → Slate (Bootstrap usa $gray-* internamente)
+$gray-100: tokens.$color-slate-100;
+$gray-200: tokens.$color-slate-200;
+$gray-300: tokens.$color-slate-300;
+$gray-400: tokens.$color-slate-400;
+$gray-500: tokens.$color-slate-500;
+$gray-600: tokens.$color-slate-600;
+$gray-700: tokens.$color-slate-700;
+$gray-800: tokens.$color-slate-800;
+$gray-900: tokens.$color-slate-900;
+
+// --- Cuerpo ---
+$body-bg: tokens.$color-slate-50;
+$body-color: tokens.$color-slate-800;
+
+// --- Bordes ---
+$border-width: 1px;
+$border-color: tokens.$color-slate-200;
+$border-radius: tokens.$radius-md;
+$border-radius-sm: tokens.$radius-sm;
+$border-radius-lg: tokens.$radius-lg;
+$border-radius-pill: tokens.$radius-full;
+
+// --- Tipografía ---
+// stylelint-disable value-keyword-case
+$font-family-sans-serif: tokens.$font-family-sans;
+$font-family-monospace: tokens.$font-family-mono;
+// stylelint-enable value-keyword-case
+$font-size-base: tokens.$font-size-base;
+$line-height-base: tokens.$line-height-normal;
+$font-weight-normal: tokens.$font-weight-regular;
+$font-weight-bold: tokens.$font-weight-bold;
+$font-weight-semibold: tokens.$font-weight-semibold;
+$headings-line-height: tokens.$line-height-tight;
+
+// --- Espaciado ---
+$spacer: tokens.$space-4; // 1rem = 16px
+
+// --- Sombras (Bootstrap las expondrá pero $enable-shadows=false las desactiva) ---
+$box-shadow: tokens.$shadow-md;
+$box-shadow-sm: tokens.$shadow-sm;
+$box-shadow-lg: tokens.$shadow-lg;
+
+// --- Flags de comportamiento ---
+$enable-rounded: true;
+$enable-shadows: false; // Usamos nuestro propio sistema de sombras
+$enable-gradients: false;
+$enable-transitions: true;
+
+// --- Transiciones ---
+$transition-base: all tokens.$transition-base;
+
+// --- Anillo de foco ---
+$focus-ring-width: 2px;
+$focus-ring-opacity: 1;
+$focus-ring-color: rgba(tokens.$color-brand-600, 0.25);
+$focus-ring-offset: 2px;
+
+// --- Z-index (alineados con tokens) ---
+$zindex-dropdown: tokens.$z-index-dropdown;
+$zindex-sticky: tokens.$z-index-sticky;
+$zindex-fixed: tokens.$z-index-fixed;
+$zindex-modal: tokens.$z-index-modal;
+$zindex-popover: tokens.$z-index-popover;
+$zindex-tooltip: tokens.$z-index-tooltip;

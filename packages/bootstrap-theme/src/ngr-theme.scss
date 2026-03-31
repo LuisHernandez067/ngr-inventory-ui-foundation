@@ -1,0 +1,20 @@
+// ============================================================
+// NGR INVENTORY BOOTSTRAP THEME — Punto de entrada principal
+// Orden de imports es CRÍTICO:
+//   1. Variables NGR (antes que Bootstrap para sobreescribir !default)
+//   2. Bootstrap completo
+//   3. Overrides de componentes
+// ============================================================
+
+// 1. Variables de override — deben ir antes que Bootstrap
+//    @import pone las variables en scope global, Bootstrap las lee via !default
+@import 'variables';
+
+// 2. Bootstrap completo con variables sobreescritas
+@import 'bootstrap/scss/bootstrap';
+
+// 3. Overrides de componentes NGR (extienden las clases de Bootstrap)
+@import 'overrides/buttons';
+@import 'overrides/forms';
+@import 'overrides/tables';
+@import 'overrides/utilities';

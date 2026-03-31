@@ -1,0 +1,25 @@
+{
+  "name": "@ngr-inventory/bootstrap-theme",
+  "version": "0.0.1",
+  "description": "Tema Bootstrap 5 personalizado para NGR Inventory UI Foundation",
+  "type": "module",
+  "exports": {
+    ".": "./src/ngr-theme.scss",
+    "./variables": "./src/_variables.scss"
+  },
+  "sideEffects": [
+    "*.scss"
+  ],
+  "scripts": {
+    "typecheck": "echo 'No TypeScript sources in this package'"
+  },
+  "devDependencies": {
+    "@ngr-inventory/design-tokens": "*"
+  },
+  "peerDependencies": {
+    "sass": "^1.0.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  }
+}
