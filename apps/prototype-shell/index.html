@@ -4,10 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NGR Inventory — Prototipo</title>
+    <!-- Bootstrap Icons CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <!-- Script bloqueante de tema — DEBE ir antes del CSS para evitar parpadeo -->
+    <script>
+      (function () {
+        var theme = localStorage.getItem('ngr-theme') || 'light';
+        var valid = ['light', 'dark', 'warm', 'cold'];
+        if (!valid.includes(theme)) theme = 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+      })();
+    </script>
   </head>
   <body>
-    <!-- Contenedor raíz con modo de tema Bootstrap -->
-    <div id="app" data-bs-theme="light"></div>
+    <!-- Enlace de salto para accesibilidad — visible solo con foco del teclado -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <!-- Contenedor raíz — el layout se monta aquí vía TypeScript -->
+    <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

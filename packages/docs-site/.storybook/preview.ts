@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/html';
 import '@ngr-inventory/bootstrap-theme';
 
-// Toolbar global para alternar entre temas light/dark
+// Toolbar global para alternar entre temas light/dark/warm/cold
 const preview: Preview = {
   globalTypes: {
     theme: {
@@ -13,6 +13,8 @@ const preview: Preview = {
         items: [
           { value: 'light', title: 'Claro', icon: 'sun' },
           { value: 'dark', title: 'Oscuro', icon: 'moon' },
+          { value: 'warm', title: 'Cálido', icon: 'contrast' },
+          { value: 'cold', title: 'Frío', icon: 'paintbrush' },
         ],
         dynamicTitle: true,
       },

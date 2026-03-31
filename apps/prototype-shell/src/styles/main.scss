@@ -1,3 +1,6 @@
 // Estilos globales del prototipo — importa el tema NGR completo
 // Usa el alias @theme configurado en vite.config.ts
 @use '@theme/ngr-theme' as *;
+
+// Importa los parciales de layout del admin shell
+@use './layout/index' as *;

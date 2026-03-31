@@ -1,0 +1,41 @@
+// Estilos del área de contenido principal
+@use '@tokens/tokens' as tokens;
+
+// Wrapper del contenido principal — margen para el sidebar en desktop
+.main-wrapper {
+  @media (min-width: 992px) {
+    margin-left: 260px;
+  }
+
+  // Compensa la altura del navbar fijo
+  padding-top: var(--navbar-height, 56px);
+  min-height: 100vh;
+}
+
+// Área de contenido principal (elemento <main>)
+.main-content {
+  padding: tokens.$space-6;
+
+  // Sin outline al recibir foco programático (usado por skip-link)
+  &:focus {
+    outline: none;
+  }
+}
+
+// Contenedor de contenido de cada módulo
+.page-content {
+  min-height: calc(100vh - var(--navbar-height, 56px) - 120px);
+}
+
+// Footer mínimo del layout
+.layout-footer {
+  padding: tokens.$space-4 0;
+  color: var(--bs-secondary-color);
+  border-top: 1px solid var(--bs-border-color);
+  margin-top: tokens.$space-6;
+}
+
+// Wrapper del breadcrumb
+.breadcrumb-wrapper {
+  margin-bottom: tokens.$space-4;
+}

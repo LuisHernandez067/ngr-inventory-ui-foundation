@@ -1,0 +1,6 @@
+// Barrel de estilos de layout — importa todos los parciales en orden de dependencia
+@use 'z-index';
+@use 'skip-link';
+@use 'navbar';
+@use 'sidebar';
+@use 'main';

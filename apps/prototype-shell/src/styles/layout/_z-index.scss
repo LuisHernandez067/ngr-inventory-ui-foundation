@@ -1,0 +1,11 @@
+// Variables de z-index como custom properties CSS — definidas en :root
+// para que sean consumidas por los módulos de layout
+:root {
+  --z-skip-link: 9999;
+  --z-modal: 1050;
+  --z-offcanvas-backdrop: 1040;
+  --z-navbar: 1030;
+  --z-sidebar: 1020;
+  --z-dropdown: 1010;
+  --navbar-height: 56px;
+}

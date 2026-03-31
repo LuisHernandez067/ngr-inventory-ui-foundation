@@ -1,5 +1,6 @@
 // Punto de entrada principal de la aplicación prototipo
 import './styles/main.scss';
+import { initLayout } from './layout/index';
 
 // Inicialización del Service Worker de MSW solo en desarrollo
 async function initMocks(): Promise<void> {
@@ -18,13 +19,8 @@ async function mount(): Promise<void> {
     throw new Error('No se encontró el elemento #app en el DOM');
   }
 
-  // Contenido inicial del prototipo
-  app.innerHTML = `
-    <div class="container py-4">
-      <h1 class="display-4">NGR Inventory</h1>
-      <p class="lead">Prototipo navegable — Bootstrap Theme cargado correctamente.</p>
-    </div>
-  `;
+  // Inicializar el layout del admin shell
+  initLayout(app);
 }
 
 mount().catch(console.error);

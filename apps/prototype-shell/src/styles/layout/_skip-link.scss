@@ -1,0 +1,19 @@
+// Enlace de salto — visualmente oculto hasta recibir foco del teclado
+@use '@tokens/tokens' as tokens;
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: tokens.$space-4;
+  z-index: var(--z-skip-link, 9999);
+  padding: tokens.$space-2 tokens.$space-4;
+  background: var(--bs-primary);
+  color: #fff;
+  border-radius: tokens.$radius-md;
+  text-decoration: none;
+  transition: top 0.1s;
+
+  &:focus {
+    top: tokens.$space-2;
+  }
+}
