@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // Storybook usa resolución bundler — sobreescribimos NodeNext del base
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "@tokens/*": ["../../packages/design-tokens/src/*"],
+      "@theme/*": ["../../packages/bootstrap-theme/src/*"]
+    }
+  },
+  "include": ["src", ".storybook"]
+}

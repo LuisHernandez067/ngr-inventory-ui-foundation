@@ -1,0 +1,24 @@
+{
+  "name": "@ngr-inventory/docs-site",
+  "version": "0.0.1",
+  "description": "Storybook 8 para el design system de NGR Inventory",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@ngr-inventory/bootstrap-theme": "*",
+    "@ngr-inventory/design-tokens": "*",
+    "@ngr-inventory/ui-core": "*",
+    "@ngr-inventory/ui-patterns": "*",
+    "@storybook/addon-essentials": "^8.4.0",
+    "@storybook/html-vite": "^8.4.0",
+    "@types/node": "^22.0.0",
+    "sass": "^1.83.0",
+    "storybook": "^8.4.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.0"
+  }
+}

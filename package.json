@@ -13,6 +13,13 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
+    "dev": "npm -w apps/prototype-shell run dev",
+    "build": "npm -w apps/prototype-shell run build",
+    "test": "vitest --workspace vitest.workspace.ts",
+    "test:coverage": "vitest --workspace vitest.workspace.ts --coverage",
+    "test:e2e": "npm -w apps/prototype-shell run test:e2e",
+    "storybook": "npm -w packages/docs-site run storybook",
+    "storybook:build": "npm -w packages/docs-site run build-storybook",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -25,6 +32,7 @@
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@eslint/js": "^9.18.0",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.18.0",
     "eslint-plugin-import": "^2.31.0",
     "husky": "^9.1.7",
@@ -33,6 +41,7 @@
     "stylelint": "^16.12.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "vitest": "^2.1.8"
   }
 }

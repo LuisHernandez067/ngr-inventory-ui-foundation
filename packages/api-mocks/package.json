@@ -1,0 +1,31 @@
+{
+  "name": "@ngr-inventory/api-mocks",
+  "version": "0.0.1",
+  "description": "Mock Service Worker v2 handlers para NGR Inventory API",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./handlers": "./src/handlers.ts",
+    "./browser": "./src/browser.ts",
+    "./server": "./src/server.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "postinstall": "npx msw init ../../apps/prototype-shell/public --save"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "msw": "^2.7.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "../../apps/prototype-shell/public"
+    ]
+  }
+}
