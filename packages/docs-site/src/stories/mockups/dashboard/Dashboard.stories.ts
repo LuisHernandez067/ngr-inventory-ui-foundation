@@ -34,7 +34,7 @@ const meta = {
               {
                 label: 'Valor inventario',
                 value: 1420580,
-                unit: 'ARS',
+                unit: 'COP',
                 trend: 'up',
                 trendPercent: 12,
               },

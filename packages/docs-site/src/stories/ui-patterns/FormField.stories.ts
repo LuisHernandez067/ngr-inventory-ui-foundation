@@ -1,5 +1,7 @@
+import { FormField } from '@ngr-inventory/ui-patterns';
 import type { Meta, StoryObj } from '@storybook/html';
-import { render } from '@ngr-inventory/ui-patterns/patterns/form-field';
+
+const render = FormField.render;
 
 // Story del patrón FormField — campo de formulario accesible
 const meta: Meta = {
@@ -97,7 +99,7 @@ export const FormularioProducto: Story = {
     <form class="p-3" style="max-width:500px">
       ${render({ label: 'Nombre', name: 'nombre', required: true, placeholder: 'Ej: Laptop HP EliteBook 840' })}
       ${render({ label: 'Código SKU', name: 'sku', required: true, placeholder: 'Ej: HP-840-G9' })}
-      ${render({ label: 'Precio (ARS)', name: 'precio', type: 'number', helperText: 'Precio sin IVA' })}
+      ${render({ label: 'Precio (COP)', name: 'precio', type: 'number', helperText: 'Precio sin IVA' })}
       ${render({ label: 'Stock inicial', name: 'stock', type: 'number', value: '0' })}
       ${render({ label: 'Descripción', name: 'descripcion', helperText: 'Opcional' })}
     </form>

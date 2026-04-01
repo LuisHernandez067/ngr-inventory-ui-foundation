@@ -1,9 +1,10 @@
 // Página de detalle de Producto — muestra información completa con dos tarjetas
-import type { PageModule } from '../../router/router';
 import type { Producto, NgrProductoStatus } from '@ngr-inventory/api-contracts';
 import { Spinner, Badge } from '@ngr-inventory/ui-core';
 import type { BadgeVariant } from '@ngr-inventory/ui-core';
 import { ActionMenu } from '@ngr-inventory/ui-patterns';
+
+import type { PageModule } from '../../router/router';
 import { apiFetch } from '../_shared/apiFetch';
 
 /** Controlador de cancelación para el fetch en vuelo */
@@ -28,7 +29,7 @@ const STATUS_LABEL: Record<NgrProductoStatus, string> = {
  * Ej.: 28500 → "$28.500,00"
  */
 function formatPrice(value: number): string {
-  return value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
+  return value.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
 }
 
 /**
@@ -48,8 +49,8 @@ function dtRow(label: string, value: string | undefined): string {
  */
 function renderDetail(container: HTMLElement, producto: Producto): void {
   // Construir badge de estado
-  const statusVariant = STATUS_VARIANT[producto.status] ?? 'secondary';
-  const statusLabel = STATUS_LABEL[producto.status] ?? producto.status;
+  const statusVariant = STATUS_VARIANT[producto.status];
+  const statusLabel = STATUS_LABEL[producto.status];
   const statusBadge = Badge.render({ variant: statusVariant, text: statusLabel, pill: true });
 
   // Construir ActionMenu con opciones de edición y eliminación
