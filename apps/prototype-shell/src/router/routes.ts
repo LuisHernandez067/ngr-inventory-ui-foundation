@@ -18,6 +18,20 @@ export function registerRoutes(router: Router): void {
     guarded: false,
   });
 
+  router.register('/auth/forgot-password', {
+    factory: () =>
+      import('../pages/auth/forgot-password').then((m) => m.forgotPasswordPage),
+    breadcrumb: 'Recuperar Contraseña',
+    guarded: false,
+  });
+
+  router.register('/auth/reset-password', {
+    factory: () =>
+      import('../pages/auth/reset-password').then((m) => m.resetPasswordPage),
+    breadcrumb: 'Nueva Contraseña',
+    guarded: false,
+  });
+
   // ─── Dashboard ────────────────────────────────────────────────────────────
 
   router.register('/dashboard', {

@@ -3,6 +3,7 @@ import './styles/main.scss';
 import { initLayout } from './layout/index';
 import { Router } from './router/router';
 import { registerRoutes } from './router/routes';
+import { authService } from './services/authService';
 
 // Inicialización del Service Worker de MSW solo en desarrollo
 async function initMocks(): Promise<void> {
@@ -36,6 +37,15 @@ async function mount(): Promise<void> {
 
   // 4. Iniciar la navegación evaluando la ruta actual
   router.start();
+
+  // 5. Iniciar el temporizador de sesión (30 minutos de inactividad)
+  authService.startSessionTimer(30);
+
+  // 6. Escuchar el evento de sesión expirada y mostrar el modal de aviso
+  window.addEventListener('ngr:session-expired', async () => {
+    const { sessionExpiredModal } = await import('./components/session-expired-modal');
+    sessionExpiredModal.show();
+  });
 }
 
 mount().catch(console.error);

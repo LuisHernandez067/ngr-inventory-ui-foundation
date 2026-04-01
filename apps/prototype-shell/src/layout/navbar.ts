@@ -1,5 +1,6 @@
 // Módulo de la barra de navegación superior
 import { cycleTheme, getTheme } from './theme';
+import { authService } from '../services/authService';
 
 /**
  * Renderiza el HTML de la barra de navegación principal.
@@ -54,6 +55,11 @@ export function render(): string {
             title="Perfil de usuario"
           ></div>
 
+          <!-- Área de usuario autenticado — actualizada por refreshNavbar() -->
+          <span id="navbar-user" class="d-none d-md-flex align-items-center gap-2 me-2">
+            <!-- Nombre y rol del usuario autenticado — actualizado por refreshNavbar() -->
+          </span>
+
           <!-- Botón de cierre de sesión -->
           <button
             class="btn btn-sm btn-outline-danger"
@@ -66,6 +72,34 @@ export function render(): string {
         </div>
       </div>
     </nav>
+  `;
+}
+
+/**
+ * Actualiza el área de usuario en la navbar según el estado de autenticación actual.
+ * Muestra el nombre y rol del usuario si hay sesión activa; limpia el área si no hay sesión.
+ */
+export function refreshNavbar(): void {
+  const userArea = document.getElementById('navbar-user');
+  if (!userArea) return;
+
+  const user = authService.getUser();
+  if (!user) {
+    userArea.innerHTML = '';
+    return;
+  }
+
+  // Clase del badge según el perfil del usuario
+  const roleBadgeClass =
+    user.perfil === 'admin'
+      ? 'bg-danger'
+      : user.perfil === 'operador'
+        ? 'bg-warning text-dark'
+        : 'bg-secondary';
+
+  userArea.innerHTML = `
+    <span class="small fw-medium">${user.nombre}</span>
+    <span class="badge ${roleBadgeClass}">${user.rol}</span>
   `;
 }
 
@@ -94,4 +128,10 @@ export function init(root: HTMLElement): void {
       window.location.hash = '#/auth';
     });
   }
+
+  // Reaccionar a cambios de autenticación — actualiza el área de usuario
+  window.addEventListener('ngr:auth-change', refreshNavbar);
+
+  // Llamar de inmediato para reflejar el estado inicial de autenticación
+  refreshNavbar();
 }

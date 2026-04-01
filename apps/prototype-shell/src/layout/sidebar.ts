@@ -1,4 +1,5 @@
 // Módulo de la barra lateral de navegación — soporta desktop fijo y mobile offcanvas
+import { authService } from '../services/authService';
 
 /** Grupos de navegación disponibles en el sidebar */
 export type NavGroup = 'top' | 'inventario' | 'movimientos' | 'administracion';
@@ -139,7 +140,67 @@ function renderNavItem(item: NavItem): string {
 }
 
 /**
- * Renderiza la lista de ítems de un grupo.
+ * Renderiza los ítems de navegación de un grupo, filtrando por módulos permitidos.
+ * Si allowed es 'all', muestra todos los ítems. Si es un arreglo, solo los que están incluidos.
+ * Retorna string vacío si no hay ítems visibles en el grupo.
+ */
+function renderGroupFiltered(group: NavGroup, allowed: string[] | 'all'): string {
+  const items = NAV_ITEMS.filter((item) => {
+    if (item.group !== group || item.id === 'auth') return false;
+    if (allowed === 'all') return true;
+    // Dashboard siempre visible para usuarios autenticados
+    if (item.id === 'dashboard') return true;
+    return allowed.includes(item.id);
+  });
+
+  if (items.length === 0) return '';
+
+  const label = GROUP_LABELS[group];
+  const navLinks = items.map(renderNavItem).join('');
+
+  if (group === 'top') {
+    return `<ul class="nav flex-column">${navLinks}</ul>`;
+  }
+
+  return `
+    <div class="sidebar-group">
+      <span class="sidebar-group-label">${label}</span>
+      <ul class="nav flex-column">${navLinks}</ul>
+    </div>
+  `;
+}
+
+/**
+ * Recarga los ítems de navegación según el perfil del usuario activo.
+ * Filtra los módulos que el usuario no tiene permitidos.
+ * Si no hay usuario autenticado, muestra todos los ítems (estado sin sesión).
+ */
+export function refreshSidebar(): void {
+  // Obtener el elemento nav interno del sidebar
+  const nav = document.getElementById('sidebar-nav');
+  if (!nav) return;
+
+  // Obtener los módulos permitidos para el perfil actual
+  const allowed = authService.getAllowedModules();
+
+  // Re-renderizar solo los enlaces de navegación, filtrando por permisos
+  // Si no hay usuario autenticado (allowed === []), se muestran todos los grupos
+  const effectiveAllowed: string[] | 'all' = allowed.length === 0 ? 'all' : allowed;
+
+  nav.innerHTML = `
+    ${renderGroupFiltered('top', effectiveAllowed)}
+    ${renderGroupFiltered('inventario', effectiveAllowed)}
+    ${renderGroupFiltered('movimientos', effectiveAllowed)}
+    ${renderGroupFiltered('administracion', effectiveAllowed)}
+  `;
+
+  // Restaurar el estado activo según el hash actual
+  setActive(window.location.hash || '#/');
+}
+
+/**
+ * Renderiza la lista de ítems de un grupo sin filtrar por permisos.
+ * Usada en el render() inicial del HTML estático del sidebar.
  */
 function renderGroup(group: NavGroup): string {
   const items = NAV_ITEMS.filter((item) => item.group === group && item.id !== 'auth');
@@ -198,7 +259,7 @@ export function render(): string {
 
       <!-- Cuerpo de la navegación -->
       <div class="offcanvas-body d-flex flex-column p-0">
-        <nav class="sidebar-nav flex-grow-1 p-2" aria-label="Módulos del sistema">
+        <nav id="sidebar-nav" class="sidebar-nav flex-grow-1 p-2" aria-label="Módulos del sistema">
           ${renderGroup('top')}
           ${renderGroup('inventario')}
           ${renderGroup('movimientos')}
@@ -254,7 +315,7 @@ export function setActive(hash: string): void {
 }
 
 /**
- * Inicializa los listeners del sidebar: reacciona a cambios de hash y teclado.
+ * Inicializa los listeners del sidebar: reacciona a cambios de hash, teclado y autenticación.
  * Debe llamarse después de que el HTML del sidebar esté en el DOM.
  */
 export function init(root: HTMLElement): void {
@@ -265,6 +326,9 @@ export function init(root: HTMLElement): void {
   window.addEventListener('hashchange', () => {
     setActive(window.location.hash || '#/');
   });
+
+  // Reaccionar a cambios de autenticación — re-filtra los ítems visibles
+  window.addEventListener('ngr:auth-change', refreshSidebar);
 
   // Soporte de teclado: Enter y Space en links del sidebar
   const nav = root.querySelector<HTMLElement>('.sidebar-nav');

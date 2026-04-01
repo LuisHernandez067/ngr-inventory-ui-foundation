@@ -1,6 +1,7 @@
 // Router hash-based principal — orquesta el ciclo de vida de las páginas
 import { update as updateBreadcrumb } from '../layout/breadcrumb';
 import { setActive } from '../layout/sidebar';
+import { authService } from '../services/authService';
 
 /**
  * Interfaz que todos los módulos de página deben implementar.
@@ -59,15 +60,20 @@ export class Router {
     // Normalizar '/' a '/dashboard' para la ruta raíz
     const resolvedHash = hash === '/' ? '/dashboard' : hash;
 
-    // Auth guard — verificar token en localStorage
-    const token = localStorage.getItem('ngr_auth_token');
+    // Auth guard — delegar la verificación al servicio de autenticación
+    const isAuthenticated = authService.isAuthenticated();
 
-    if (!token && resolvedHash !== '/auth') {
+    // Determinar si la ruta destino está marcada como no protegida
+    const targetConfig = this.routes.get(resolvedHash);
+    const isGuarded = targetConfig ? (targetConfig.guarded ?? true) : true;
+
+    if (!isAuthenticated && isGuarded) {
       window.location.hash = '#/auth';
       return;
     }
 
-    if (token && resolvedHash === '/auth') {
+    // Si el usuario ya está autenticado y va a una ruta de auth, redirigir al dashboard
+    if (isAuthenticated && resolvedHash === '/auth') {
       window.location.hash = '#/dashboard';
       return;
     }

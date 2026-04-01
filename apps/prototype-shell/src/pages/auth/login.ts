@@ -1,6 +1,8 @@
 // Página de login — formulario de autenticación del prototipo
-// No usa autenticación real — simula el flujo con un setTimeout
+// Usa authService para persistir el estado y findMockUser para validar credenciales
 import type { PageModule } from '../../router/router';
+import { authService } from '../../services/authService';
+import { findMockUser } from '../../services/mockUsers';
 
 // Estado local del módulo — scoped fuera del objeto para evitar conflictos con PageModule
 let submitHandler: ((e: Event) => void) | null = null;
@@ -34,12 +36,15 @@ function handleSubmit(container: HTMLElement): void {
   pendingTimeout = setTimeout(() => {
     pendingTimeout = null;
 
-    // Lógica de validación del prototipo
-    const isValid = email.endsWith('@ngr.com') || password === 'admin123';
+    // Buscar usuario en la lista de cuentas de demostración
+    const user = findMockUser(email, password);
 
-    if (isValid) {
-      // Guardar token mock y navegar al dashboard
-      localStorage.setItem('ngr_auth_token', 'mock-token-xyz');
+    if (user) {
+      // Persistir sesión a través del servicio de autenticación y navegar al dashboard
+      authService.login(
+        { nombre: user.nombre, email: user.email, rol: user.rol, perfil: user.perfil },
+        'mock-token-xyz',
+      );
       window.location.hash = '#/dashboard';
     } else {
       // Mostrar error y restaurar el botón
@@ -94,7 +99,7 @@ export const loginPage: PageModule = {
               </div>
 
               <!-- Campo de contraseña -->
-              <div class="mb-4">
+              <div class="mb-3">
                 <label for="login-password" class="form-label">Contraseña</label>
                 <input
                   type="password"
@@ -105,6 +110,19 @@ export const loginPage: PageModule = {
                   autocomplete="current-password"
                   required
                 />
+              </div>
+
+              <!-- Link de recuperación de contraseña -->
+              <div class="text-end mb-2">
+                <a href="#/auth/forgot-password" class="small">¿Olvidaste tu contraseña?</a>
+              </div>
+
+              <!-- Credenciales de prueba — ayuda visual para el prototipo -->
+              <div class="alert alert-info py-2 small mb-3">
+                <strong>Usuarios de prueba:</strong><br>
+                administrador@ngr.com / admin123<br>
+                operador@ngr.com / operador123<br>
+                consulta@ngr.com / consulta123
               </div>
 
               <!-- Botón de submit — cambia a estado de carga durante la verificación -->

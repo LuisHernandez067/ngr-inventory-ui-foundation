@@ -57,20 +57,20 @@ const loginHtml = `
 </div>
 `;
 
-export const Predeterminado: Story = { render: () => loginHtml };
+export const Default: Story = { render: () => loginHtml };
 
-export const ConError: Story = {
+export const Error: Story = {
   render: () =>
     loginHtml.replace(
       '<button type="submit"',
       `<div class="alert alert-danger small py-2 mb-3" role="alert">
-      <i class="bi bi-exclamation-circle me-1"></i> Credenciales inválidas. Verificá tu correo y contraseña.
+      <i class="bi bi-exclamation-circle me-1"></i> Credenciales incorrectas. Verificá tu correo y contraseña.
     </div>
     <button type="submit"`
     ),
 };
 
-export const Cargando: Story = {
+export const Loading: Story = {
   render: () =>
     loginHtml
       .replace(

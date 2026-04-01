@@ -1,7 +1,7 @@
 // Orquestador de layout — ensambla todos los módulos del admin shell
 import { init as initTheme } from './theme';
-import { render as renderNavbar, init as initNavbar } from './navbar';
-import { render as renderSidebar, init as initSidebar } from './sidebar';
+import { render as renderNavbar, init as initNavbar, refreshNavbar } from './navbar';
+import { render as renderSidebar, init as initSidebar, refreshSidebar } from './sidebar';
 import { render as renderBreadcrumb, update as updateBreadcrumb } from './breadcrumb';
 import { render as renderFooter } from './footer';
 
@@ -55,4 +55,9 @@ export function initLayout(app: HTMLElement): void {
 
   // 4. Breadcrumb — estado inicial sin registrar listener (lo hace el Router)
   updateBreadcrumb(window.location.hash || '#/');
+
+  // 5. Refrescar sidebar y navbar con el estado de autenticación actual
+  //    Cubre el caso de recarga de página donde el usuario ya tiene sesión activa
+  refreshSidebar();
+  refreshNavbar();
 }
