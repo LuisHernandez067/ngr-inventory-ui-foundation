@@ -9,6 +9,7 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@ngr-inventory/api-mocks": "*",
     "@ngr-inventory/bootstrap-theme": "*",
     "@ngr-inventory/design-tokens": "*",
     "@ngr-inventory/ui-core": "*",
@@ -16,6 +17,7 @@
     "@storybook/addon-essentials": "^8.4.0",
     "@storybook/html-vite": "^8.4.0",
     "@types/node": "^22.0.0",
+    "msw-storybook-addon": "*",
     "sass": "^1.83.0",
     "storybook": "^8.4.0",
     "typescript": "^5.7.3",

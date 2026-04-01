@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html';
+import { http, HttpResponse } from 'msw';
 import { render, init } from '@ngr-inventory/ui-patterns/patterns/data-table';
 import { render as renderStatusBadge } from '@ngr-inventory/ui-patterns/patterns/status-badge';
 import {
@@ -7,6 +8,7 @@ import {
 } from '@ngr-inventory/ui-patterns/patterns/action-menu';
 import type { ColumnDef } from '@ngr-inventory/ui-patterns';
 import type { ActionMenuItem } from '@ngr-inventory/ui-patterns';
+import type { Producto, PaginatedResponse } from '@ngr-inventory/api-contracts';
 
 // Story del patrón DataTable — tabla de datos completa
 const meta: Meta = {
@@ -91,6 +93,20 @@ const columns: ColumnDef<Producto>[] = [
   { key: 'stock', header: 'Stock', sortable: true, width: '80px' },
   {
     key: 'estado',
+    header: 'Estado',
+    width: '130px',
+    render: (val) => renderStatusBadge({ status: String(val) }),
+  },
+];
+
+// Columnas para la historia con datos de la API real
+const columnasApi: ColumnDef<Producto>[] = [
+  { key: 'codigo', header: 'Código', width: '140px' },
+  { key: 'nombre', header: 'Nombre', sortable: true },
+  { key: 'categoriaNombre', header: 'Categoría', sortable: true },
+  { key: 'unidadMedida', header: 'Unidad', width: '80px' },
+  {
+    key: 'status',
     header: 'Estado',
     width: '130px',
     render: (val) => renderStatusBadge({ status: String(val) }),
@@ -244,6 +260,113 @@ export const ConMenuDeAcciones: Story = {
     return `
       <div class="p-3">
         ${render({ columns: columnsWithActions, rows: productos })}
+      </div>
+    `;
+  },
+};
+
+// Historia con carga async desde MSW — demuestra integración real con la API mock
+export const DesdeMSW: Story = {
+  name: 'Desde API (MSW)',
+  render: () => {
+    const rootId = 'story-datatable-msw';
+
+    setTimeout(async () => {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+
+      // Mostrar estado de carga mientras se obtienen los datos
+      root.innerHTML = render({
+        columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+        rows: [],
+        loading: true,
+      });
+
+      try {
+        const response = await fetch('/api/productos?page=1&pageSize=10');
+        const result = (await response.json()) as PaginatedResponse<Producto>;
+
+        init(root, {
+          columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+          rows: result.data as Record<string, unknown>[],
+        });
+      } catch {
+        root.innerHTML = render({
+          columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+          rows: [],
+          emptyIcon: 'exclamation-triangle',
+          emptyTitle: 'Error al cargar datos',
+          emptyDescription: 'No se pudo conectar con la API. Verificá que MSW está activo.',
+        });
+      }
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          Cargando productos desde <code>GET /api/productos</code> via MSW...
+        </p>
+        <div id="${rootId}">
+          ${render({ columns: columnasApi as ColumnDef<Record<string, unknown>>[], rows: [], loading: true })}
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Historia con error simulado via ?_scenario=error-500
+export const ConErrorDeRed: Story = {
+  name: 'Con error de red (MSW override)',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/productos', () =>
+          HttpResponse.json(
+            {
+              type: '/errors/server-error',
+              title: 'Error interno del servidor',
+              status: 500,
+              detail: 'Ocurrió un error inesperado al cargar los productos.',
+            },
+            { status: 500 }
+          )
+        ),
+      ],
+    },
+  },
+  render: () => {
+    const rootId = 'story-datatable-error';
+
+    setTimeout(async () => {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+
+      root.innerHTML = render({
+        columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+        rows: [],
+        loading: true,
+      });
+
+      const response = await fetch('/api/productos');
+      if (!response.ok) {
+        root.innerHTML = render({
+          columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+          rows: [],
+          emptyIcon: 'exclamation-triangle',
+          emptyTitle: 'Error al cargar productos',
+          emptyDescription: `Error ${response.status.toString()}: El servidor no pudo procesar la solicitud.`,
+        });
+      }
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          Esta historia sobreescribe el handler para simular un error 500...
+        </p>
+        <div id="${rootId}">
+          ${render({ columns: columnasApi as ColumnDef<Record<string, unknown>>[], rows: [], loading: true })}
+        </div>
       </div>
     `;
   },

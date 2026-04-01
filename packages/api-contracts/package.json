@@ -1,0 +1,12 @@
+{
+  "name": "@ngr-inventory/api-contracts",
+  "version": "0.1.0",
+  "description": "Contratos TypeScript para la API de NGR Inventory",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}

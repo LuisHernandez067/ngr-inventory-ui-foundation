@@ -15,10 +15,10 @@ const STATUS_MAP: Record<NgrStatus, { variant: BadgeVariant; icon: string; label
   activo: { variant: 'success', icon: 'bi-check-circle-fill', label: 'Activo' },
   inactivo: { variant: 'secondary', icon: 'bi-dash-circle', label: 'Inactivo' },
   pendiente: { variant: 'warning', icon: 'bi-clock', label: 'Pendiente' },
-  aprobado: { variant: 'success', icon: 'bi-check-circle', label: 'Aprobado' },
+  aprobado: { variant: 'success', icon: 'bi-check2-all', label: 'Aprobado' },
   rechazado: { variant: 'danger', icon: 'bi-x-circle-fill', label: 'Rechazado' },
   en_transito: { variant: 'info', icon: 'bi-truck', label: 'En tránsito' },
-  reservado: { variant: 'warning', icon: 'bi-lock', label: 'Reservado' },
+  reservado: { variant: 'warning', icon: 'bi-bookmark-fill', label: 'Reservado' },
 };
 
 /**

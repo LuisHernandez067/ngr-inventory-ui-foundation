@@ -12,6 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@ngr-inventory/api-contracts": "*",
     "@ngr-inventory/ui-core": "*"
   },
   "peerDependencies": {

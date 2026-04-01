@@ -4,15 +4,8 @@ import type { ComponentProps, ButtonVariant, BadgeVariant } from '@ngr-inventory
 // Re-exportar tipos base de ui-core que los patrones necesitan
 export type { ComponentProps, ButtonVariant, BadgeVariant };
 
-/** Estados de dominio disponibles en el sistema NGR Inventory */
-export type NgrStatus =
-  | 'activo'
-  | 'inactivo'
-  | 'pendiente'
-  | 'aprobado'
-  | 'rechazado'
-  | 'en_transito'
-  | 'reservado';
+// Re-exportar NgrStatus desde api-contracts (fuente canónica)
+export type { NgrStatus } from '@ngr-inventory/api-contracts';
 
 /** Definición de una columna de la tabla de datos */
 export interface ColumnDef<T = Record<string, unknown>> {

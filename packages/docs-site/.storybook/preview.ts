@@ -1,5 +1,10 @@
 import type { Preview } from '@storybook/html';
 import '@ngr-inventory/bootstrap-theme';
+import { initialize, mswLoader } from 'msw-storybook-addon';
+import { handlers } from '@ngr-inventory/api-mocks';
+
+// Inicializar MSW — intercepta requests en Storybook usando service worker
+initialize({ onUnhandledRequest: 'bypass' });
 
 // Toolbar global para alternar entre temas light/dark/warm/cold
 const preview: Preview = {
@@ -18,6 +23,12 @@ const preview: Preview = {
         ],
         dynamicTitle: true,
       },
+    },
+  },
+  loaders: [mswLoader],
+  parameters: {
+    msw: {
+      handlers,
     },
   },
   decorators: [

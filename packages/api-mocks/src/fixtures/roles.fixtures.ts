@@ -1,0 +1,150 @@
+import type { Rol } from '@ngr-inventory/api-contracts';
+
+/** Fixtures de roles del sistema — 4 roles con diferentes niveles de acceso */
+export const rolFixtures: Rol[] = [
+  {
+    id: 'rol-001',
+    nombre: 'Administrador',
+    descripcion:
+      'Acceso completo al sistema — gestión de usuarios, configuración y todos los módulos',
+    esAdmin: true,
+    permisos: [
+      { id: 'perm-001', clave: 'productos.ver', nombre: 'Ver productos', modulo: 'productos' },
+      { id: 'perm-002', clave: 'productos.crear', nombre: 'Crear productos', modulo: 'productos' },
+      {
+        id: 'perm-003',
+        clave: 'productos.editar',
+        nombre: 'Editar productos',
+        modulo: 'productos',
+      },
+      {
+        id: 'perm-004',
+        clave: 'productos.eliminar',
+        nombre: 'Eliminar productos',
+        modulo: 'productos',
+      },
+      {
+        id: 'perm-005',
+        clave: 'movimientos.ver',
+        nombre: 'Ver movimientos',
+        modulo: 'movimientos',
+      },
+      {
+        id: 'perm-006',
+        clave: 'movimientos.crear',
+        nombre: 'Crear movimientos',
+        modulo: 'movimientos',
+      },
+      {
+        id: 'perm-007',
+        clave: 'movimientos.aprobar',
+        nombre: 'Aprobar movimientos',
+        modulo: 'movimientos',
+      },
+      { id: 'perm-008', clave: 'usuarios.ver', nombre: 'Ver usuarios', modulo: 'usuarios' },
+      {
+        id: 'perm-009',
+        clave: 'usuarios.gestionar',
+        nombre: 'Gestionar usuarios',
+        modulo: 'usuarios',
+      },
+      {
+        id: 'perm-010',
+        clave: 'reportes.exportar',
+        nombre: 'Exportar reportes',
+        modulo: 'reportes',
+      },
+    ],
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+    createdBy: 'system',
+    updatedBy: 'system',
+  },
+  {
+    id: 'rol-002',
+    nombre: 'Supervisor',
+    descripcion: 'Supervisión de operaciones — aprobación de movimientos y generación de reportes',
+    esAdmin: false,
+    permisos: [
+      { id: 'perm-001', clave: 'productos.ver', nombre: 'Ver productos', modulo: 'productos' },
+      {
+        id: 'perm-003',
+        clave: 'productos.editar',
+        nombre: 'Editar productos',
+        modulo: 'productos',
+      },
+      {
+        id: 'perm-005',
+        clave: 'movimientos.ver',
+        nombre: 'Ver movimientos',
+        modulo: 'movimientos',
+      },
+      {
+        id: 'perm-006',
+        clave: 'movimientos.crear',
+        nombre: 'Crear movimientos',
+        modulo: 'movimientos',
+      },
+      {
+        id: 'perm-007',
+        clave: 'movimientos.aprobar',
+        nombre: 'Aprobar movimientos',
+        modulo: 'movimientos',
+      },
+      {
+        id: 'perm-010',
+        clave: 'reportes.exportar',
+        nombre: 'Exportar reportes',
+        modulo: 'reportes',
+      },
+    ],
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+    createdBy: 'system',
+    updatedBy: 'system',
+  },
+  {
+    id: 'rol-003',
+    nombre: 'Operario',
+    descripcion: 'Operaciones diarias de ingreso y egreso de mercadería',
+    esAdmin: false,
+    permisos: [
+      { id: 'perm-001', clave: 'productos.ver', nombre: 'Ver productos', modulo: 'productos' },
+      {
+        id: 'perm-005',
+        clave: 'movimientos.ver',
+        nombre: 'Ver movimientos',
+        modulo: 'movimientos',
+      },
+      {
+        id: 'perm-006',
+        clave: 'movimientos.crear',
+        nombre: 'Crear movimientos',
+        modulo: 'movimientos',
+      },
+    ],
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+    createdBy: 'system',
+    updatedBy: 'system',
+  },
+  {
+    id: 'rol-004',
+    nombre: 'Solo Lectura',
+    descripcion: 'Acceso de consulta — visualización sin capacidad de modificar datos',
+    esAdmin: false,
+    permisos: [
+      { id: 'perm-001', clave: 'productos.ver', nombre: 'Ver productos', modulo: 'productos' },
+      {
+        id: 'perm-005',
+        clave: 'movimientos.ver',
+        nombre: 'Ver movimientos',
+        modulo: 'movimientos',
+      },
+    ],
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+    createdBy: 'system',
+    updatedBy: 'system',
+  },
+];
