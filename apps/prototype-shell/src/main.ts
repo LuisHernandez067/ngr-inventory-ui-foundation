@@ -1,6 +1,8 @@
 // Punto de entrada principal de la aplicación prototipo
 import './styles/main.scss';
 import { initLayout } from './layout/index';
+import { Router } from './router/router';
+import { registerRoutes } from './router/routes';
 
 // Inicialización del Service Worker de MSW solo en desarrollo
 async function initMocks(): Promise<void> {
@@ -19,8 +21,21 @@ async function mount(): Promise<void> {
     throw new Error('No se encontró el elemento #app en el DOM');
   }
 
-  // Inicializar el layout del admin shell
+  // 1. Inicializar el layout del admin shell (navbar, sidebar, breadcrumb, footer)
   initLayout(app);
+
+  // 2. Obtener el contenedor de contenido donde el router montará las páginas
+  const pageContent = document.getElementById('page-content');
+  if (!pageContent) {
+    throw new Error('No se encontró el elemento #page-content en el DOM');
+  }
+
+  // 3. Crear el router y registrar todas las rutas
+  const router = new Router(pageContent);
+  registerRoutes(router);
+
+  // 4. Iniciar la navegación evaluando la ruta actual
+  router.start();
 }
 
 mount().catch(console.error);

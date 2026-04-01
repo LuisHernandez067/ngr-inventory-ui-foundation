@@ -211,17 +211,39 @@ export function render(): string {
 }
 
 /**
+ * Determina el hash de sidebar activo a partir del hash de navegación.
+ * Para rutas de detalle (e.g. '#/productos/1'), retorna el hash padre ('#/productos').
+ * Esto permite que el ítem del módulo quede resaltado en páginas de detalle.
+ */
+function resolveActiveHash(hash: string): string {
+  const normalized = hash || '#/';
+
+  // Si el hash tiene más de un segmento después de '#/', extraer el primero
+  // Ejemplo: '#/productos/1' → '#/productos', '#/productos' → '#/productos'
+  const withoutHash = normalized.replace(/^#/, ''); // '/productos/1'
+  const segments = withoutHash.split('/').filter(Boolean); // ['productos', '1']
+
+  if (segments.length > 1) {
+    // Ruta de detalle — activar el ítem padre del primer segmento
+    return `#/${segments[0]}`;
+  }
+
+  return normalized;
+}
+
+/**
  * Actualiza el estado activo de los enlaces del sidebar según el hash actual.
  * Elimina la clase 'active' de todos y la agrega solo al enlace que coincide.
+ * Para rutas de detalle (e.g. '#/productos/1'), activa el ítem padre '#/productos'.
  */
 export function setActive(hash: string): void {
-  // Normalizar: si no tiene '/' después de '#', agregar para match consistente
-  const normalizedHash = hash || '#/';
+  // Resolver el hash activo — soporta rutas de detalle con segmentos múltiples
+  const activeHash = resolveActiveHash(hash);
 
   const links = document.querySelectorAll<HTMLAnchorElement>('.sidebar .nav-link[data-hash]');
   links.forEach((link) => {
     const linkHash = link.getAttribute('data-hash') ?? '';
-    if (linkHash === normalizedHash) {
+    if (linkHash === activeHash) {
       link.classList.add('active');
       link.setAttribute('aria-current', 'page');
     } else {

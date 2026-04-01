@@ -39,7 +39,8 @@ export function cycleTheme(): Theme {
   const current = getTheme();
   const currentIndex = THEMES.indexOf(current);
   const nextIndex = (currentIndex + 1) % THEMES.length;
-  const next = THEMES[nextIndex];
+  // El módulo garantiza que nextIndex siempre está dentro del rango de THEMES
+  const next: Theme = THEMES[nextIndex] ?? 'light';
   setTheme(next);
   return next;
 }

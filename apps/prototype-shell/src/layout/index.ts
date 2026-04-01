@@ -1,14 +1,22 @@
 // Orquestador de layout — ensambla todos los módulos del admin shell
 import { init as initTheme } from './theme';
 import { render as renderNavbar, init as initNavbar } from './navbar';
-import { render as renderSidebar, init as initSidebar, setActive } from './sidebar';
+import { render as renderSidebar, init as initSidebar } from './sidebar';
 import { render as renderBreadcrumb, update as updateBreadcrumb } from './breadcrumb';
 import { render as renderFooter } from './footer';
+
+export { update as updateBreadcrumb } from './breadcrumb';
+export { setActive } from './sidebar';
 
 /**
  * Ensambla e inicializa el shell de administración completo.
  * Renderiza navbar, sidebar, breadcrumb, área de contenido y footer,
  * luego inicializa los módulos en orden de dependencia.
+ *
+ * NOTA: El listener de hashchange fue removido de esta función.
+ * El Router es el único propietario del listener hashchange — evita
+ * condiciones de carrera y listeners duplicados. El router llama
+ * directamente a updateBreadcrumb() y setActive() tras cada navegación.
  *
  * @param app - Elemento raíz (#app) donde se monta el shell
  */
@@ -42,13 +50,9 @@ export function initLayout(app: HTMLElement): void {
   // 2. Navbar — conecta el ciclo de temas y el toggle del offcanvas
   initNavbar(app);
 
-  // 3. Sidebar — conecta listeners de hashchange y teclado
+  // 3. Sidebar — conecta listeners de teclado (hashchange lo maneja el Router)
   initSidebar(app);
 
-  // 4. Breadcrumb — listener de hashchange para actualizar la ruta
+  // 4. Breadcrumb — estado inicial sin registrar listener (lo hace el Router)
   updateBreadcrumb(window.location.hash || '#/');
-  window.addEventListener('hashchange', () => {
-    updateBreadcrumb(window.location.hash || '#/');
-    setActive(window.location.hash || '#/');
-  });
 }

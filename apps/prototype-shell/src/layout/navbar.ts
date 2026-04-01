@@ -53,6 +53,16 @@ export function render(): string {
             aria-label="Usuario"
             title="Perfil de usuario"
           ></div>
+
+          <!-- Botón de cierre de sesión -->
+          <button
+            class="btn btn-sm btn-outline-danger"
+            id="btn-logout"
+            aria-label="Cerrar sesión"
+            title="Cerrar sesión"
+          >
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
         </div>
       </div>
     </nav>
@@ -74,5 +84,14 @@ export function init(root: HTMLElement): void {
 
     // Refleja el tema inicial en el título del botón
     themeSwitcher.setAttribute('title', `Tema actual: ${getTheme()}`);
+  }
+
+  // Botón de logout — limpia el token y redirige al login
+  const logoutBtn = root.querySelector<HTMLButtonElement>('#btn-logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('ngr_auth_token');
+      window.location.hash = '#/auth';
+    });
   }
 }
