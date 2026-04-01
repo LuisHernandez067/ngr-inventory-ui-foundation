@@ -58,6 +58,17 @@ export const UltimaPagina: Story = {
   `,
 };
 
+// Historia en página intermedia — con navegación activa en ambos extremos
+export const PaginaIntermedia: Story = {
+  name: 'Página intermedia',
+  render: () => `
+    <div class="p-3">
+      <p class="text-muted fst-italic mb-2">Página 5 de 12 — prev y next habilitados, elipsis a ambos lados.</p>
+      ${render({ currentPage: 5, totalPages: 12 })}
+    </div>
+  `,
+};
+
 // Historia interactiva con evento ngr:page-change
 export const Interactivo: Story = {
   name: 'Interactivo — emite ngr:page-change',

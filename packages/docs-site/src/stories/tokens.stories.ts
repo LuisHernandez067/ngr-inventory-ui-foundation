@@ -83,3 +83,44 @@ export const NGRBrand: Story = {
     </div>
   `,
 };
+
+// Historia de comparación de los 4 temas con variables semánticas de Bootstrap
+export const ComparacionTemas: Story = {
+  name: 'Comparación de temas',
+  parameters: { layout: 'fullscreen' },
+  render: () => {
+    const themes = ['light', 'dark', 'warm', 'cold'] as const;
+    const semanticVars = [
+      '--bs-primary',
+      '--bs-secondary',
+      '--bs-success',
+      '--bs-danger',
+      '--bs-warning',
+      '--bs-info',
+    ];
+
+    const themeHtml = themes
+      .map(
+        (theme) => `
+      <div data-bs-theme="${theme}" style="flex:1; padding: 1rem; background: var(--bs-body-bg)">
+        <h6 style="color: var(--bs-body-color); margin-bottom: 1rem; text-transform: capitalize">${theme}</h6>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem">
+          ${semanticVars
+            .map(
+              (v) => `
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <div style="width:2rem; height:2rem; background: var(${v}); border-radius: 4px; border: 1px solid rgba(0,0,0,0.1)"></div>
+              <small style="color: var(--bs-body-color); font-family: monospace">${v}</small>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      </div>
+    `
+      )
+      .join('');
+
+    return `<div style="display: flex; gap: 0; min-height: 400px">${themeHtml}</div>`;
+  },
+};

@@ -96,3 +96,77 @@ export const CicloAutomatico: Story = {
     `;
   },
 };
+
+// Historia visual — overlay sobre una tabla de datos simulada
+export const SobreTabla: Story = {
+  name: 'Sobre tabla',
+  render: () => {
+    const targetId = 'story-overlay-table';
+
+    setTimeout(() => {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      show(target, 'Cargando productos...');
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">Overlay activo sobre una tabla de datos.</p>
+        <div id="${targetId}" class="border rounded" style="min-height:200px">
+          <table class="table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>TKL-001</td><td>Teclado Mecánico</td><td>Periféricos</td><td>12</td></tr>
+              <tr><td>MON-002</td><td>Monitor 27" IPS</td><td>Monitores</td><td>5</td></tr>
+              <tr><td>MOU-003</td><td>Mouse Inalámbrico</td><td>Periféricos</td><td>8</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Historia visual — overlay sobre un formulario de edición
+export const SobreFormulario: Story = {
+  name: 'Sobre formulario',
+  render: () => {
+    const targetId = 'story-overlay-form';
+
+    setTimeout(() => {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      show(target, 'Guardando cambios...');
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">Overlay activo sobre un formulario de edición.</p>
+        <div id="${targetId}" class="border rounded p-4" style="max-width:480px">
+          <div class="mb-3">
+            <label class="form-label">Nombre del producto</label>
+            <input type="text" class="form-control" value="Teclado Mecánico TKL" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <select class="form-select" disabled>
+              <option>Periféricos</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Precio unitario</label>
+            <input type="number" class="form-control" value="8500" disabled>
+          </div>
+          <button class="btn btn-primary" disabled>Guardar</button>
+        </div>
+      </div>
+    `;
+  },
+};

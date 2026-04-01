@@ -314,6 +314,94 @@ export const DesdeMSW: Story = {
   },
 };
 
+// Historia de carga pendiente — el handler nunca resuelve, mostrando el spinner indefinidamente
+export const Cargando: Story = {
+  name: 'Cargando (MSW)',
+  parameters: {
+    msw: {
+      handlers: [http.get('/api/productos', () => new Promise(() => {}))],
+    },
+  },
+  render: () => {
+    const rootId = 'story-datatable-loading';
+
+    setTimeout(async () => {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+
+      root.innerHTML = render({
+        columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+        rows: [],
+        loading: true,
+      });
+
+      // La promesa nunca resuelve — el spinner queda visible
+      await fetch('/api/productos').catch(() => {});
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          Handler que nunca resuelve — tabla queda en estado de carga...
+        </p>
+        <div id="${rootId}">
+          ${render({ columns: columnasApi as ColumnDef<Record<string, unknown>>[], rows: [], loading: true })}
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Historia sin datos — la API devuelve lista vacía
+export const SinDatos: Story = {
+  name: 'Sin datos (MSW)',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/productos', () =>
+          HttpResponse.json({ data: [], total: 0, page: 1, pageSize: 20, totalPages: 0 })
+        ),
+      ],
+    },
+  },
+  render: () => {
+    const rootId = 'story-datatable-empty-msw';
+
+    setTimeout(async () => {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+
+      root.innerHTML = render({
+        columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+        rows: [],
+        loading: true,
+      });
+
+      const response = await fetch('/api/productos');
+      const result = (await response.json()) as PaginatedResponse<Producto>;
+
+      init(root, {
+        columns: columnasApi as ColumnDef<Record<string, unknown>>[],
+        rows: result.data as Record<string, unknown>[],
+        emptyIcon: 'inbox',
+        emptyTitle: 'Sin productos',
+        emptyDescription: 'No hay productos registrados en el sistema.',
+      });
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          API devuelve lista vacía — se muestra el estado vacío del componente...
+        </p>
+        <div id="${rootId}">
+          ${render({ columns: columnasApi as ColumnDef<Record<string, unknown>>[], rows: [], loading: true })}
+        </div>
+      </div>
+    `;
+  },
+};
+
 // Historia con error simulado via ?_scenario=error-500
 export const ConErrorDeRed: Story = {
   name: 'Con error de red (MSW override)',

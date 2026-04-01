@@ -1,0 +1,28 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="UI Core/Índice" />
+
+# UI Core — Componentes base
+
+`@ngr-inventory/ui-core` contiene los 10 componentes atómicos del sistema. Son los ladrillos de construcción: no dependen de lógica de negocio.
+
+## Componentes disponibles
+
+| Componente    | Propósito                                        |
+| ------------- | ------------------------------------------------ |
+| Button        | Acciones principales, secundarias y destructivas |
+| Badge         | Etiquetas de estado y contadores                 |
+| Alert         | Mensajes de feedback al usuario                  |
+| Spinner       | Indicador de carga                               |
+| EmptyState    | Estado vacío con acción opcional                 |
+| Card          | Contenedor con sombra y padding                  |
+| Avatar        | Imagen de perfil con fallback a iniciales        |
+| Tooltip       | Información contextual en hover                  |
+| ConfirmDialog | Diálogo de confirmación con SweetAlert2          |
+| PageHeader    | Encabezado de sección con breadcrumb y acciones  |
+
+## Principios de uso
+
+- Importar siempre desde `@ngr-inventory/ui-core`
+- No modificar internamente — extender via props
+- No hardcodear colores — usar variantes semánticas

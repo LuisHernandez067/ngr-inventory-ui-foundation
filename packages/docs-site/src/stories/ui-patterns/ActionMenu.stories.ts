@@ -133,6 +133,83 @@ export const Interactivo: Story = {
   },
 };
 
+// Historia que simula el estado de carga del contenedor padre — menú deshabilitado
+export const Cargando: Story = {
+  name: 'Cargando — contenedor en carga',
+  render: () => `
+    <div class="p-3">
+      <p class="text-muted fst-italic mb-3">
+        Cuando el contenedor padre está cargando, el ActionMenu se muestra deshabilitado.
+      </p>
+      <div class="position-relative" style="opacity:0.5; pointer-events:none">
+        ${render({ items: itemsProducto })}
+      </div>
+      <div class="mt-3 d-flex align-items-center gap-2 text-muted small">
+        <span class="spinner-border spinner-border-sm" role="status"></span>
+        Cargando datos del producto...
+      </div>
+    </div>
+  `,
+};
+
+// Historia que simula que no hay datos — menú oculto cuando no hay registros
+export const SinDatos: Story = {
+  name: 'Sin datos — menú oculto',
+  render: () => `
+    <div class="p-3">
+      <p class="text-muted fst-italic mb-3">
+        Sin registros disponibles, no se renderiza el ActionMenu.
+      </p>
+      <div class="card border-0 bg-body-secondary rounded-3 p-5 text-center">
+        <i class="bi bi-inbox fs-1 text-muted mb-2 d-block"></i>
+        <p class="text-muted mb-0">Sin productos. No hay acciones disponibles.</p>
+      </div>
+    </div>
+  `,
+};
+
+// Historia que simula error en la operación — ítem de reintento visible
+export const ConError: Story = {
+  name: 'Con error — acción fallida',
+  render: () => {
+    const rootId = 'story-action-error';
+
+    setTimeout(() => {
+      const root = document.getElementById(rootId);
+      if (!root) return;
+      init(root);
+      root.addEventListener('ngr:action', (event: Event) => {
+        const ce = event as CustomEvent<{ id: string }>;
+        if (ce.detail.id === 'reintentar') {
+          const msg = document.getElementById('story-action-error-msg');
+          if (msg) {
+            msg.className = 'alert alert-info small py-2 mt-2';
+            msg.textContent = 'Reintentando operación...';
+          }
+        }
+      });
+    }, 0);
+
+    const itemsConError: ActionMenuItem[] = [
+      { id: 'reintentar', label: 'Reintentar', icon: 'arrow-clockwise' },
+      { id: 'cancelar', label: 'Cancelar acción', icon: 'x-circle', variant: 'danger' },
+    ];
+
+    return `
+      <div class="p-3">
+        <div class="alert alert-danger small py-2 mb-3" role="alert">
+          <i class="bi bi-exclamation-circle me-1"></i>
+          No se pudo completar la operación. Intentá nuevamente.
+        </div>
+        <div id="${rootId}">
+          ${render({ items: itemsConError })}
+        </div>
+        <div id="story-action-error-msg" style="display:none"></div>
+      </div>
+    `;
+  },
+};
+
 // Historia en contexto de tabla
 export const EnTabla: Story = {
   name: 'En contexto de tabla',

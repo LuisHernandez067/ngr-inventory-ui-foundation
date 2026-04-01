@@ -9,6 +9,7 @@ const config: StorybookConfig = {
     '../../ui-core/src/**/*.stories.ts',
     '../../ui-patterns/src/**/*.stories.ts',
     '../src/stories/**/*.stories.ts',
+    '../src/stories/**/*.mdx',
   ],
   addons: ['@storybook/addon-essentials'],
   framework: {

@@ -57,6 +57,48 @@ export const SinFiltros: Story = {
   `,
 };
 
+// Historia con múltiples chips activos — alias semántico de FiltrosActivos
+export const MultiplesActivos: Story = {
+  name: 'Múltiples activos',
+  render: () => `
+    <div class="p-3">
+      <p class="text-muted fst-italic mb-2">Varios filtros activos simultáneamente.</p>
+      ${render({
+        filters: [
+          { key: 'categoria', label: 'Categoría', value: 'Periféricos' },
+          { key: 'estado', label: 'Estado', value: 'Activo' },
+          { key: 'proveedor', label: 'Proveedor', value: 'Samsung' },
+          { key: 'deposito', label: 'Depósito', value: 'Central' },
+        ],
+      })}
+    </div>
+  `,
+};
+
+// Historia que simula el estado tras eliminar todos los chips
+export const TodosEliminados: Story = {
+  name: 'Todos eliminados',
+  render: () => `
+    <div class="p-3">
+      <p class="text-muted fst-italic mb-2">Todos los filtros fueron eliminados — no se renderizan chips.</p>
+      <div class="py-2">
+        ${render({ filters: [] }) || '<span class="text-muted small fst-italic">Sin filtros activos.</span>'}
+      </div>
+    </div>
+  `,
+};
+
+// Historia con un único chip activo
+export const SoloUno: Story = {
+  name: 'Solo uno activo',
+  render: () => `
+    <div class="p-3">
+      <p class="text-muted fst-italic mb-2">Un único filtro activo.</p>
+      ${render({ filters: [{ key: 'estado', label: 'Estado', value: 'Pendiente' }] })}
+    </div>
+  `,
+};
+
 // Historia interactiva con evento
 export const Interactivo: Story = {
   name: 'Interactivo — emite ngr:filter-remove',

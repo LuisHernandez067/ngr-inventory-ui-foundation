@@ -1,6 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/html';
+import { http, HttpResponse } from 'msw';
 import { render, init } from '@ngr-inventory/ui-patterns/patterns/table-toolbar';
+import {
+  render as renderDataTable,
+  init as initDataTable,
+} from '@ngr-inventory/ui-patterns/patterns/data-table';
 import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
+import type { ColumnDef } from '@ngr-inventory/ui-patterns';
+import type { PaginatedResponse } from '@ngr-inventory/api-contracts';
 
 // Story del patrón TableToolbar — barra de herramientas compuesta
 const meta: Meta = {
@@ -96,6 +103,156 @@ export const Completo: Story = {
             ],
             actions,
           })}
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Columnas para las historias MSW
+const columnasApi: ColumnDef<Record<string, unknown>>[] = [
+  { key: 'codigo', header: 'Código', width: '140px' },
+  { key: 'nombre', header: 'Nombre', sortable: true },
+  { key: 'categoriaNombre', header: 'Categoría', sortable: true },
+  { key: 'unidadMedida', header: 'Unidad', width: '80px' },
+];
+
+// Historia combinada: TableToolbar + DataTable en estado de carga — handler que nunca resuelve
+export const Cargando: Story = {
+  name: 'Cargando (MSW)',
+  parameters: {
+    msw: {
+      handlers: [http.get('/api/productos', () => new Promise(() => {}))],
+    },
+  },
+  render: () => {
+    const toolbarId = 'story-toolbar-cargando';
+    const tableId = 'story-table-cargando';
+
+    setTimeout(() => {
+      const toolbar = document.getElementById(toolbarId);
+      if (toolbar) init(toolbar);
+      // Disparar fetch — el handler nunca resuelve, la tabla queda en carga
+      fetch('/api/productos').catch(() => {});
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          Barra de búsqueda funcional, tabla bloqueada mientras carga la API (handler que nunca resuelve).
+        </p>
+        <div id="${toolbarId}">
+          ${render({ searchPlaceholder: 'Buscar productos...' })}
+        </div>
+        <div id="${tableId}" class="mt-2">
+          ${renderDataTable({ columns: columnasApi, rows: [], loading: true })}
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Historia combinada: TableToolbar + DataTable sin resultados — API devuelve lista vacía
+export const SinDatos: Story = {
+  name: 'Sin datos (MSW)',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/productos', () =>
+          HttpResponse.json({ data: [], total: 0, page: 1, pageSize: 20, totalPages: 0 })
+        ),
+      ],
+    },
+  },
+  render: () => {
+    const toolbarId = 'story-toolbar-sin-datos';
+    const tableId = 'story-table-sin-datos';
+
+    setTimeout(async () => {
+      const toolbar = document.getElementById(toolbarId);
+      const table = document.getElementById(tableId);
+      if (toolbar) init(toolbar);
+      if (!table) return;
+
+      table.innerHTML = renderDataTable({ columns: columnasApi, rows: [], loading: true });
+
+      const response = await fetch('/api/productos');
+      const result = (await response.json()) as PaginatedResponse<Record<string, unknown>>;
+
+      initDataTable(table, {
+        columns: columnasApi,
+        rows: result.data,
+        emptyIcon: 'search',
+        emptyTitle: 'Sin resultados',
+        emptyDescription: 'No se encontraron productos con los filtros aplicados.',
+      });
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          La API devuelve una lista vacía — la tabla muestra el estado vacío.
+        </p>
+        <div id="${toolbarId}">
+          ${render({ searchPlaceholder: 'Buscar productos...' })}
+        </div>
+        <div id="${tableId}" class="mt-2">
+          ${renderDataTable({ columns: columnasApi, rows: [], loading: true })}
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Historia combinada: TableToolbar + DataTable con error — API devuelve 500
+export const ConError: Story = {
+  name: 'Con error (MSW)',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/productos', () =>
+          HttpResponse.json(
+            { type: 'about:blank', title: 'Error del servidor', status: 500 },
+            { status: 500 }
+          )
+        ),
+      ],
+    },
+  },
+  render: () => {
+    const toolbarId = 'story-toolbar-con-error';
+    const tableId = 'story-table-con-error';
+
+    setTimeout(async () => {
+      const toolbar = document.getElementById(toolbarId);
+      const table = document.getElementById(tableId);
+      if (toolbar) init(toolbar);
+      if (!table) return;
+
+      table.innerHTML = renderDataTable({ columns: columnasApi, rows: [], loading: true });
+
+      const response = await fetch('/api/productos');
+      if (!response.ok) {
+        table.innerHTML = renderDataTable({
+          columns: columnasApi,
+          rows: [],
+          emptyIcon: 'exclamation-triangle',
+          emptyTitle: 'Error al cargar',
+          emptyDescription: `Error ${response.status.toString()}: No se pudo obtener la lista de productos.`,
+        });
+      }
+    }, 0);
+
+    return `
+      <div class="p-3">
+        <p class="text-muted fst-italic mb-2">
+          La API devuelve error 500 — la tabla muestra el estado de error.
+        </p>
+        <div id="${toolbarId}">
+          ${render({ searchPlaceholder: 'Buscar productos...' })}
+        </div>
+        <div id="${tableId}" class="mt-2">
+          ${renderDataTable({ columns: columnasApi, rows: [], loading: true })}
         </div>
       </div>
     `;

@@ -1,0 +1,29 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="UI Patterns/Índice" />
+
+# UI Patterns — Patrones operativos
+
+`@ngr-inventory/ui-patterns` contiene los 10 patrones de UI que se repiten en los módulos del inventario.
+
+## Patrones disponibles
+
+| Patrón            | Propósito                                                      |
+| ----------------- | -------------------------------------------------------------- |
+| DataTable         | Tabla de datos con ordenamiento y paginación                   |
+| Pagination        | Control de paginación                                          |
+| SearchBar         | Búsqueda con debounce                                          |
+| FilterChips       | Chips de filtro activos                                        |
+| FormField         | Campo de formulario con validación                             |
+| TableToolbar      | Barra de herramientas de tabla (búsqueda + filtros + acciones) |
+| StatusBadge       | Badge con color semántico por estado                           |
+| ActionMenu        | Menú contextual de acciones (Bootstrap Dropdown)               |
+| ConfirmableButton | Botón con confirmación integrada                               |
+| LoadingOverlay    | Overlay de carga sobre contenido                               |
+
+## Estados que todo patrón async debe manejar
+
+1. **Cargando** — skeleton o spinner
+2. **Vacío** — EmptyState con mensaje claro
+3. **Con datos** — contenido normal
+4. **Con error** — mensaje de error con opción de reintentar
