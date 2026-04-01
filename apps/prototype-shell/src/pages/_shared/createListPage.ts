@@ -1,14 +1,11 @@
 // Factory que crea módulos de página de lista con DataTable, Pagination y Toolbar.
 // Cada instancia gestiona su propio estado de paginación, búsqueda y requests en vuelo.
-import {
-  DataTable,
-  Pagination,
-  TableToolbar,
-  LoadingOverlay,
-} from '@ngr-inventory/ui-patterns';
-import type { ColumnDef as UiColumnDef } from '@ngr-inventory/ui-patterns';
 import type { PaginatedResponse } from '@ngr-inventory/api-contracts';
+import { DataTable, Pagination, TableToolbar, LoadingOverlay } from '@ngr-inventory/ui-patterns';
+import type { ColumnDef as UiColumnDef } from '@ngr-inventory/ui-patterns';
+
 import type { PageModule } from '../../router/router';
+
 import { apiFetch } from './apiFetch';
 
 /**
@@ -42,6 +39,16 @@ export interface ListPageOptions<T> {
   actionIcon?: string;
   /** Texto del botón de acción principal */
   actionLabel?: string;
+  /** Callback invocado al hacer clic en una fila — recibe el id del item */
+  onRowClick?: (id: string) => void;
+  /** Callback invocado al hacer clic en el botón de acción principal */
+  onActionClick?: () => void;
+  /**
+   * Filtros adicionales que se adjuntan a la URL de fetch.
+   * Backward-compatible: no afecta instancias existentes que no lo provean.
+   * Valores vacíos ('') se omiten de la URL.
+   */
+  filters?: Record<string, string>;
 }
 
 /**
@@ -49,12 +56,13 @@ export interface ListPageOptions<T> {
  * El estado (página actual, tamaño, búsqueda) es local a cada instancia creada.
  */
 export function createListPage<T extends Record<string, unknown>>(
-  options: ListPageOptions<T>,
+  options: ListPageOptions<T>
 ): PageModule {
   // ── Estado interno de la página ──────────────────────────────────────────────
   let currentPage = 1;
   const pageSize = 10;
   let searchQuery = '';
+  let activeFilters: Record<string, string> = {};
   let abortController: AbortController | null = null;
 
   // Referencia al contenedor raíz — se establece en render()
@@ -119,16 +127,32 @@ export function createListPage<T extends Record<string, unknown>>(
 
     const uiColumns = buildUiColumns();
 
-    // Renderizar DataTable con las filas recibidas
-    tableContainer.innerHTML = DataTable.render<T>({
+    // Construir callback de clic en fila si la opción fue provista
+    // DataTable.init recibe el objeto completo — extraemos el id para el caller
+    const rowClickHandler = options.onRowClick
+      ? (row: T) => {
+          const rowRecord = row as Record<string, unknown>;
+          const rawId = rowRecord['id'];
+          const id = typeof rawId === 'string' || typeof rawId === 'number' ? String(rawId) : '';
+          options.onRowClick?.(id);
+        }
+      : undefined;
+
+    // Props base del DataTable — onRowClick solo se incluye si fue provisto
+    // para satisfacer exactOptionalPropertyTypes: true del compilador
+    const dataTableProps = {
       columns: uiColumns,
       rows: response.data,
-    });
+      ...(rowClickHandler !== undefined ? { onRowClick: rowClickHandler } : {}),
+    };
 
-    // Inicializar listeners de ordenamiento del DataTable
+    // Renderizar DataTable con las filas recibidas
+    tableContainer.innerHTML = DataTable.render<T>(dataTableProps);
+
+    // Inicializar listeners de ordenamiento y clic en filas del DataTable
     const tableRoot = tableContainer.querySelector<HTMLElement>('.ngr-datatable-wrapper');
     if (tableRoot) {
-      DataTable.init<T>(tableRoot, { columns: uiColumns, rows: response.data });
+      DataTable.init<T>(tableRoot, dataTableProps);
     }
 
     // Actualizar paginación — solo mostrar si hay más de una página
@@ -159,9 +183,14 @@ export function createListPage<T extends Record<string, unknown>>(
     showTableLoading();
 
     // Construir URL con parámetros de paginación y búsqueda
+    const filterParams = Object.entries(activeFilters)
+      .filter(([, v]) => v !== '')
+      .map(([k, v]) => `&${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+      .join('');
     const url =
-      `${options.endpoint}?page=${currentPage}&pageSize=${pageSize}` +
-      (searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : '');
+      `${options.endpoint}?page=${String(currentPage)}&pageSize=${String(pageSize)}` +
+      (searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : '') +
+      filterParams;
 
     apiFetch<PaginatedResponse<T>>(url, { signal: abortController.signal })
       .then((response) => {
@@ -185,7 +214,7 @@ export function createListPage<T extends Record<string, unknown>>(
       ? `<i class="bi bi-${options.actionIcon}" aria-hidden="true"></i> `
       : '';
 
-    return `<button type="button" class="btn btn-primary">${icon}${options.actionLabel}</button>`;
+    return `<button type="button" class="btn btn-primary ngr-action-btn">${icon}${options.actionLabel}</button>`;
   }
 
   // ── Implementación del PageModule ────────────────────────────────────────────
@@ -196,6 +225,7 @@ export function createListPage<T extends Record<string, unknown>>(
       // Resetear estado al montar la página
       currentPage = 1;
       searchQuery = '';
+      activeFilters = { ...(options.filters ?? {}) };
 
       // Estructura HTML principal de la página
       container.innerHTML = `
@@ -230,6 +260,14 @@ export function createListPage<T extends Record<string, unknown>>(
           currentPage = 1;
           fetchData();
         });
+
+        // Wiring del botón de acción principal — navega a la ruta de creación
+        if (options.onActionClick) {
+          const actionBtn = toolbarContainer.querySelector<HTMLButtonElement>('.ngr-action-btn');
+          actionBtn?.addEventListener('click', () => {
+            options.onActionClick?.();
+          });
+        }
       }
 
       // Suscribirse al evento de cambio de página que emite Pagination

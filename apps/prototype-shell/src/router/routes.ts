@@ -1,6 +1,6 @@
 // Registro de rutas de la aplicación — conecta paths con módulos de página
 // Todas las importaciones son lazy (dinámicas) para code splitting óptimo
-import { Router } from './router';
+import type { Router } from './router';
 
 /**
  * Registra todas las rutas de la aplicación en el router dado.
@@ -19,15 +19,13 @@ export function registerRoutes(router: Router): void {
   });
 
   router.register('/auth/forgot-password', {
-    factory: () =>
-      import('../pages/auth/forgot-password').then((m) => m.forgotPasswordPage),
+    factory: () => import('../pages/auth/forgot-password').then((m) => m.forgotPasswordPage),
     breadcrumb: 'Recuperar Contraseña',
     guarded: false,
   });
 
   router.register('/auth/reset-password', {
-    factory: () =>
-      import('../pages/auth/reset-password').then((m) => m.resetPasswordPage),
+    factory: () => import('../pages/auth/reset-password').then((m) => m.resetPasswordPage),
     breadcrumb: 'Nueva Contraseña',
     guarded: false,
   });
@@ -72,6 +70,16 @@ export function registerRoutes(router: Router): void {
     breadcrumb: 'Productos',
   });
 
+  router.register('/productos/nuevo', {
+    factory: () => import('../pages/modules/productos-form').then((m) => m.productosFormCreatePage),
+    breadcrumb: 'Nuevo Producto',
+  });
+
+  router.register('/productos/:id/editar', {
+    factory: () => import('../pages/modules/productos-form').then((m) => m.productosFormEditPage),
+    breadcrumb: 'Editar Producto',
+  });
+
   router.register('/productos/:id', {
     factory: () => import('../pages/modules/productos-detail').then((m) => m.productosDetailPage),
     breadcrumb: 'Detalle de Producto',
@@ -82,9 +90,37 @@ export function registerRoutes(router: Router): void {
     breadcrumb: 'Categorías',
   });
 
+  router.register('/categorias/nuevo', {
+    factory: () =>
+      import('../pages/modules/categorias-form').then((m) => m.categoriasFormCreatePage),
+    breadcrumb: 'Nueva Categoría',
+  });
+
+  router.register('/categorias/:id/editar', {
+    factory: () => import('../pages/modules/categorias-form').then((m) => m.categoriasFormEditPage),
+    breadcrumb: 'Editar Categoría',
+  });
+
+  router.register('/categorias/:id', {
+    factory: () => import('../pages/modules/categorias-detail').then((m) => m.categoriasDetailPage),
+    breadcrumb: 'Detalle de Categoría',
+  });
+
   router.register('/proveedores', {
     factory: () => import('../pages/modules/proveedores').then((m) => m.proveedoresPage),
     breadcrumb: 'Proveedores',
+  });
+
+  router.register('/proveedores/nuevo', {
+    factory: () =>
+      import('../pages/modules/proveedores-form').then((m) => m.proveedoresFormCreatePage),
+    breadcrumb: 'Nuevo Proveedor',
+  });
+
+  router.register('/proveedores/:id/editar', {
+    factory: () =>
+      import('../pages/modules/proveedores-form').then((m) => m.proveedoresFormEditPage),
+    breadcrumb: 'Editar Proveedor',
   });
 
   router.register('/proveedores/:id', {

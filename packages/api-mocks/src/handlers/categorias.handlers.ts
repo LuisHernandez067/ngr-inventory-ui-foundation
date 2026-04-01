@@ -1,6 +1,8 @@
-import { http, HttpResponse } from 'msw';
 import type { Categoria, PaginatedResponse, ProblemDetails } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { categoriaFixtures } from '../fixtures/categorias.fixtures';
+import { productoFixtures } from '../fixtures/productos.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
 /** Copia mutable en memoria para simular persistencia entre requests */
@@ -57,7 +59,10 @@ export const categoriasHandlers = [
       return HttpResponse.json(err, { status: 404 });
     }
 
-    return HttpResponse.json(categoria);
+    // Calcular la cantidad de productos asociados a esta categoría
+    const productoCount = productoFixtures.filter((p) => p.categoriaId === params['id']).length;
+
+    return HttpResponse.json({ ...categoria, productoCount });
   }),
 
   // POST /api/categorias — crear nueva categoría

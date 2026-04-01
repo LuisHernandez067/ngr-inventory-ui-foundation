@@ -1,10 +1,11 @@
 // Página de detalle de Producto — muestra información completa con dos tarjetas
 import type { Producto, NgrProductoStatus } from '@ngr-inventory/api-contracts';
-import { Spinner, Badge } from '@ngr-inventory/ui-core';
+import { Spinner, Badge, ConfirmDialog } from '@ngr-inventory/ui-core';
 import type { BadgeVariant } from '@ngr-inventory/ui-core';
 import { ActionMenu } from '@ngr-inventory/ui-patterns';
 
 import type { PageModule } from '../../router/router';
+import { authService } from '../../services/authService';
 import { apiFetch } from '../_shared/apiFetch';
 
 /** Controlador de cancelación para el fetch en vuelo */
@@ -45,6 +46,54 @@ function dtRow(label: string, value: string | undefined): string {
 }
 
 /**
+ * Muestra un mensaje de error inline en el contenedor cuando la eliminación falla.
+ */
+function showDeleteError(container: HTMLElement): void {
+  // Eliminar alerta previa si existe
+  container.querySelector('#delete-error')?.remove();
+
+  const alert = document.createElement('div');
+  alert.id = 'delete-error';
+  alert.className = 'alert alert-danger d-flex align-items-center gap-2 mt-3';
+  alert.setAttribute('role', 'alert');
+  alert.innerHTML =
+    '<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>' +
+    '<span>No se pudo eliminar el producto. Intente nuevamente.</span>';
+
+  // Insertar la alerta después de la barra superior
+  const topBar = container.querySelector<HTMLElement>(
+    '.d-flex.align-items-center.justify-content-between'
+  );
+  topBar?.insertAdjacentElement('afterend', alert);
+}
+
+/**
+ * Gestiona el flujo completo de confirmación y eliminación de un producto.
+ * Muestra el diálogo de confirmación y, si se confirma, llama al endpoint DELETE.
+ */
+async function handleDelete(
+  container: HTMLElement,
+  id: string,
+  signal: AbortSignal | undefined
+): Promise<void> {
+  const confirmed = await ConfirmDialog.confirm({
+    title: 'Eliminar producto',
+    message: '¿Estás seguro? Esta acción no se puede deshacer.',
+  });
+
+  if (!confirmed) return;
+
+  try {
+    await apiFetch<undefined>(`/api/productos/${id}`, { method: 'DELETE', signal: signal ?? null });
+    window.location.hash = '#/productos';
+  } catch (error: unknown) {
+    // Ignorar errores de cancelación — ocurren al navegar fuera de la página
+    if (error instanceof Error && error.name === 'AbortError') return;
+    showDeleteError(container);
+  }
+}
+
+/**
  * Renderiza el layout completo del detalle de producto una vez que los datos están disponibles.
  */
 function renderDetail(container: HTMLElement, producto: Producto): void {
@@ -53,15 +102,20 @@ function renderDetail(container: HTMLElement, producto: Producto): void {
   const statusLabel = STATUS_LABEL[producto.status];
   const statusBadge = Badge.render({ variant: statusVariant, text: statusLabel, pill: true });
 
-  // Construir ActionMenu con opciones de edición y eliminación
-  const actionMenuHtml = ActionMenu.render({
-    id: 'producto-actions',
-    size: 'sm',
-    items: [
-      { id: 'edit', label: 'Editar', icon: 'pencil' },
-      { id: 'delete', label: 'Eliminar', icon: 'trash', variant: 'danger' },
-    ],
-  });
+  // Verificar si el usuario tiene rol de sólo lectura
+  const isConsulta = authService.getProfile() === 'consulta';
+
+  // Construir ActionMenu solo para roles con permisos de escritura
+  const actionMenuHtml = isConsulta
+    ? ''
+    : ActionMenu.render({
+        id: 'producto-actions',
+        size: 'sm',
+        items: [
+          { id: 'edit', label: 'Editar', icon: 'pencil' },
+          { id: 'delete', label: 'Eliminar', icon: 'trash', variant: 'danger' },
+        ],
+      });
 
   container.innerHTML = `
     <div class="p-4">
@@ -130,22 +184,24 @@ function renderDetail(container: HTMLElement, producto: Producto): void {
     window.location.hash = '#/productos';
   });
 
-  // Inicializar ActionMenu para habilitar el dropdown de Bootstrap
-  const actionMenuRoot = container.querySelector<HTMLElement>('#producto-actions');
-  if (actionMenuRoot) {
-    ActionMenu.init(actionMenuRoot);
+  // Inicializar ActionMenu solo si está presente (no consulta)
+  if (!isConsulta) {
+    const actionMenuRoot = container.querySelector<HTMLElement>('#producto-actions');
+    if (actionMenuRoot) {
+      ActionMenu.init(actionMenuRoot);
 
-    // Escuchar acciones del menú
-    actionMenuRoot.addEventListener('ngr:action', (event: Event) => {
-      const customEvent = event as CustomEvent<{ id: string }>;
-      if (customEvent.detail.id === 'edit') {
-        // Navegar a la página de edición (funcionalidad futura)
-        window.location.hash = `#/productos/${producto.id}/editar`;
-      } else if (customEvent.detail.id === 'delete') {
-        // Confirmación de eliminación (funcionalidad futura)
-        alert(`Eliminar producto ${producto.nombre} — funcionalidad próximamente`);
-      }
-    });
+      // Escuchar acciones del menú
+      actionMenuRoot.addEventListener('ngr:action', (event: Event) => {
+        const customEvent = event as CustomEvent<{ id: string }>;
+        if (customEvent.detail.id === 'edit') {
+          // Navegar a la página de edición del producto
+          window.location.hash = `#/productos/${producto.id}/editar`;
+        } else if (customEvent.detail.id === 'delete') {
+          // Confirmar eliminación y llamar al endpoint DELETE
+          void handleDelete(container, producto.id, abortController?.signal);
+        }
+      });
+    }
   }
 }
 

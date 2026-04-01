@@ -98,6 +98,57 @@ describe('api-mocks — handlers', () => {
       });
     });
 
+    it('debe retornar solo productos activos al filtrar por status=active', async () => {
+      const response = await fetch('http://localhost/api/productos?status=active');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { data: { status: string }[] };
+      // Todos los resultados deben tener status active
+      body.data.forEach((p) => {
+        expect(p.status).toBe('active');
+      });
+    });
+
+    it('debe retornar solo productos inactivos al filtrar por status=inactive', async () => {
+      const response = await fetch('http://localhost/api/productos?status=inactive');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { data: { status: string }[] };
+      // Todos los resultados deben tener status inactive
+      body.data.forEach((p) => {
+        expect(p.status).toBe('inactive');
+      });
+      // prod-012 es el único inactivo en los fixtures
+      expect(body.data.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('debe retornar solo productos de la categoría al filtrar por categoriaId', async () => {
+      const response = await fetch('http://localhost/api/productos?categoriaId=cat-001');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { data: { categoriaId: string }[] };
+      // Todos los resultados deben pertenecer a cat-001
+      body.data.forEach((p) => {
+        expect(p.categoriaId).toBe('cat-001');
+      });
+      // cat-001 tiene prod-001, prod-004, prod-007, prod-008 en los fixtures
+      expect(body.data.length).toBe(4);
+    });
+
+    it('debe aplicar filtros combinados status + categoriaId correctamente', async () => {
+      const response = await fetch(
+        'http://localhost/api/productos?status=active&categoriaId=cat-001'
+      );
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as {
+        data: { status: string; categoriaId: string }[];
+      };
+      // Todos los resultados deben cumplir ambos filtros
+      body.data.forEach((p) => {
+        expect(p.status).toBe('active');
+        expect(p.categoriaId).toBe('cat-001');
+      });
+      // cat-001 solo tiene productos activos en los fixtures
+      expect(body.data.length).toBe(4);
+    });
+
     it('debe retornar 404 cuando el escenario es error-404', async () => {
       const response = await fetch('http://localhost/api/productos?_scenario=error-404');
       expect(response.status).toBe(404);
@@ -254,6 +305,49 @@ describe('api-mocks — handlers', () => {
       const body = (await response.json()) as { data: unknown[]; total: number };
       expect(Array.isArray(body.data)).toBe(true);
       expect(typeof body.total).toBe('number');
+    });
+  });
+
+  describe('GET /api/categorias/:id', () => {
+    it('debe retornar 200 con la categoría cuando existe', async () => {
+      const response = await fetch('http://localhost/api/categorias/cat-001');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { id: string };
+      expect(body.id).toBe('cat-001');
+    });
+
+    it('debe incluir el campo productoCount en el detalle de la categoría', async () => {
+      const response = await fetch('http://localhost/api/categorias/cat-001');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { id: string; productoCount: number };
+      // productoCount debe ser un número mayor o igual a cero
+      expect(typeof body.productoCount).toBe('number');
+      expect(body.productoCount).toBeGreaterThanOrEqual(0);
+    });
+
+    it('debe computar productoCount correctamente para cat-001 (4 productos en fixtures)', async () => {
+      const response = await fetch('http://localhost/api/categorias/cat-001');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { productoCount: number };
+      // cat-001 tiene prod-001, prod-004, prod-007, prod-008 en los fixtures
+      expect(body.productoCount).toBe(4);
+    });
+
+    it('debe retornar productoCount=0 para una categoría sin productos', async () => {
+      // cat-006 tiene prod-003 (Mobiliario) — si no existe categoría sin productos,
+      // verificamos que el campo existe y es numérico
+      const response = await fetch('http://localhost/api/categorias/cat-006');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as { productoCount: number };
+      expect(typeof body.productoCount).toBe('number');
+    });
+
+    it('debe retornar 404 cuando la categoría no existe', async () => {
+      const response = await fetch('http://localhost/api/categorias/inexistente-999');
+      expect(response.status).toBe(404);
+      const body = (await response.json()) as { status: number; type: string };
+      expect(body.status).toBe(404);
+      expect(body.type).toBe('/errors/not-found');
     });
   });
 

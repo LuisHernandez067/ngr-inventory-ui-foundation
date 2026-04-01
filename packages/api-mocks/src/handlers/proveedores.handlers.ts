@@ -1,5 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import type { Proveedor, PaginatedResponse, ProblemDetails } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { proveedorFixtures } from '../fixtures/proveedores.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
@@ -18,15 +19,17 @@ export const proveedoresHandlers = [
     const page = Number(url.searchParams.get('page') ?? '1');
     const pageSize = Number(url.searchParams.get('pageSize') ?? '20');
     const search = url.searchParams.get('search')?.toLowerCase() ?? '';
+    const statusFilter = url.searchParams.get('status');
 
-    const filtered = search
-      ? proveedores.filter(
-          (p) =>
-            p.razonSocial.toLowerCase().includes(search) ||
-            p.codigo.toLowerCase().includes(search) ||
-            p.ruc.includes(search)
-        )
-      : proveedores;
+    const filtered = proveedores.filter((p) => {
+      const matchesSearch =
+        !search ||
+        p.razonSocial.toLowerCase().includes(search) ||
+        p.codigo.toLowerCase().includes(search) ||
+        p.ruc.includes(search);
+      const matchesStatus = !statusFilter || p.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
 
     const start = (page - 1) * pageSize;
     const data = filtered.slice(start, start + pageSize);

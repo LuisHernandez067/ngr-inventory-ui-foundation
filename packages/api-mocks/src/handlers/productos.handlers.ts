@@ -1,5 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import type { Producto, PaginatedResponse, ProblemDetails } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { productoFixtures } from '../fixtures/productos.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
@@ -18,12 +19,19 @@ export const productosHandlers = [
     const page = Number(url.searchParams.get('page') ?? '1');
     const pageSize = Number(url.searchParams.get('pageSize') ?? '10');
     const search = url.searchParams.get('search')?.toLowerCase() ?? '';
+    const statusFilter = url.searchParams.get('status');
+    const categoriaIdFilter = url.searchParams.get('categoriaId');
 
-    const filtered = search
-      ? productos.filter(
-          (p) => p.nombre.toLowerCase().includes(search) || p.codigo.toLowerCase().includes(search)
-        )
-      : productos;
+    // Aplicar filtros compuestos: search + status + categoriaId (todos opcionales)
+    const filtered = productos.filter((p) => {
+      const matchesSearch =
+        !search ||
+        p.nombre.toLowerCase().includes(search) ||
+        p.codigo.toLowerCase().includes(search);
+      const matchesStatus = !statusFilter || p.status === statusFilter;
+      const matchesCategoriaId = !categoriaIdFilter || p.categoriaId === categoriaIdFilter;
+      return matchesSearch && matchesStatus && matchesCategoriaId;
+    });
 
     const start = (page - 1) * pageSize;
     const data = filtered.slice(start, start + pageSize);

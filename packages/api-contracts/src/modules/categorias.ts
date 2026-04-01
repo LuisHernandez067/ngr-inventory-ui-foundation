@@ -8,6 +8,8 @@ export type Categoria = AuditFields & {
   descripcion?: string;
   parentId?: string;
   status: 'active' | 'inactive';
+  /** Cantidad de productos asociados — campo computado, solo presente en el detalle GET /:id */
+  productoCount?: number;
 };
 
 /** DTO para crear una categoría */
