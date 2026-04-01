@@ -1,15 +1,22 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
+
 import { server } from './server';
 
 // Tests de integración para los handlers de MSW v2
 // Verifican que los mocks responden correctamente usando el servidor Node de MSW
 describe('api-mocks — handlers', () => {
   // Iniciar el servidor MSW antes de todos los tests
-  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
   // Limpiar handlers sobreescritos entre tests
-  afterEach(() => server.resetHandlers());
+  afterEach(() => {
+    server.resetHandlers();
+  });
   // Cerrar el servidor al terminar
-  afterAll(() => server.close());
+  afterAll(() => {
+    server.close();
+  });
 
   describe('GET /api/health', () => {
     it('debe retornar 200 con status "ok"', async () => {
@@ -81,7 +88,7 @@ describe('api-mocks — handlers', () => {
     it('debe filtrar por búsqueda cuando se envía el param search', async () => {
       const response = await fetch('http://localhost/api/productos?search=tornillo');
       expect(response.status).toBe(200);
-      const body = (await response.json()) as { data: Array<{ nombre: string; codigo: string }> };
+      const body = (await response.json()) as { data: { nombre: string; codigo: string }[] };
       // Todos los resultados deben contener "tornillo" en nombre o código
       body.data.forEach((p) => {
         const match =
@@ -250,7 +257,7 @@ describe('api-mocks — handlers', () => {
     });
   });
 
-  // Cobertura representativa del módulo stock
+  // Cobertura del módulo stock
   describe('GET /api/stock', () => {
     it('debe retornar lista paginada de stock', async () => {
       const response = await fetch('http://localhost/api/stock');
@@ -265,6 +272,152 @@ describe('api-mocks — handlers', () => {
       expect(response.status).toBe(403);
       const body = (await response.json()) as { type: string };
       expect(body.type).toBe('/errors/forbidden');
+    });
+  });
+
+  // Endpoints granulares del dashboard (widgets independientes)
+  describe('GET /api/dashboard/kpis', () => {
+    it('debe retornar un array de métricas KPI', async () => {
+      const response = await fetch('http://localhost/api/dashboard/kpis');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as {
+        id: string;
+        label: string;
+        value: number;
+        trend: string;
+        icon: string;
+        colorClass: string;
+      }[];
+      // Debe retornar entre 4 y 6 KPIs
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThanOrEqual(4);
+      expect(body.length).toBeLessThanOrEqual(6);
+    });
+
+    it('cada KPI debe tener los campos obligatorios del contrato', async () => {
+      const response = await fetch('http://localhost/api/dashboard/kpis');
+      const body = (await response.json()) as {
+        id: string;
+        label: string;
+        value: number;
+        trend: string;
+        icon: string;
+        colorClass: string;
+      }[];
+      body.forEach((kpi) => {
+        expect(typeof kpi.id).toBe('string');
+        expect(typeof kpi.label).toBe('string');
+        expect(typeof kpi.value).toBe('number');
+        expect(['up', 'down', 'stable']).toContain(kpi.trend);
+        expect(typeof kpi.icon).toBe('string');
+        expect(typeof kpi.colorClass).toBe('string');
+      });
+    });
+
+    it('debe retornar 500 con escenario error-500', async () => {
+      const response = await fetch('http://localhost/api/dashboard/kpis?_scenario=error-500');
+      expect(response.status).toBe(500);
+      const body = (await response.json()) as { type: string; status: number };
+      expect(body.status).toBe(500);
+    });
+  });
+
+  describe('GET /api/dashboard/alerts', () => {
+    it('debe retornar un array de alertas operacionales', async () => {
+      const response = await fetch('http://localhost/api/dashboard/alerts');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as {
+        id: string;
+        tipo: string;
+        severity: string;
+        titulo: string;
+        descripcion: string;
+      }[];
+      // Debe retornar entre 3 y 5 alertas
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThanOrEqual(3);
+      expect(body.length).toBeLessThanOrEqual(5);
+    });
+
+    it('cada alerta debe tener los campos obligatorios del contrato', async () => {
+      const response = await fetch('http://localhost/api/dashboard/alerts');
+      const body = (await response.json()) as {
+        id: string;
+        tipo: string;
+        severity: string;
+        titulo: string;
+        descripcion: string;
+      }[];
+      body.forEach((alert) => {
+        expect(typeof alert.id).toBe('string');
+        expect(['bajo-stock', 'orden-pendiente', 'conteo-vencido']).toContain(alert.tipo);
+        expect(['danger', 'warning', 'info']).toContain(alert.severity);
+        expect(typeof alert.titulo).toBe('string');
+        expect(typeof alert.descripcion).toBe('string');
+      });
+    });
+
+    it('debe retornar 403 con escenario error-403', async () => {
+      const response = await fetch('http://localhost/api/dashboard/alerts?_scenario=error-403');
+      expect(response.status).toBe(403);
+      const body = (await response.json()) as { type: string };
+      expect(body.type).toBe('/errors/forbidden');
+    });
+  });
+
+  describe('GET /api/dashboard/movements', () => {
+    it('debe retornar un array de movimientos recientes', async () => {
+      const response = await fetch('http://localhost/api/dashboard/movements');
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as {
+        id: string;
+        numero: string;
+        tipo: string;
+        descripcion: string;
+        usuario: string;
+        fecha: string;
+      }[];
+      // Debe retornar entre 8 y 10 movimientos
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThanOrEqual(8);
+      expect(body.length).toBeLessThanOrEqual(10);
+    });
+
+    it('cada movimiento debe tener los campos obligatorios del contrato', async () => {
+      const response = await fetch('http://localhost/api/dashboard/movements');
+      const body = (await response.json()) as {
+        id: string;
+        numero: string;
+        tipo: string;
+        descripcion: string;
+        usuario: string;
+        fecha: string;
+      }[];
+      body.forEach((mov) => {
+        expect(typeof mov.id).toBe('string');
+        expect(typeof mov.numero).toBe('string');
+        expect(['entrada', 'salida', 'ajuste', 'transferencia']).toContain(mov.tipo);
+        expect(typeof mov.descripcion).toBe('string');
+        expect(typeof mov.usuario).toBe('string');
+        // La fecha debe ser un ISO 8601 válido
+        const date = new Date(mov.fecha);
+        expect(date.toString()).not.toBe('Invalid Date');
+      });
+    });
+
+    it('debe ser independiente del endpoint /api/dashboard legacy', async () => {
+      // Verifica que el endpoint granular existe separado del legacy
+      const granular = await fetch('http://localhost/api/dashboard/movements');
+      const legacy = await fetch('http://localhost/api/dashboard');
+      expect(granular.status).toBe(200);
+      expect(legacy.status).toBe(200);
+    });
+
+    it('debe retornar 500 con escenario error-500', async () => {
+      const response = await fetch('http://localhost/api/dashboard/movements?_scenario=error-500');
+      expect(response.status).toBe(500);
+      const body = (await response.json()) as { status: number };
+      expect(body.status).toBe(500);
     });
   });
 });
