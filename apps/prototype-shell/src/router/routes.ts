@@ -134,9 +134,42 @@ export function registerRoutes(router: Router): void {
     breadcrumb: 'Almacenes',
   });
 
+  router.register('/almacenes/nuevo', {
+    factory: () => import('../pages/modules/almacenes-form').then((m) => m.almacenesFormCreatePage),
+    breadcrumb: 'Nuevo Almacén',
+  });
+
+  router.register('/almacenes/:id/editar', {
+    factory: () => import('../pages/modules/almacenes-form').then((m) => m.almacenesFormEditPage),
+    breadcrumb: 'Editar Almacén',
+  });
+
+  router.register('/almacenes/:id', {
+    factory: () => import('../pages/modules/almacenes-detail').then((m) => m.almacenesDetailPage),
+    breadcrumb: 'Detalle de Almacén',
+  });
+
   router.register('/ubicaciones', {
     factory: () => import('../pages/modules/ubicaciones').then((m) => m.ubicacionesPage),
     breadcrumb: 'Ubicaciones',
+  });
+
+  router.register('/ubicaciones/nuevo', {
+    factory: () =>
+      import('../pages/modules/ubicaciones-form').then((m) => m.ubicacionesFormCreatePage),
+    breadcrumb: 'Nueva Ubicación',
+  });
+
+  router.register('/ubicaciones/:id/editar', {
+    factory: () =>
+      import('../pages/modules/ubicaciones-form').then((m) => m.ubicacionesFormEditPage),
+    breadcrumb: 'Editar Ubicación',
+  });
+
+  router.register('/ubicaciones/:id', {
+    factory: () =>
+      import('../pages/modules/ubicaciones-detail').then((m) => m.ubicacionesDetailPage),
+    breadcrumb: 'Detalle de Ubicación',
   });
 
   // ─── Módulos de Movimientos ───────────────────────────────────────────────
@@ -149,6 +182,11 @@ export function registerRoutes(router: Router): void {
   router.register('/stock', {
     factory: () => import('../pages/modules/stock').then((m) => m.stockPage),
     breadcrumb: 'Stock',
+  });
+
+  router.register('/stock/consolidado', {
+    factory: () => import('../pages/modules/stock-consolidado').then((m) => m.stockConsolidadoPage),
+    breadcrumb: 'Stock Consolidado',
   });
 
   router.register('/kardex', {

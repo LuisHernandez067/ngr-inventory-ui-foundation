@@ -39,7 +39,9 @@ export class Router {
   constructor(container: HTMLElement) {
     this.container = container;
     // El router es el único dueño de hashchange
-    window.addEventListener('hashchange', () => this.navigate());
+    window.addEventListener('hashchange', () => {
+      void this.navigate();
+    });
   }
 
   /**
@@ -57,8 +59,11 @@ export class Router {
   async navigate(): Promise<void> {
     const hash = window.location.hash.replace('#', '') || '/';
 
+    // Separar el path de los query params del hash (ej: /stock?productoId=xxx → /stock)
+    // Los query params se leen directamente desde window.location.hash en cada página
+    const hashPath = hash.split('?')[0] ?? hash;
     // Normalizar '/' a '/dashboard' para la ruta raíz
-    const resolvedHash = hash === '/' ? '/dashboard' : hash;
+    const resolvedHash = hashPath === '/' ? '/dashboard' : hashPath;
 
     // Auth guard — delegar la verificación al servicio de autenticación
     const isAuthenticated = authService.isAuthenticated();
@@ -125,12 +130,12 @@ export class Router {
    * Primero busca exact match, luego intenta pattern matching con parámetros.
    * Retorna null si no encuentra ninguna coincidencia.
    */
-  private matchRoute(
-    hash: string,
-  ): { config: RouteConfig; params: Record<string, string> } | null {
+  private matchRoute(hash: string): { config: RouteConfig; params: Record<string, string> } | null {
     // Exact match — más rápido y evita colisiones con patrones
     if (this.routes.has(hash)) {
-      return { config: this.routes.get(hash)!, params: {} };
+      const config = this.routes.get(hash);
+      if (!config) return null;
+      return { config, params: {} };
     }
 
     // Pattern match — para rutas con parámetros como '/productos/:id'
@@ -174,6 +179,6 @@ export class Router {
    * Inicia el router evaluando la ruta actual al cargar la aplicación.
    */
   start(): void {
-    this.navigate();
+    void this.navigate();
   }
 }

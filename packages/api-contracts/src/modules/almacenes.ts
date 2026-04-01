@@ -10,6 +10,8 @@ export type Almacen = AuditFields & {
   responsableId?: string;
   responsableNombre?: string;
   status: 'active' | 'inactive';
+  /** Cantidad de ubicaciones asociadas — incluido solo en respuesta GET /api/almacenes/:id */
+  ubicacionCount?: number;
 };
 
 /** DTO para crear un almacén */
