@@ -79,9 +79,10 @@ export const proveedoresHandlers = [
       codigo: body.codigo ?? 'PROV-NEW',
       razonSocial: body.razonSocial ?? 'Nuevo Proveedor S.A.',
       ruc: body.ruc ?? '30-00000000-0',
-      email: body.email,
-      telefono: body.telefono,
-      direccion: body.direccion,
+      // Propiedades opcionales: solo se incluyen si el body las provee
+      ...(body.email !== undefined ? { email: body.email } : {}),
+      ...(body.telefono !== undefined ? { telefono: body.telefono } : {}),
+      ...(body.direccion !== undefined ? { direccion: body.direccion } : {}),
       status: body.status ?? 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -100,8 +101,9 @@ export const proveedoresHandlers = [
     const errorResponse = resolveScenario(scenario);
     if (errorResponse) return errorResponse;
 
-    const idx = proveedores.findIndex((p) => p.id === params['id']);
-    if (idx === -1) {
+    // Busca el proveedor y retorna 404 si no existe
+    const base = proveedores.find((p) => p.id === params['id']);
+    if (!base) {
       const err: ProblemDetails = {
         type: '/errors/not-found',
         title: 'Proveedor no encontrado',
@@ -113,14 +115,16 @@ export const proveedoresHandlers = [
 
     const body = (await request.json()) as Partial<Proveedor>;
     const actualizado: Proveedor = {
-      ...proveedores[idx],
+      ...base,
       ...body,
-      id: proveedores[idx].id,
+      id: base.id,
+      // Campos de auditoría requeridos: se preservan del registro original
+      createdAt: base.createdAt,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };
 
-    proveedores = proveedores.map((p, i) => (i === idx ? actualizado : p));
+    proveedores = proveedores.map((p) => (p.id === base.id ? actualizado : p));
     return HttpResponse.json(actualizado);
   }),
 

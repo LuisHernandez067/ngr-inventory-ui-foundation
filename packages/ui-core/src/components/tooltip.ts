@@ -1,5 +1,6 @@
 // Componente Tooltip — wrapper de Bootstrap Tooltip JS
 import { Tooltip } from 'bootstrap';
+
 import type { ComponentProps } from '../types';
 
 /** Configuración para el componente Tooltip */

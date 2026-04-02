@@ -36,10 +36,14 @@ function buildPageList(current: number, total: number): (number | null)[] {
 
   // Insertar null donde hay saltos en la secuencia
   for (let i = 0; i < sorted.length; i++) {
-    if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+    // Con noUncheckedIndexedAccess los accesos por índice pueden ser undefined.
+    // Usamos optional chaining + fallback para evitar non-null assertions prohibidas.
+    const current = sorted[i] ?? 0;
+    const prev = sorted[i - 1] ?? 0;
+    if (i > 0 && current - prev > 1) {
       result.push(null); // elipsis
     }
-    result.push(sorted[i]);
+    result.push(current);
   }
 
   return result;
@@ -61,15 +65,16 @@ export function render(props: PaginationProps): string {
   const pages = buildPageList(currentPage, totalPages);
 
   const pageItems = pages
-    .map((page, idx) => {
+    .map((page, _idx) => {
       if (page === null) {
         // Elemento de elipsis
         return `<li class="page-item disabled" aria-hidden="true"><span class="page-link">…</span></li>`;
       }
       const isActive = page === currentPage;
+      const pageStr = String(page);
       return (
         `<li class="page-item${isActive ? ' active' : ''}" ${isActive ? 'aria-current="page"' : ''}>` +
-        `<button type="button" class="page-link" data-page="${page}" ${isActive ? 'aria-disabled="true"' : ''}>${page}</button>` +
+        `<button type="button" class="page-link" data-page="${pageStr}" ${isActive ? 'aria-disabled="true"' : ''}>${pageStr}</button>` +
         `</li>`
       );
     })
@@ -79,13 +84,13 @@ export function render(props: PaginationProps): string {
     `<nav${idAttr} class="ngr-pagination${extraClass}" aria-label="Paginación">` +
     `<ul class="pagination justify-content-center mb-0">` +
     `<li class="page-item${prevDisabled ? ' disabled' : ''}">` +
-    `<button type="button" class="page-link" data-page="${currentPage - 1}" ` +
+    `<button type="button" class="page-link" data-page="${String(currentPage - 1)}" ` +
     `${prevDisabled ? 'disabled aria-disabled="true"' : ''} aria-label="Página anterior">` +
     `<i class="bi bi-chevron-left" aria-hidden="true"></i></button>` +
     `</li>` +
     pageItems +
     `<li class="page-item${nextDisabled ? ' disabled' : ''}">` +
-    `<button type="button" class="page-link" data-page="${currentPage + 1}" ` +
+    `<button type="button" class="page-link" data-page="${String(currentPage + 1)}" ` +
     `${nextDisabled ? 'disabled aria-disabled="true"' : ''} aria-label="Página siguiente">` +
     `<i class="bi bi-chevron-right" aria-hidden="true"></i></button>` +
     `</li>` +

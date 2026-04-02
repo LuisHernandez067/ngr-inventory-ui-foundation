@@ -77,8 +77,9 @@ export const categoriasHandlers = [
       id: `cat-${String(Date.now()).slice(-6)}`,
       codigo: body.codigo ?? 'NEW-001',
       nombre: body.nombre ?? 'Nueva Categoría',
-      descripcion: body.descripcion,
-      parentId: body.parentId,
+      // Campos opcionales: solo se incluyen si el body los provee
+      ...(body.descripcion !== undefined ? { descripcion: body.descripcion } : {}),
+      ...(body.parentId !== undefined ? { parentId: body.parentId } : {}),
       status: body.status ?? 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -109,10 +110,21 @@ export const categoriasHandlers = [
     }
 
     const body = (await request.json()) as Partial<Categoria>;
+    // idx fue verificado arriba — la entrada existe; el check siguiente satisface noUncheckedIndexedAccess
+    const existente = categorias[idx];
+    if (!existente)
+      return HttpResponse.json(
+        {
+          type: '/errors/not-found',
+          title: 'Categoría no encontrada',
+          status: 404,
+        } as ProblemDetails,
+        { status: 404 }
+      );
     const actualizada: Categoria = {
-      ...categorias[idx],
+      ...existente,
       ...body,
-      id: categorias[idx].id,
+      id: existente.id,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };

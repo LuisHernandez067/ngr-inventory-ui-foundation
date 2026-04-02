@@ -113,14 +113,19 @@ export const movimientosHandlers = [
       numero,
       tipo: body.tipo ?? 'entrada',
       estado: 'borrador',
-      almacenOrigenId: body.almacenOrigenId,
-      almacenOrigenNombre: body.almacenOrigenNombre,
-      almacenDestinoId: body.almacenDestinoId,
-      almacenDestinoNombre: body.almacenDestinoNombre,
-      proveedorId: body.proveedorId,
-      proveedorNombre: body.proveedorNombre,
+      // Campos opcionales: solo se incluyen si el body los provee
+      ...(body.almacenOrigenId !== undefined ? { almacenOrigenId: body.almacenOrigenId } : {}),
+      ...(body.almacenOrigenNombre !== undefined
+        ? { almacenOrigenNombre: body.almacenOrigenNombre }
+        : {}),
+      ...(body.almacenDestinoId !== undefined ? { almacenDestinoId: body.almacenDestinoId } : {}),
+      ...(body.almacenDestinoNombre !== undefined
+        ? { almacenDestinoNombre: body.almacenDestinoNombre }
+        : {}),
+      ...(body.proveedorId !== undefined ? { proveedorId: body.proveedorId } : {}),
+      ...(body.proveedorNombre !== undefined ? { proveedorNombre: body.proveedorNombre } : {}),
       items: body.items ?? [],
-      observacion: body.observacion,
+      ...(body.observacion !== undefined ? { observacion: body.observacion } : {}),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       createdBy: 'mock-user@ngr.com',
@@ -150,11 +155,22 @@ export const movimientosHandlers = [
     }
 
     const body = (await request.json()) as Partial<Movimiento>;
+    // idx fue verificado arriba — la entrada existe; el check siguiente satisface noUncheckedIndexedAccess
+    const existente = movimientos[idx];
+    if (!existente)
+      return HttpResponse.json(
+        {
+          type: '/errors/not-found',
+          title: 'Movimiento no encontrado',
+          status: 404,
+        } as ProblemDetails,
+        { status: 404 }
+      );
     const actualizado: Movimiento = {
-      ...movimientos[idx],
+      ...existente,
       ...body,
-      id: movimientos[idx].id,
-      numero: movimientos[idx].numero,
+      id: existente.id,
+      numero: existente.numero,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };

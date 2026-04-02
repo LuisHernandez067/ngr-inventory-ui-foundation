@@ -1,24 +1,21 @@
 // Patrón StatusBadge — badge semántico para estados del dominio NGR Inventory
-import type { ComponentProps, BadgeVariant } from '../types';
-import type { NgrStatus } from '../types';
+import type { BadgeVariant, ComponentProps, NgrStatus } from '../types';
 
 /** Props para el componente StatusBadge */
 export interface StatusBadgeProps extends ComponentProps {
-  /** Estado del dominio a representar */
-  status: NgrStatus | string;
+  /** Estado del dominio a representar — puede ser un NgrStatus conocido o un string libre */
+  status: string;
   /** Aplica bordes redondeados tipo píldora (por defecto false) */
   pill?: boolean;
 }
 
 /** Mapeo de estados del dominio a variantes de Bootstrap e íconos */
 const STATUS_MAP: Record<NgrStatus, { variant: BadgeVariant; icon: string; label: string }> = {
-  activo: { variant: 'success', icon: 'bi-check-circle-fill', label: 'Activo' },
-  inactivo: { variant: 'secondary', icon: 'bi-dash-circle', label: 'Inactivo' },
-  pendiente: { variant: 'warning', icon: 'bi-clock', label: 'Pendiente' },
-  aprobado: { variant: 'success', icon: 'bi-check2-all', label: 'Aprobado' },
-  rechazado: { variant: 'danger', icon: 'bi-x-circle-fill', label: 'Rechazado' },
-  en_transito: { variant: 'info', icon: 'bi-truck', label: 'En tránsito' },
-  reservado: { variant: 'warning', icon: 'bi-bookmark-fill', label: 'Reservado' },
+  active: { variant: 'success', icon: 'bi-check-circle-fill', label: 'Activo' },
+  inactive: { variant: 'secondary', icon: 'bi-dash-circle', label: 'Inactivo' },
+  pending: { variant: 'warning', icon: 'bi-clock', label: 'Pendiente' },
+  error: { variant: 'danger', icon: 'bi-x-circle-fill', label: 'Error' },
+  warning: { variant: 'warning', icon: 'bi-exclamation-triangle-fill', label: 'Advertencia' },
 };
 
 /**
@@ -33,11 +30,9 @@ export function render(props: StatusBadgeProps): string {
   const extraClass = className ? ` ${className}` : '';
 
   // Obtener configuración del estado — fallback para estados desconocidos
-  const config = STATUS_MAP[status as NgrStatus] ?? {
-    variant: 'secondary' as BadgeVariant,
-    icon: 'bi-question-circle',
-    label: status,
-  };
+  const config = Object.hasOwn(STATUS_MAP, status)
+    ? STATUS_MAP[status as NgrStatus]
+    : { variant: 'secondary' as BadgeVariant, icon: 'bi-question-circle', label: status };
 
   return `<span${idAttr} class="badge bg-${config.variant}${pillClass} ngr-status-badge${extraClass}"><i class="bi ${config.icon} me-1" aria-hidden="true"></i>${config.label}</span>`;
 }

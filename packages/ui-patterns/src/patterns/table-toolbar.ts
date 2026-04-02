@@ -1,7 +1,8 @@
 // Patrón TableToolbar — barra de herramientas compuesta (búsqueda + filtros + acciones)
 import type { TableToolbarProps } from '../types';
-import { render as renderSearchBar, init as initSearchBar } from './search-bar';
+
 import { render as renderFilterChips, init as initFilterChips } from './filter-chips';
+import { render as renderSearchBar, init as initSearchBar } from './search-bar';
 
 /**
  * Renderiza el HTML de la barra de herramientas de tabla.
@@ -15,7 +16,9 @@ export function render(props: TableToolbarProps): string {
 
   const searchHtml = showSearch
     ? `<div class="ngr-toolbar-search flex-grow-1">` +
-      renderSearchBar({ placeholder: searchPlaceholder }) +
+      renderSearchBar({
+        ...(searchPlaceholder !== undefined ? { placeholder: searchPlaceholder } : {}),
+      }) +
       `</div>`
     : '';
 

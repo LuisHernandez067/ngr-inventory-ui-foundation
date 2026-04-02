@@ -40,7 +40,13 @@ export function findMockUser(email: string, password: string): MockUser | null {
 
   // Fallback: cualquier @ngr.com + admin123 → perfil admin
   if (email.endsWith('@ngr.com') && password === 'admin123') {
-    return { email, password, perfil: 'admin', nombre: email.split('@')[0], rol: 'Administrador' };
+    return {
+      email,
+      password,
+      perfil: 'admin',
+      nombre: email.split('@')[0] ?? email,
+      rol: 'Administrador',
+    };
   }
 
   return null;

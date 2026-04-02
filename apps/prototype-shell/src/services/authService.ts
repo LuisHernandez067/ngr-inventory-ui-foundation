@@ -33,7 +33,8 @@ const PERMISSIONS: Record<string, string[] | 'all'> = {
 };
 
 // Referencia al temporizador de sesión activo — null si no hay ninguno
-let sessionTimerHandle: ReturnType<typeof window.setTimeout> | null = null;
+// Se usa `number` explícito porque window.setTimeout retorna number en el DOM
+let sessionTimerHandle: number | null = null;
 
 // Singleton de autenticación del prototipo
 export const authService = {
@@ -82,13 +83,16 @@ export const authService = {
 
   // Inicia un temporizador de sesión. Emite ngr:session-expired después de N minutos.
   // Pasa 0 para desactivar.
-  startSessionTimer(minutes: number): ReturnType<typeof window.setTimeout> | null {
+  startSessionTimer(minutes: number): number | null {
     authService.clearSessionTimer();
     if (minutes <= 0) return null;
-    sessionTimerHandle = window.setTimeout(() => {
-      sessionTimerHandle = null;
-      window.dispatchEvent(new CustomEvent('ngr:session-expired'));
-    }, minutes * 60 * 1000);
+    sessionTimerHandle = window.setTimeout(
+      () => {
+        sessionTimerHandle = null;
+        window.dispatchEvent(new CustomEvent('ngr:session-expired'));
+      },
+      minutes * 60 * 1000
+    );
     return sessionTimerHandle;
   },
 

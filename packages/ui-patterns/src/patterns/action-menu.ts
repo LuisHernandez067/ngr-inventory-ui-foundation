@@ -1,6 +1,7 @@
 // Patrón ActionMenu — menú desplegable de acciones con Bootstrap Dropdown
 import { Dropdown } from 'bootstrap';
-import type { ComponentProps, ActionMenuItem } from '../types';
+
+import type { ActionMenuItem, ComponentProps } from '../types';
 
 /** Props para el componente ActionMenu */
 export interface ActionMenuProps extends ComponentProps {

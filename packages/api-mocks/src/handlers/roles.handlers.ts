@@ -1,10 +1,11 @@
-import { http, HttpResponse } from 'msw';
 import type {
   Rol,
   PermisosEfectivos,
   PaginatedResponse,
   ProblemDetails,
 } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { rolFixtures } from '../fixtures/roles.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
@@ -78,7 +79,8 @@ export const rolesHandlers = [
     const nuevo: Rol = {
       id: `rol-${String(Date.now()).slice(-6)}`,
       nombre: body.nombre ?? 'Nuevo Rol',
-      descripcion: body.descripcion,
+      // Propiedades opcionales: solo se incluyen si el body las provee
+      ...(body.descripcion !== undefined ? { descripcion: body.descripcion } : {}),
       permisos: body.permisos ?? [],
       esAdmin: body.esAdmin ?? false,
       createdAt: new Date().toISOString(),
@@ -98,8 +100,9 @@ export const rolesHandlers = [
     const errorResponse = resolveScenario(scenario);
     if (errorResponse) return errorResponse;
 
-    const idx = roles.findIndex((r) => r.id === params['id']);
-    if (idx === -1) {
+    // Busca el rol y retorna 404 si no existe
+    const base = roles.find((r) => r.id === params['id']);
+    if (!base) {
       const err: ProblemDetails = {
         type: '/errors/not-found',
         title: 'Rol no encontrado',
@@ -111,14 +114,16 @@ export const rolesHandlers = [
 
     const body = (await request.json()) as Partial<Rol>;
     const actualizado: Rol = {
-      ...roles[idx],
+      ...base,
       ...body,
-      id: roles[idx].id,
+      id: base.id,
+      // Campos de auditoría requeridos: se preservan del registro original
+      createdAt: base.createdAt,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };
 
-    roles = roles.map((r, i) => (i === idx ? actualizado : r));
+    roles = roles.map((r) => (r.id === base.id ? actualizado : r));
     return HttpResponse.json(actualizado);
   }),
 

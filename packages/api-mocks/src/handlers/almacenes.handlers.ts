@@ -86,10 +86,13 @@ export const almacenesHandlers = [
       id: `alm-${String(Date.now()).slice(-6)}`,
       codigo: body.codigo ?? 'ALM-NEW',
       nombre: body.nombre ?? 'Nuevo Almacén',
-      descripcion: body.descripcion,
-      direccion: body.direccion,
-      responsableId: body.responsableId,
-      responsableNombre: body.responsableNombre,
+      // Campos opcionales: solo se incluyen si el body los provee
+      ...(body.descripcion !== undefined ? { descripcion: body.descripcion } : {}),
+      ...(body.direccion !== undefined ? { direccion: body.direccion } : {}),
+      ...(body.responsableId !== undefined ? { responsableId: body.responsableId } : {}),
+      ...(body.responsableNombre !== undefined
+        ? { responsableNombre: body.responsableNombre }
+        : {}),
       status: body.status ?? 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

@@ -1,5 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import type { LoginRequest, LoginResponse, AuthUser } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { resolveScenario } from '../scenarios/error-scenarios';
 
 // Credenciales de demo — duplicado intencional desde prototype-shell/mockUsers.ts
@@ -44,7 +45,13 @@ function findDemoUser(email: string, password: string): DemoUser | null {
 
   // Fallback: cualquier @ngr.com + admin123 → perfil admin
   if (email.endsWith('@ngr.com') && password === 'admin123') {
-    return { email, password, perfil: 'admin', nombre: email.split('@')[0], rol: 'Administrador' };
+    return {
+      email,
+      password,
+      perfil: 'admin',
+      nombre: email.split('@')[0] ?? email,
+      rol: 'Administrador',
+    };
   }
 
   return null;
@@ -100,7 +107,7 @@ export const authHandlers = [
     if (errorResponse) return errorResponse;
 
     const body = (await request.json()) as LoginRequest;
-    const demoUser = findDemoUser(body.email ?? '', body.password ?? '');
+    const demoUser = findDemoUser(body.email, body.password);
 
     if (!demoUser) {
       return HttpResponse.json(
@@ -138,7 +145,7 @@ export const authHandlers = [
 
     const auth = request.headers.get('Authorization');
 
-    if (!auth || !auth.startsWith('Bearer ')) {
+    if (!auth?.startsWith('Bearer ')) {
       return HttpResponse.json(
         { type: '/errors/unauthorized', title: 'No autenticado', status: 401 },
         { status: 401 }
@@ -146,7 +153,8 @@ export const authHandlers = [
     }
 
     // Token simulado — en prototipo siempre devuelve el admin
-    const adminUser = DEMO_CREDENTIALS.find((u) => u.perfil === 'admin')!;
+    const adminUser = DEMO_CREDENTIALS.find((u) => u.perfil === 'admin');
+    if (!adminUser) return new HttpResponse(null, { status: 500 });
     return HttpResponse.json(buildAuthUser(adminUser));
   }),
 

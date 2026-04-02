@@ -1,5 +1,5 @@
-import { HttpResponse } from 'msw';
 import type { ProblemDetails } from '@ngr-inventory/api-contracts';
+import { HttpResponse } from 'msw';
 
 /** Escenarios de error predefinidos para simular respuestas fallidas */
 const SCENARIOS: Record<string, ProblemDetails & { _httpStatus: number }> = {
@@ -53,6 +53,10 @@ const SCENARIOS: Record<string, ProblemDetails & { _httpStatus: number }> = {
  */
 export function resolveScenario(scenario: string | null): Response | null {
   if (!scenario || !(scenario in SCENARIOS)) return null;
-  const { _httpStatus, ...body } = SCENARIOS[scenario];
+  // Guard explícito: aunque el `in` ya filtró los undefined, noUncheckedIndexedAccess
+  // no hace narrowing automático por key, así que verificamos antes de desestructurar
+  const entry = SCENARIOS[scenario];
+  if (!entry) return null;
+  const { _httpStatus, ...body } = entry;
   return HttpResponse.json(body, { status: _httpStatus });
 }

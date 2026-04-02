@@ -111,8 +111,9 @@ export const conteosHandlers = [
       almacenNombre: body.almacenNombre ?? 'Sin almacén',
       estado: 'planificado',
       items: body.items ?? [],
-      fechaInicio: body.fechaInicio,
-      fechaFin: body.fechaFin,
+      // Campos opcionales: solo se incluyen si el body los provee
+      ...(body.fechaInicio !== undefined ? { fechaInicio: body.fechaInicio } : {}),
+      ...(body.fechaFin !== undefined ? { fechaFin: body.fechaFin } : {}),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       createdBy: 'mock-user@ngr.com',
@@ -142,11 +143,22 @@ export const conteosHandlers = [
     }
 
     const body = (await request.json()) as Partial<Conteo>;
+    // idx fue verificado arriba — la entrada existe; el check siguiente satisface noUncheckedIndexedAccess
+    const existente = conteos[idx];
+    if (!existente)
+      return HttpResponse.json(
+        {
+          type: '/errors/not-found',
+          title: 'Conteo no encontrado',
+          status: 404,
+        } as ProblemDetails,
+        { status: 404 }
+      );
     const actualizado: Conteo = {
-      ...conteos[idx],
+      ...existente,
       ...body,
-      id: conteos[idx].id,
-      numero: conteos[idx].numero,
+      id: existente.id,
+      numero: existente.numero,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };

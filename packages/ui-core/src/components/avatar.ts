@@ -17,8 +17,10 @@ export interface NgrAvatarProps extends ComponentProps {
  */
 function getInitials(name: string): string {
   const words = name.trim().split(/\s+/);
-  if (words.length === 1) return words[0].charAt(0).toUpperCase();
-  return (words[0].charAt(0) + words[words.length - 1].charAt(0)).toUpperCase();
+  // Con noUncheckedIndexedAccess los accesos por índice son T|undefined — aserciones seguras
+  // porque trim+split garantiza al menos un elemento cuando name no está vacío
+  if (words.length === 1) return (words[0] ?? '').charAt(0).toUpperCase();
+  return ((words[0] ?? '').charAt(0) + (words[words.length - 1] ?? '').charAt(0)).toUpperCase();
 }
 
 /**
@@ -39,7 +41,7 @@ export function render(props: NgrAvatarProps): string {
 
   const idAttr = id ? ` id="${id}"` : '';
   const extraClass = className ? ` ${className}` : '';
-  const colorIndex = getColorIndex(name) + 1; // índices 1-8
+  const colorIndex = (getColorIndex(name) + 1).toString(); // índices 1-8
   const bgStyle = `background-color:var(--ngr-avatar-${colorIndex})`;
 
   if (src) {

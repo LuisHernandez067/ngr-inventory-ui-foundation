@@ -1,5 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import type { Ubicacion, PaginatedResponse, ProblemDetails } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { ubicacionFixtures } from '../fixtures/ubicaciones.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
@@ -78,7 +79,8 @@ export const ubicacionesHandlers = [
       almacenId: body.almacenId ?? 'alm-001',
       almacenNombre: body.almacenNombre ?? 'Sin almacén',
       tipo: body.tipo ?? 'estante',
-      capacidad: body.capacidad,
+      // Propiedades opcionales: solo se incluyen si el body las provee
+      ...(body.capacidad !== undefined ? { capacidad: body.capacidad } : {}),
       status: body.status ?? 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -97,8 +99,9 @@ export const ubicacionesHandlers = [
     const errorResponse = resolveScenario(scenario);
     if (errorResponse) return errorResponse;
 
-    const idx = ubicaciones.findIndex((u) => u.id === params['id']);
-    if (idx === -1) {
+    // Busca la ubicación y retorna 404 si no existe
+    const base = ubicaciones.find((u) => u.id === params['id']);
+    if (!base) {
       const err: ProblemDetails = {
         type: '/errors/not-found',
         title: 'Ubicación no encontrada',
@@ -110,14 +113,16 @@ export const ubicacionesHandlers = [
 
     const body = (await request.json()) as Partial<Ubicacion>;
     const actualizada: Ubicacion = {
-      ...ubicaciones[idx],
+      ...base,
       ...body,
-      id: ubicaciones[idx].id,
+      id: base.id,
+      // Campos de auditoría requeridos: se preservan del registro original
+      createdAt: base.createdAt,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };
 
-    ubicaciones = ubicaciones.map((u, i) => (i === idx ? actualizada : u));
+    ubicaciones = ubicaciones.map((u) => (u.id === base.id ? actualizada : u));
     return HttpResponse.json(actualizada);
   }),
 

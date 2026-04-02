@@ -1,5 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import type { Usuario, PaginatedResponse, ProblemDetails } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { usuarioFixtures } from '../fixtures/usuarios.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
@@ -76,7 +77,8 @@ export const usuariosHandlers = [
       email: body.email ?? 'nuevo@ngr.com',
       nombre: body.nombre ?? 'Nuevo',
       apellido: body.apellido ?? 'Usuario',
-      telefono: body.telefono,
+      // Propiedades opcionales: solo se incluyen si el body las provee
+      ...(body.telefono !== undefined ? { telefono: body.telefono } : {}),
       rolId: body.rolId ?? 'rol-003',
       rolNombre: body.rolNombre ?? 'Operario',
       activo: true,
@@ -97,8 +99,9 @@ export const usuariosHandlers = [
     const errorResponse = resolveScenario(scenario);
     if (errorResponse) return errorResponse;
 
-    const idx = usuarios.findIndex((u) => u.id === params['id']);
-    if (idx === -1) {
+    // Busca el usuario y retorna 404 si no existe
+    const base = usuarios.find((u) => u.id === params['id']);
+    if (!base) {
       const err: ProblemDetails = {
         type: '/errors/not-found',
         title: 'Usuario no encontrado',
@@ -110,14 +113,16 @@ export const usuariosHandlers = [
 
     const body = (await request.json()) as Partial<Usuario>;
     const actualizado: Usuario = {
-      ...usuarios[idx],
+      ...base,
       ...body,
-      id: usuarios[idx].id,
+      id: base.id,
+      // Campos de auditoría requeridos: se preservan del registro original
+      createdAt: base.createdAt,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };
 
-    usuarios = usuarios.map((u, i) => (i === idx ? actualizado : u));
+    usuarios = usuarios.map((u) => (u.id === base.id ? actualizado : u));
     return HttpResponse.json(actualizado);
   }),
 

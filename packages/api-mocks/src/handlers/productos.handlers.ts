@@ -81,15 +81,16 @@ export const productosHandlers = [
       id: `prod-${String(Date.now()).slice(-6)}`,
       codigo: body.codigo ?? 'NUEVO-001',
       nombre: body.nombre ?? 'Nuevo Producto',
-      descripcion: body.descripcion,
+      // Propiedades opcionales: solo se incluyen si el body las provee
+      ...(body.descripcion !== undefined ? { descripcion: body.descripcion } : {}),
       categoriaId: body.categoriaId ?? 'cat-001',
       categoriaNombre: body.categoriaNombre ?? 'Sin categoría',
-      proveedorId: body.proveedorId,
-      proveedorNombre: body.proveedorNombre,
+      ...(body.proveedorId !== undefined ? { proveedorId: body.proveedorId } : {}),
+      ...(body.proveedorNombre !== undefined ? { proveedorNombre: body.proveedorNombre } : {}),
       unidadMedida: body.unidadMedida ?? 'unidad',
       precioUnitario: body.precioUnitario ?? 0,
       stockMinimo: body.stockMinimo ?? 1,
-      stockMaximo: body.stockMaximo,
+      ...(body.stockMaximo !== undefined ? { stockMaximo: body.stockMaximo } : {}),
       status: body.status ?? 'active',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -108,8 +109,9 @@ export const productosHandlers = [
     const errorResponse = resolveScenario(scenario);
     if (errorResponse) return errorResponse;
 
-    const idx = productos.findIndex((p) => p.id === params['id']);
-    if (idx === -1) {
+    // Busca el producto y retorna 404 si no existe
+    const base = productos.find((p) => p.id === params['id']);
+    if (!base) {
       const err: ProblemDetails = {
         type: '/errors/not-found',
         title: 'Producto no encontrado',
@@ -121,14 +123,16 @@ export const productosHandlers = [
 
     const body = (await request.json()) as Partial<Producto>;
     const actualizado: Producto = {
-      ...productos[idx],
+      ...base,
       ...body,
-      id: productos[idx].id,
+      id: base.id,
+      // Campos de auditoría requeridos: se preservan del registro original
+      createdAt: base.createdAt,
       updatedAt: new Date().toISOString(),
       updatedBy: 'mock-user@ngr.com',
     };
 
-    productos = productos.map((p, i) => (i === idx ? actualizado : p));
+    productos = productos.map((p) => (p.id === base.id ? actualizado : p));
     return HttpResponse.json(actualizado);
   }),
 
