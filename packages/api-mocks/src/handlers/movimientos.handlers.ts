@@ -10,7 +10,7 @@ import { movimientoFixtures } from '../fixtures/movimientos.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
 /** Copia mutable en memoria para simular persistencia entre requests */
-let movimientos = [...movimientoFixtures];
+export let movimientos = [...movimientoFixtures];
 
 /** Contador para generar números de movimiento */
 let movimientoCounter = movimientos.length + 1;

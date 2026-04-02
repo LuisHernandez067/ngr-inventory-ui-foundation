@@ -214,6 +214,32 @@ export function registerRoutes(router: Router): void {
     breadcrumb: 'Kardex',
   });
 
+  // ─── Módulos de Conteos ───────────────────────────────────────────────────
+
+  // Ruta estática /conteos/nuevo debe registrarse ANTES de /conteos/:id
+  // para que el router la resuelva correctamente y no la trate como un id
+  router.register('/conteos/nuevo', {
+    factory: () => import('../pages/modules/conteos-nuevo').then((m) => m.conteosNuevoPage),
+    breadcrumb: 'Nuevo Conteo',
+  });
+
+  // Rutas /conteos/:id/carga y /conteos/:id/cierre deben registrarse ANTES de /conteos/:id
+  // para que el router las resuelva con el segmento extra correctamente
+  router.register('/conteos/:id/carga', {
+    factory: () => import('../pages/modules/conteos-carga').then((m) => m.conteosCargaPage),
+    breadcrumb: 'Cargar Cantidades',
+  });
+
+  router.register('/conteos/:id/cierre', {
+    factory: () => import('../pages/modules/conteos-cierre').then((m) => m.conteosCierrePage),
+    breadcrumb: 'Cierre de Conteo',
+  });
+
+  router.register('/conteos/:id', {
+    factory: () => import('../pages/modules/conteos-detail').then((m) => m.conteosDetailPage),
+    breadcrumb: 'Detalle de Conteo',
+  });
+
   router.register('/conteos', {
     factory: () => import('../pages/modules/conteos').then((m) => m.conteosPage),
     breadcrumb: 'Conteos',

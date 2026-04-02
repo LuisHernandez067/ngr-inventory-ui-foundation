@@ -4,7 +4,7 @@ import type { AuditFields } from '../common/audit';
 export type EstadoConteo = 'planificado' | 'en_curso' | 'pausado' | 'completado' | 'anulado';
 
 /** Ítem individual dentro de un conteo físico */
-export type ConteoItem = {
+export interface ConteoItem {
   id: string;
   productoId: string;
   productoCodigo: string;
@@ -14,7 +14,7 @@ export type ConteoItem = {
   cantidadContada?: number;
   diferencia?: number;
   ajustado: boolean;
-};
+}
 
 /** Conteo físico de inventario */
 export type Conteo = AuditFields & {
@@ -34,3 +34,22 @@ export type CreateConteoDto = Omit<Conteo, 'id' | 'numero' | keyof AuditFields>;
 
 /** DTO para actualizar un conteo */
 export type UpdateConteoDto = Partial<CreateConteoDto>;
+
+/** DTO para carga masiva de cantidades contadas por ítem */
+export interface ConteoItemCargaDto {
+  id: string;
+  cantidadContada: number;
+}
+
+/** DTO para cierre de conteo — genera un movimiento de ajuste derivado */
+export interface CierreConteoDto {
+  confirmarAjuste: boolean;
+  observacion?: string;
+}
+
+/** Resultado del cierre de conteo — incluye referencia al movimiento de ajuste generado */
+export interface CierreConteoResult {
+  conteo: Conteo;
+  movimientoAjusteId?: string;
+  movimientoAjusteNumero?: string;
+}
