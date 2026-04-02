@@ -14,11 +14,13 @@
   },
   "scripts": {
     "dev": "npm -w apps/prototype-shell run dev",
+    "dev:chrome": "npm -w apps/prototype-shell run dev:chrome",
     "build": "npm -w apps/prototype-shell run build",
     "test": "vitest --workspace vitest.workspace.ts",
     "test:coverage": "vitest --workspace vitest.workspace.ts --coverage",
     "test:e2e": "npm -w apps/prototype-shell run test:e2e",
     "storybook": "npm -w packages/docs-site run storybook",
+    "storybook:chrome": "npm -w packages/docs-site run storybook:chrome",
     "storybook:build": "npm -w packages/docs-site run build-storybook",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

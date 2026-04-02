@@ -5,7 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
+    "dev:chrome": "BROWSER=google-chrome vite --open",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",

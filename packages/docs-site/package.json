@@ -5,7 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --open",
+    "storybook:chrome": "BROWSER=google-chrome storybook dev -p 6006 --open",
     "build-storybook": "storybook build"
   },
   "devDependencies": {

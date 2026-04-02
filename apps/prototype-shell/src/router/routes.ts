@@ -179,6 +179,26 @@ export function registerRoutes(router: Router): void {
     breadcrumb: 'Movimientos',
   });
 
+  // Ruta estática /movimientos/nuevo debe registrarse ANTES de /movimientos/:id
+  // para que el router la resuelva correctamente y no la trate como un id
+  router.register('/movimientos/nuevo', {
+    factory: () => import('../pages/modules/movimientos-form').then((m) => m.movimientosFormPage),
+    breadcrumb: 'Nuevo Movimiento',
+  });
+
+  // Ruta /movimientos/:id/editar debe registrarse ANTES de /movimientos/:id
+  // para que el router la resuelva correctamente con el segmento /editar
+  router.register('/movimientos/:id/editar', {
+    factory: () => import('../pages/modules/movimientos-form').then((m) => m.movimientosFormPage),
+    breadcrumb: 'Editar Movimiento',
+  });
+
+  router.register('/movimientos/:id', {
+    factory: () =>
+      import('../pages/modules/movimientos-detail').then((m) => m.movimientosDetailPage),
+    breadcrumb: 'Detalle de Movimiento',
+  });
+
   router.register('/stock', {
     factory: () => import('../pages/modules/stock').then((m) => m.stockPage),
     breadcrumb: 'Stock',
