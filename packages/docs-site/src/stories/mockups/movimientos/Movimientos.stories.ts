@@ -889,6 +889,255 @@ export const MovimientosFormEntrada: Story = {
   `,
 };
 
+/** Story — formulario con errores de validación visibles: tipo vacío + sin ítems */
+export const MovimientosFormValidation: Story = {
+  name: 'Formulario — errores de validación',
+  parameters: {
+    msw: {
+      handlers: handlersFormulario,
+    },
+  },
+  render: () => `
+    <div class="bg-body-secondary min-vh-100">
+      <div class="bg-body border-bottom px-4 py-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="#">Movimientos</a></li>
+            <li class="breadcrumb-item active">Nuevo movimiento</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="container-fluid p-4" style="max-width: 800px;">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <a href="#" class="text-decoration-none text-secondary">← Volver</a>
+          <h1 class="h3 mb-0">Nuevo movimiento</h1>
+        </div>
+
+        <!-- Alerta global de error de validación -->
+        <div class="alert alert-danger d-flex align-items-start gap-2 mb-4" role="alert"
+             aria-live="assertive">
+          <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0 mt-1" aria-hidden="true"></i>
+          <div>
+            <strong>Corregí los siguientes errores antes de continuar:</strong>
+            <ul class="mb-0 mt-1">
+              <li>El tipo de movimiento es requerido</li>
+              <li>Debés agregar al menos un ítem</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header fw-semibold">
+            <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+            Información general
+          </div>
+          <div class="card-body">
+            <form id="mov-form-validation" novalidate>
+              <!-- Tipo de movimiento — campo con error -->
+              <div class="mb-3">
+                <label for="tipo-val" class="form-label fw-semibold">
+                  Tipo de movimiento <span class="text-danger" aria-hidden="true">*</span>
+                </label>
+                <select id="tipo-val" name="tipo" class="form-select is-invalid"
+                        aria-describedby="tipo-val-error" aria-invalid="true">
+                  <option value="" selected>— Seleccioná un tipo —</option>
+                  <option value="entrada">Entrada</option>
+                  <option value="salida">Salida</option>
+                  <option value="transferencia">Transferencia</option>
+                  <option value="ajuste">Ajuste</option>
+                  <option value="devolucion">Devolución</option>
+                </select>
+                <div id="tipo-val-error" class="invalid-feedback" role="alert">
+                  El tipo de movimiento es requerido.
+                </div>
+              </div>
+
+              <!-- Observación -->
+              <div class="mb-3">
+                <label for="observacion-val" class="form-label">Observación</label>
+                <textarea id="observacion-val" name="observacion" class="form-control" rows="2"
+                  placeholder="Observaciones adicionales..."></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Tabla de ítems con error visible -->
+        <div class="card border-danger border-0 shadow-sm mb-4">
+          <div class="card-header fw-semibold d-flex align-items-center justify-content-between">
+            <span>
+              <i class="bi bi-list-ul me-2" aria-hidden="true"></i>
+              Ítems del movimiento
+              <span class="text-danger ms-1" aria-label="campo requerido">*</span>
+            </span>
+            <button class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+              Agregar ítem
+            </button>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th style="width:120px;" class="text-end">Cantidad</th>
+                    <th style="width:140px;" class="text-end">Precio unit.</th>
+                    <th style="width:40px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                      <i class="bi bi-inbox fs-4 d-block mb-2" aria-hidden="true"></i>
+                      Sin ítems agregados. Hacé clic en "Agregar ítem" para comenzar.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="px-3 pb-3">
+              <div class="text-danger small d-flex align-items-center gap-1" role="alert">
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                Debés agregar al menos un ítem al movimiento.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex gap-2">
+          <button type="submit" form="mov-form-validation" class="btn btn-primary">
+            <i class="bi bi-floppy me-1" aria-hidden="true"></i>
+            Guardar borrador
+          </button>
+          <a href="#" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </div>
+    </div>
+  `,
+};
+
+/** Story — lista vacía: sin movimientos registrados (estado inicial del módulo) */
+export const MovimientosListaVacia: Story = {
+  name: 'Lista — sin movimientos',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/movimientos', () =>
+          HttpResponse.json({ data: [], total: 0, page: 1, pageSize: 20, totalPages: 0 })
+        ),
+      ],
+    },
+  },
+  render: () => `
+    <div class="bg-body-secondary min-vh-100">
+      <div class="bg-body border-bottom px-4 py-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Movimientos</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="container-fluid p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0">Movimientos de inventario</h1>
+          <button class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+            Nuevo movimiento
+          </button>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-5 text-center">
+            <i class="bi bi-arrow-left-right text-muted fs-1 mb-3 d-block" aria-hidden="true"></i>
+            <h5 class="mb-2">Sin movimientos registrados</h5>
+            <p class="text-muted mb-4">Todavía no hay movimientos de inventario. Creá el primero.</p>
+            <button class="btn btn-primary">
+              <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+              Nuevo movimiento
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+};
+
+/** Story — lista en estado de carga: skeleton rows mientras se obtienen los datos */
+export const MovimientosListaCargando: Story = {
+  name: 'Lista — cargando',
+  parameters: {
+    msw: {
+      // Handler con delay simulado para mostrar el skeleton antes de la respuesta
+      handlers: [
+        http.get('/api/movimientos', async () => {
+          await new Promise((resolve) => setTimeout(resolve, 60_000));
+          return HttpResponse.json({ data: [], total: 0, page: 1, pageSize: 20, totalPages: 0 });
+        }),
+      ],
+    },
+  },
+  render: () => `
+    <div class="bg-body-secondary min-vh-100">
+      <div class="bg-body border-bottom px-4 py-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0 small">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Movimientos</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="container-fluid p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0">Movimientos de inventario</h1>
+          <button class="btn btn-primary" disabled aria-disabled="true">
+            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+            Nuevo movimiento
+          </button>
+        </div>
+
+        <!-- Skeleton de la tabla mientras carga -->
+        <div class="card border-0 shadow-sm" aria-busy="true" aria-label="Cargando movimientos…">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th style="width:160px;">Número</th>
+                    <th style="width:130px;">Tipo</th>
+                    <th style="width:120px;">Estado</th>
+                    <th>Origen / Destino</th>
+                    <th style="width:130px;">Fecha</th>
+                    <th style="width:80px;" class="text-end">Ítems</th>
+                  </tr>
+                </thead>
+                <tbody class="placeholder-glow">
+                  ${Array.from({ length: 5 })
+                    .map(
+                      () => `
+                  <tr>
+                    <td><span class="placeholder col-8 rounded"></span></td>
+                    <td><span class="placeholder col-7 rounded"></span></td>
+                    <td><span class="placeholder col-6 rounded"></span></td>
+                    <td><span class="placeholder col-9 rounded"></span></td>
+                    <td><span class="placeholder col-7 rounded"></span></td>
+                    <td class="text-end"><span class="placeholder col-4 rounded"></span></td>
+                  </tr>`
+                    )
+                    .join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+};
+
 /** Story — formulario de creación con tipo transferencia pre-seleccionado: almacén origen + almacén destino */
 export const MovimientosFormTransferencia: Story = {
   name: 'Formulario — nueva Transferencia',

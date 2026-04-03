@@ -551,6 +551,31 @@ type Story = StoryObj<typeof meta>;
 // ── Stories ───────────────────────────────────────────────────────────────────
 
 /**
+ * Catálogo vacío — GET /api/reportes devuelve lista vacía.
+ * Muestra el mensaje "No hay reportes disponibles."
+ */
+export const CatalogoVacio: Story = {
+  name: 'Catálogo vacío',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/reportes', () =>
+          HttpResponse.json({ data: [], total: 0, page: 1, pageSize: 50, totalPages: 0 })
+        ),
+        handlerGetAlmacenes,
+        handlerGetProductos,
+      ],
+    },
+  },
+  render: () =>
+    buildLayout({
+      reportes: [],
+      selectedId: null,
+      rightPanel: buildIdlePanel(),
+    }),
+};
+
+/**
  * Estado inicial idle — catálogo completo visible.
  * 4 tarjetas activas + 2 deshabilitadas "Próximamente" (valorizado, auditoría).
  */

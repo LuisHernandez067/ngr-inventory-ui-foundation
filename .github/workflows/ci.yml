@@ -94,8 +94,8 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Ejecutar tests unitarios
-        run: npm run test
+      - name: Ejecutar tests unitarios con cobertura
+        run: npm run test:coverage
 
   # --- Storybook build: verifica que el design system compila ---
   storybook-build:
@@ -116,3 +116,39 @@ jobs:
 
       - name: Build de Storybook
         run: npm run storybook:build
+
+  # --- E2E: Playwright Chromium headless ---
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    defaults:
+      run:
+        working-directory: apps/prototype-shell
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+        working-directory: .
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Ejecutar tests E2E (Chromium)
+        run: npx playwright test --project=chromium
+
+      - name: Subir reporte de Playwright
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: apps/prototype-shell/playwright-report/
+          retention-days: 7

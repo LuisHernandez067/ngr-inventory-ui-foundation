@@ -386,6 +386,121 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Story — producto seleccionado sin movimientos: tabla vacía con mensaje "Sin movimientos" */
+export const KardexVacioSinMovimientos: Story = {
+  name: 'Kardex — producto sin movimientos (vacío)',
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/kardex', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') ?? '1');
+          // prod-002 no tiene movimientos en este handler — retorna lista vacía
+          return HttpResponse.json({
+            data: [],
+            total: 0,
+            page,
+            pageSize: 20,
+            totalPages: 0,
+          });
+        }),
+        http.get('/api/productos', ({ request }) => {
+          const url = new URL(request.url);
+          const page = Number(url.searchParams.get('page') ?? '1');
+          return HttpResponse.json({
+            data: productosDisponibles.map((p) => ({
+              ...p,
+              categoriaId: 'cat-001',
+              categoriaNombre: 'Periféricos',
+              unidadMedida: 'unidad',
+              precioUnitario: 185000,
+              stockMinimo: 2,
+              status: 'active',
+              createdAt: '2025-01-01T00:00:00Z',
+              updatedAt: '2025-01-01T00:00:00Z',
+              createdBy: 'admin@ngr.com',
+              updatedBy: 'admin@ngr.com',
+            })),
+            total: productosDisponibles.length,
+            page,
+            pageSize: 100,
+            totalPages: 1,
+          });
+        }),
+      ],
+    },
+  },
+  render: () => {
+    const producto = productosDisponibles[1] ?? {
+      id: 'prod-002',
+      codigo: 'MON-IPS-001',
+      nombre: 'Monitor 27 pulgadas IPS',
+    };
+
+    return `
+      <div class="bg-body-secondary min-vh-100">
+        <div class="bg-body border-bottom px-4 py-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li class="breadcrumb-item active">Kardex</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="container-fluid p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0">Kardex de inventario</h1>
+          </div>
+
+          ${buildProductSelectorHtml(producto.id)}
+
+          <!-- Resumen del producto seleccionado -->
+          <div class="alert alert-info d-flex align-items-center gap-3 mb-4" role="status">
+            <i class="bi bi-box-seam fs-4" aria-hidden="true"></i>
+            <div>
+              <strong>[${producto.codigo}] ${producto.nombre}</strong>
+              <span class="ms-3 text-muted">Saldo actual:</span>
+              <strong class="ms-1">0 unidades</strong>
+            </div>
+          </div>
+
+          <!-- Tabla vacía: sin movimientos para el producto seleccionado -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header fw-semibold d-flex align-items-center justify-content-between">
+              <span>
+                <i class="bi bi-table me-2" aria-hidden="true"></i>
+                Historial de movimientos
+              </span>
+              <span class="text-muted small fw-normal">0 registros</span>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th style="width:110px;">Fecha</th>
+                      <th style="width:140px;">Tipo</th>
+                      <th style="width:160px;">Movimiento</th>
+                      <th>Almacén</th>
+                      <th style="width:90px;" class="text-end">Entrada</th>
+                      <th style="width:90px;" class="text-end">Salida</th>
+                      <th style="width:90px;" class="text-end">Saldo</th>
+                      <th style="width:130px;" class="text-end">Costo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${buildKardexRowsHtml([])}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+};
+
 /** Story — estado inicial: selector visible, sin tabla, texto placeholder */
 export const KardexSinProducto: Story = {
   name: 'Kardex — sin producto seleccionado',

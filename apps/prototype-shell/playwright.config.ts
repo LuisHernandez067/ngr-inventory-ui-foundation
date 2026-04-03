@@ -36,5 +36,7 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env['CI'],
+    // Timeout extendido para CI donde el arranque del dev server es más lento
+    timeout: 120_000,
   },
 });

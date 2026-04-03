@@ -1,5 +1,6 @@
-import { http, HttpResponse } from 'msw';
 import type { KardexEntry, PaginatedResponse } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
 import { kardexFixtures } from '../fixtures/kardex.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 

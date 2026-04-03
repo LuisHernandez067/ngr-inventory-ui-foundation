@@ -12,7 +12,9 @@ const USERS = {
 
 /** Limpia localStorage y navega a la base URL para garantizar estado limpio */
 async function clearAuth(page: Page): Promise<void> {
-  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => {
+    localStorage.clear();
+  });
 }
 
 /** Completa el formulario de login y hace submit */
@@ -36,7 +38,9 @@ test.describe('Autenticación — flujos E2E', () => {
   test.describe('Redirección a login sin autenticación', () => {
     test('navegar a / sin sesión debe redirigir a #/auth', async ({ page }) => {
       // Limpiar storage y navegar
-      await page.evaluate(() => localStorage.clear());
+      await page.evaluate(() => {
+        localStorage.clear();
+      });
       await page.goto('/');
 
       // Esperar a que el hash cambie a /auth
@@ -46,7 +50,9 @@ test.describe('Autenticación — flujos E2E', () => {
     });
 
     test('navegar a #/dashboard sin sesión debe redirigir a #/auth', async ({ page }) => {
-      await page.evaluate(() => localStorage.clear());
+      await page.evaluate(() => {
+        localStorage.clear();
+      });
       await page.goto('/#/dashboard');
 
       await page.waitForFunction(() => window.location.hash === '#/auth', { timeout: 5000 });
