@@ -120,6 +120,20 @@ const previewDatosResponse: ReporteDatos = {
   total: 2,
 };
 
+/** 201 filas para forzar el path de POST + polling (IMMEDIATE_THRESHOLD = 200) */
+const previewDatosResponseLarge: ReporteDatos = {
+  reporteId: 'rep-001',
+  tipo: 'stock_actual',
+  filtrosAplicados: { tipo: 'stock_actual' },
+  data: Array.from({ length: 201 }, () => ({
+    productoId: 'prod-001',
+    producto: 'Teclado TKL',
+    stockActual: 25,
+    almacen: 'Central',
+  })),
+  total: 201,
+};
+
 /** Respuesta de preview vacía */
 const previewDatosVacioResponse: ReporteDatos = {
   reporteId: 'rep-001',
@@ -561,7 +575,7 @@ describe('reportesPage', () => {
     mockAuthService.hasPermission.mockReturnValue(true);
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
-      .mockResolvedValueOnce(previewDatosResponse)
+      .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente);
 
     vi.useFakeTimers();
@@ -609,7 +623,7 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse) // GET /api/reportes
-      .mockResolvedValueOnce(previewDatosResponse) // GET /api/reportes/:id/datos
+      .mockResolvedValueOnce(previewDatosResponseLarge) // GET /api/reportes/:id/datos
       .mockResolvedValueOnce(exportJobPendiente) // POST /exportar
       .mockResolvedValueOnce(exportJobListo); // GET /exportaciones/:jobId
 
@@ -659,7 +673,7 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
-      .mockResolvedValueOnce(previewDatosResponse)
+      .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente)
       .mockResolvedValueOnce(exportJobError);
 
@@ -707,7 +721,7 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
-      .mockResolvedValueOnce(previewDatosResponse)
+      .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente)
       .mockRejectedValueOnce(new Error('Connection lost'));
 
