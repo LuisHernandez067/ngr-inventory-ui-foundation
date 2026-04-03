@@ -9,7 +9,7 @@ let usuarios = [...usuarioFixtures];
 
 /** Handlers CRUD para el módulo de usuarios */
 export const usuariosHandlers = [
-  // GET /api/usuarios — lista paginada con búsqueda
+  // GET /api/usuarios — lista paginada con búsqueda y filtros
   http.get('/api/usuarios', ({ request }) => {
     const url = new URL(request.url);
     const scenario = url.searchParams.get('_scenario');
@@ -20,7 +20,11 @@ export const usuariosHandlers = [
     const pageSize = Number(url.searchParams.get('pageSize') ?? '20');
     const search = url.searchParams.get('search')?.toLowerCase() ?? '';
 
-    const filtered = search
+    // Parámetros de filtro extendidos
+    const rolId = url.searchParams.get('rolId') ?? '';
+    const activoParam = url.searchParams.get('activo') ?? '';
+
+    let filtered = search
       ? usuarios.filter(
           (u) =>
             u.nombre.toLowerCase().includes(search) ||
@@ -28,6 +32,17 @@ export const usuariosHandlers = [
             u.email.toLowerCase().includes(search)
         )
       : usuarios;
+
+    // Filtro por rol
+    if (rolId) {
+      filtered = filtered.filter((u) => u.rolId === rolId);
+    }
+
+    // Filtro por estado activo — acepta 'true' o 'false' como string
+    if (activoParam === 'true' || activoParam === 'false') {
+      const activoBool = activoParam === 'true';
+      filtered = filtered.filter((u) => u.activo === activoBool);
+    }
 
     const start = (page - 1) * pageSize;
     const data = filtered.slice(start, start + pageSize);
@@ -123,6 +138,35 @@ export const usuariosHandlers = [
     };
 
     usuarios = usuarios.map((u) => (u.id === base.id ? actualizado : u));
+    return HttpResponse.json(actualizado);
+  }),
+
+  // PATCH /api/usuarios/:id/toggle-activo — alterna el estado activo del usuario
+  http.patch('/api/usuarios/:id/toggle-activo', ({ params, request }) => {
+    const url = new URL(request.url);
+    const scenario = url.searchParams.get('_scenario');
+    const errorResponse = resolveScenario(scenario);
+    if (errorResponse) return errorResponse;
+
+    const usuario = usuarios.find((u) => u.id === params['id']);
+    if (!usuario) {
+      const err: ProblemDetails = {
+        type: '/errors/not-found',
+        title: 'Usuario no encontrado',
+        status: 404,
+        detail: `No existe un usuario con id "${String(params['id'])}"`,
+      };
+      return HttpResponse.json(err, { status: 404 });
+    }
+
+    const actualizado: Usuario = {
+      ...usuario,
+      activo: !usuario.activo,
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'mock-user@ngr.com',
+    };
+
+    usuarios = usuarios.map((u) => (u.id === actualizado.id ? actualizado : u));
     return HttpResponse.json(actualizado);
   }),
 

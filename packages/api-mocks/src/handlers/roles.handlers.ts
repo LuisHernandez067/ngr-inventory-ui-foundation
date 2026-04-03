@@ -1,5 +1,6 @@
 import type {
   Rol,
+  Permiso,
   PermisosEfectivos,
   PaginatedResponse,
   ProblemDetails,
@@ -8,6 +9,38 @@ import { http, HttpResponse } from 'msw';
 
 import { rolFixtures } from '../fixtures/roles.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
+
+/**
+ * Catálogo completo de permisos del sistema, agrupados por módulo.
+ * IDs y claves alineados 1-a-1 con los fixtures de roles existentes.
+ */
+export const PERMISOS_CATALOG: Permiso[] = [
+  { id: 'perm-001', clave: 'productos.ver', nombre: 'Ver productos', modulo: 'productos' },
+  { id: 'perm-002', clave: 'productos.crear', nombre: 'Crear productos', modulo: 'productos' },
+  { id: 'perm-003', clave: 'productos.editar', nombre: 'Editar productos', modulo: 'productos' },
+  {
+    id: 'perm-004',
+    clave: 'productos.eliminar',
+    nombre: 'Eliminar productos',
+    modulo: 'productos',
+  },
+  { id: 'perm-005', clave: 'movimientos.ver', nombre: 'Ver movimientos', modulo: 'movimientos' },
+  {
+    id: 'perm-006',
+    clave: 'movimientos.crear',
+    nombre: 'Crear movimientos',
+    modulo: 'movimientos',
+  },
+  {
+    id: 'perm-007',
+    clave: 'movimientos.aprobar',
+    nombre: 'Aprobar movimientos',
+    modulo: 'movimientos',
+  },
+  { id: 'perm-008', clave: 'usuarios.ver', nombre: 'Ver usuarios', modulo: 'usuarios' },
+  { id: 'perm-009', clave: 'usuarios.gestionar', nombre: 'Gestionar usuarios', modulo: 'usuarios' },
+  { id: 'perm-010', clave: 'reportes.exportar', nombre: 'Exportar reportes', modulo: 'reportes' },
+];
 
 /** Copia mutable en memoria para simular persistencia entre requests */
 let roles = [...rolFixtures];
@@ -147,6 +180,16 @@ export const rolesHandlers = [
 
     roles = roles.filter((r) => r.id !== params['id']);
     return new HttpResponse(null, { status: 204 });
+  }),
+
+  // GET /api/permisos — catálogo completo de permisos del sistema
+  http.get('/api/permisos', ({ request }) => {
+    const url = new URL(request.url);
+    const scenario = url.searchParams.get('_scenario');
+    const errorResponse = resolveScenario(scenario);
+    if (errorResponse) return errorResponse;
+
+    return HttpResponse.json(PERMISOS_CATALOG);
   }),
 
   // GET /api/roles/:id/permisos — permisos efectivos del rol

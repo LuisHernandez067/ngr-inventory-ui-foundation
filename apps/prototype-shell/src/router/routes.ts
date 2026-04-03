@@ -252,9 +252,47 @@ export function registerRoutes(router: Router): void {
     breadcrumb: 'Usuarios',
   });
 
+  // Ruta estática /usuarios/nuevo debe registrarse ANTES de /usuarios/:id
+  // para que el router la resuelva correctamente y no la trate como un id
+  router.register('/usuarios/nuevo', {
+    factory: () => import('../pages/modules/usuarios-form').then((m) => m.usuariosFormPage),
+    breadcrumb: 'Nuevo Usuario',
+  });
+
+  // Ruta /usuarios/:id/editar debe registrarse ANTES de /usuarios/:id
+  // para que el router la resuelva correctamente con el segmento /editar
+  router.register('/usuarios/:id/editar', {
+    factory: () => import('../pages/modules/usuarios-form').then((m) => m.usuariosFormPage),
+    breadcrumb: 'Editar Usuario',
+  });
+
+  router.register('/usuarios/:id', {
+    factory: () => import('../pages/modules/usuarios-detail').then((m) => m.usuariosDetailPage),
+    breadcrumb: 'Detalle de Usuario',
+  });
+
   router.register('/roles', {
     factory: () => import('../pages/modules/roles').then((m) => m.rolesPage),
     breadcrumb: 'Roles y Permisos',
+  });
+
+  // Ruta estática /roles/nuevo debe registrarse ANTES de /roles/:id
+  // para que el router la resuelva correctamente y no la trate como un id
+  router.register('/roles/nuevo', {
+    factory: () => import('../pages/modules/roles-form').then((m) => m.rolesFormPage),
+    breadcrumb: 'Nuevo Rol',
+  });
+
+  // Ruta /roles/:id/editar debe registrarse ANTES de /roles/:id
+  // para que el router la resuelva correctamente con el segmento /editar
+  router.register('/roles/:id/editar', {
+    factory: () => import('../pages/modules/roles-form').then((m) => m.rolesFormPage),
+    breadcrumb: 'Editar Rol',
+  });
+
+  router.register('/roles/:id', {
+    factory: () => import('../pages/modules/roles-detail').then((m) => m.rolesDetailPage),
+    breadcrumb: 'Detalle de Rol',
   });
 
   router.register('/reportes', {

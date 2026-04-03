@@ -13,6 +13,8 @@ export interface AuthUser {
   email: string;
   rol: 'Administrador' | 'Operador' | 'Consulta';
   perfil: 'admin' | 'operador' | 'consulta';
+  // Alineado con api-contracts.AuthUser — campo opcional para compatibilidad con sesiones previas
+  permisos?: string[];
 }
 
 // Mapa de módulos permitidos por perfil
@@ -102,5 +104,13 @@ export const authService = {
       clearTimeout(sessionTimerHandle);
       sessionTimerHandle = null;
     }
+  },
+
+  // Verifica si el usuario actual tiene el permiso indicado por su clave.
+  // Retorna false si el usuario no está autenticado o no tiene permisos almacenados.
+  hasPermission(clave: string): boolean {
+    const user = authService.getUser();
+    if (!user?.permisos) return false;
+    return user.permisos.includes(clave);
   },
 };
