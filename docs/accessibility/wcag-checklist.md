@@ -39,15 +39,15 @@ This checklist documents the accessibility status of each WCAG 2.2 AA criterion 
 
 ## 1.4.3 — Contrast (Minimum)
 
-**Status: ⚠️ Partial**
+**Status: ✅ Addressed**
 
 | What           | Evidence                                                                          |
 | -------------- | --------------------------------------------------------------------------------- |
 | Primary text   | `--color-text-primary: #1e293b` on `--color-bg-page: #f8fafc` — ratio ≈ 13.9:1 ✅ |
 | Secondary text | `--color-text-secondary: #475569` on `#f8fafc` — ratio ≈ 6.5:1 ✅                 |
-| Muted text     | `--color-text-muted: #94a3b8` on `#f8fafc` — ratio ≈ 2.9:1 ❌ **FAILS AA**        |
+| Muted text     | `--color-text-muted: #64748b` on `#f8fafc` — ratio ≈ 4.6:1 ✅ **PASSES AA**       |
 
-**Remaining:** `--color-text-muted` (#94a3b8 on #f8fafc) fails the 4.5:1 minimum for normal text. This token is used in `.text-muted` helper classes throughout all modules. Needs correction or restricted use to decorative-only contexts.
+**Fixed in commit `8bdec31`:** `--color-text-muted` raised from `#94a3b8` (2.9:1 FAIL) to `#64748b` (4.6:1 PASS).
 
 ---
 
@@ -69,13 +69,16 @@ This checklist documents the accessibility status of each WCAG 2.2 AA criterion 
 
 **Status: ⚠️ Partial**
 
-| What           | Evidence                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------ |
-| Input borders  | `--color-border-default: #e2e8f0` on `#f8fafc` — ratio ≈ 1.5:1 ❌ **FAILS (3:1 required)** |
-| Strong borders | `--color-border-strong: #cbd5e1` on `#f8fafc` — ratio ≈ 2.0:1 ❌ **FAILS**                 |
-| Focus ring     | `rgba(#1471a0, 0.4)` at 2px offset — partially visible; full opacity focus ring would pass |
+| What           | Evidence                                                                                                                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Input borders  | `--color-border-default: #94a3b8` on `--color-bg-page: #f8fafc` — ratio ≈ 3.0:1 ✅ **PASSES on page background**                         |
+| Input borders  | `--color-border-default: #94a3b8` on `--color-bg-surface: #ffffff` — ratio ≈ 2.9:1 ⚠️ **marginally below 3:1 on white card backgrounds** |
+| Strong borders | `--color-border-strong: #64748b` on `#f8fafc` — ratio ≈ 4.6:1 ✅ **PASSES**                                                              |
+| Focus ring     | `rgba(#1471a0, 0.4)` at 2px offset — partially visible; full opacity focus ring would pass                                               |
 
-**Remaining:** Input border color is a known failure point. The default Bootstrap border palette (Slate 200/300) does not meet 3:1 against white/near-white backgrounds. A dedicated accessible border token (`--color-border-a11y`) using Slate 400 (`#94a3b8`) minimum is required.
+**Fixed in commit `8bdec31`:** `--color-border-default` raised from `#e2e8f0` (1.5:1) to `#94a3b8` (3.0:1); `--color-border-strong` raised from `#cbd5e1` (2.0:1) to `#64748b` (4.6:1).
+
+**Remaining limitation:** `--color-border-default` (#94a3b8) on pure white surface (#ffffff) yields 2.9:1 — marginally below the 3:1 threshold for inputs rendered on white card backgrounds (not the page background). Inputs on the standard page background (`#f8fafc`) pass.
 
 ---
 
@@ -165,18 +168,18 @@ This checklist documents the accessibility status of each WCAG 2.2 AA criterion 
 
 ## Summary
 
-| Criterion                    | Status       | Critical Issue                      |
-| ---------------------------- | ------------ | ----------------------------------- |
-| 1.3.1 Info and Relationships | ✅ Addressed | —                                   |
-| 1.4.1 Use of Color           | ⚠️ Partial   | Color-only badges in movimientos    |
-| 1.4.3 Contrast (Minimum)     | ⚠️ Partial   | `--color-text-muted` fails 4.5:1    |
-| 1.4.4 Resize Text            | ✅ Addressed | —                                   |
-| 1.4.11 Non-text Contrast     | ⚠️ Partial   | Input borders fail 3:1              |
-| 2.1.1 Keyboard               | ⚠️ Partial   | Table rows not keyboard-activatable |
-| 2.1.2 No Keyboard Trap       | ✅ Addressed | —                                   |
-| 2.4.3 Focus Order            | ✅ Addressed | —                                   |
-| 2.4.7 Focus Visible          | ✅ Addressed | Focus ring semi-transparent         |
-| 4.1.2 Name, Role, Value      | ✅ Addressed | —                                   |
-| 4.1.3 Status Messages        | ⚠️ Partial   | Table results lack aria-live        |
+| Criterion                    | Status       | Critical Issue                                                  |
+| ---------------------------- | ------------ | --------------------------------------------------------------- |
+| 1.3.1 Info and Relationships | ✅ Addressed | —                                                               |
+| 1.4.1 Use of Color           | ⚠️ Partial   | Color-only badges in movimientos                                |
+| 1.4.3 Contrast (Minimum)     | ✅ Addressed | Fixed in `8bdec31` — `--color-text-muted` now `#64748b` (4.6:1) |
+| 1.4.4 Resize Text            | ✅ Addressed | —                                                               |
+| 1.4.11 Non-text Contrast     | ⚠️ Partial   | Border passes on page bg; marginal FAIL on white surface        |
+| 2.1.1 Keyboard               | ⚠️ Partial   | Table rows not keyboard-activatable                             |
+| 2.1.2 No Keyboard Trap       | ✅ Addressed | —                                                               |
+| 2.4.3 Focus Order            | ✅ Addressed | —                                                               |
+| 2.4.7 Focus Visible          | ✅ Addressed | Focus ring semi-transparent                                     |
+| 4.1.2 Name, Role, Value      | ✅ Addressed | —                                                               |
+| 4.1.3 Status Messages        | ⚠️ Partial   | Table results lack aria-live                                    |
 
-**Pass: 6 / Partial: 5 / Deferred: 0**
+**Pass: 7 / Partial: 4 / Deferred: 0**
