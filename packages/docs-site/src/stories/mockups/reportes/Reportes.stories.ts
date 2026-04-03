@@ -398,10 +398,17 @@ function buildExportacionExitosaPanel(): string {
         <i class="bi bi-check-circle-fill fs-5" aria-hidden="true"></i>
         <span>¡Reporte generado correctamente! La descarga comenzó automáticamente.</span>
       </div>
-      <button type="button" class="btn btn-outline-primary btn-sm">
-        <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>
-        Nuevo reporte
-      </button>
+      <div class="d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-success btn-sm"
+                aria-label="Descargar reporte generado">
+          <i class="bi bi-download me-1" aria-hidden="true"></i>
+          Descargar reporte
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>
+          Nuevo reporte
+        </button>
+      </div>
     </div>
   `;
 }
@@ -608,6 +615,25 @@ export const VistaPrevia: Story = {
       rightPanel: buildVistaPreviaPanel({
         reporte: reporteStockActual,
         rows: stockConsolidadoFixtures,
+        showExportBtn: true,
+      }),
+    }),
+};
+
+/**
+ * Estado previewing — datos vacíos.
+ * GET /api/reportes/:id/datos devuelve { columns: [], rows: [] }.
+ * Muestra el estado vacío "No se encontraron datos con los filtros aplicados."
+ */
+export const PreviewVacia: Story = {
+  name: 'Vista previa — sin datos (vacío)',
+  render: () =>
+    buildLayout({
+      reportes: reporteDefinicionFixtures,
+      selectedId: reporteStockActual.id,
+      rightPanel: buildVistaPreviaPanel({
+        reporte: reporteStockActual,
+        rows: [],
         showExportBtn: true,
       }),
     }),

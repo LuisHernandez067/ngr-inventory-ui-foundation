@@ -427,9 +427,7 @@ function buildDetailPanel(_reportes: ReporteDefinicion[]): string {
                 ? `<div class="d-flex gap-1">
                      <select id="select-formato" class="form-select form-select-sm" style="width:auto;"
                              aria-label="Seleccionar formato de exportación">
-                       <option value="csv"  ${state.selectedFormato === 'csv' ? 'selected' : ''}>CSV</option>
-                       <option value="xlsx" ${state.selectedFormato === 'xlsx' ? 'selected' : ''}>XLSX</option>
-                       <option value="pdf"  ${state.selectedFormato === 'pdf' ? 'selected' : ''}>PDF</option>
+                       ${reporte.formatos.map((f) => `<option value="${f}" ${state.selectedFormato === f ? 'selected' : ''}>${f.toUpperCase()}</option>`).join('')}
                      </select>
                      <button type="button" id="btn-exportar"
                              class="btn btn-success btn-sm"
@@ -467,10 +465,17 @@ function buildDetailPanel(_reportes: ReporteDefinicion[]): string {
           <i class="bi bi-check-circle-fill fs-5" aria-hidden="true"></i>
           <span>¡Reporte generado correctamente! La descarga comenzó automáticamente.</span>
         </div>
-        <button type="button" id="btn-nuevo-reporte" class="btn btn-outline-primary btn-sm">
-          <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>
-          Nuevo reporte
-        </button>
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button" id="btn-descargar-reporte" class="btn btn-success btn-sm"
+                  aria-label="Descargar reporte generado">
+            <i class="bi bi-download me-1" aria-hidden="true"></i>
+            Descargar reporte
+          </button>
+          <button type="button" id="btn-nuevo-reporte" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>
+            Nuevo reporte
+          </button>
+        </div>
       </div>
     `;
   }
@@ -647,6 +652,17 @@ function wireDetailEvents(
     if (!state.selectedReporte) return;
     void handleExportar(reportes);
   });
+
+  // Descargar reporte (desde done)
+  detailEl
+    .querySelector<HTMLButtonElement>('#btn-descargar-reporte')
+    ?.addEventListener('click', () => {
+      const reporte = state.selectedReporte;
+      if (reporte && state.previewRows.length > 0) {
+        const filename = `${reporte.tipo}-${new Date().toISOString().slice(0, 10)}.${state.selectedFormato}`;
+        triggerCsvDownload(state.previewRows, filename);
+      }
+    });
 
   // Reintentar (desde error → previewing)
   detailEl.querySelector<HTMLButtonElement>('#btn-reintentar')?.addEventListener('click', () => {
