@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render, init } from '@ngr-inventory/ui-core/components/spinner';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Spinner — indicador de carga accesible
 const meta: Meta = {

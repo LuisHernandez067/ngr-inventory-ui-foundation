@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { http, HttpResponse } from 'msw';
-import { render, init } from '@ngr-inventory/ui-patterns/patterns/table-toolbar';
+import type { PaginatedResponse } from '@ngr-inventory/api-contracts';
+import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
+import type { ColumnDef } from '@ngr-inventory/ui-patterns';
 import {
   render as renderDataTable,
   init as initDataTable,
 } from '@ngr-inventory/ui-patterns/patterns/data-table';
-import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
-import type { ColumnDef } from '@ngr-inventory/ui-patterns';
-import type { PaginatedResponse } from '@ngr-inventory/api-contracts';
+import { render, init } from '@ngr-inventory/ui-patterns/patterns/table-toolbar';
+import type { Meta, StoryObj } from '@storybook/html';
+import { http, HttpResponse } from 'msw';
 
 // Story del patrón TableToolbar — barra de herramientas compuesta
 const meta: Meta = {
@@ -122,7 +122,7 @@ export const Cargando: Story = {
   name: 'Cargando (MSW)',
   parameters: {
     msw: {
-      handlers: [http.get('/api/productos', () => new Promise(() => {}))],
+      handlers: [http.get('/api/productos', () => new Promise(() => undefined))],
     },
   },
   render: () => {
@@ -133,7 +133,7 @@ export const Cargando: Story = {
       const toolbar = document.getElementById(toolbarId);
       if (toolbar) init(toolbar);
       // Disparar fetch — el handler nunca resuelve, la tabla queda en carga
-      fetch('/api/productos').catch(() => {});
+      fetch('/api/productos').catch(() => undefined);
     }, 0);
 
     return `

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+
 import { render, init } from '../patterns/data-table';
 import type { ColumnDef } from '../types';
 
@@ -87,7 +88,7 @@ describe('DataTable — render()', () => {
 
   it('debe usar render personalizado de columna cuando se provee', () => {
     const customColumns: ColumnDef<Producto>[] = [
-      { key: 'estado', header: 'Estado', render: (val) => `<strong>${val}</strong>` },
+      { key: 'estado', header: 'Estado', render: (val) => `<strong>${String(val)}</strong>` },
     ];
     const html = render({ columns: customColumns, rows: [rows[0]] });
     expect(html).toContain('<strong>activo</strong>');
@@ -108,8 +109,11 @@ describe('DataTable — init() — sorting', () => {
     sortableTh?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.key).toBe('nombre');
-    expect(spy.mock.calls[0][0].detail.direction).toBe('asc');
+    const sortChangeEvent0 = spy.mock.calls[0]?.[0] as
+      | CustomEvent<{ key: string; direction: string | null }>
+      | undefined;
+    expect(sortChangeEvent0?.detail.key).toBe('nombre');
+    expect(sortChangeEvent0?.detail.direction).toBe('asc');
     expect(sortableTh?.getAttribute('aria-sort')).toBe('ascending');
 
     document.body.removeChild(root);
@@ -129,7 +133,10 @@ describe('DataTable — init() — sorting', () => {
     sortableTh?.click(); // desc
 
     expect(spy).toHaveBeenCalledTimes(2);
-    expect(spy.mock.calls[1][0].detail.direction).toBe('desc');
+    const sortChangeEvent1 = spy.mock.calls[1]?.[0] as
+      | CustomEvent<{ key: string; direction: string | null }>
+      | undefined;
+    expect(sortChangeEvent1?.detail.direction).toBe('desc');
     expect(sortableTh?.getAttribute('aria-sort')).toBe('descending');
 
     document.body.removeChild(root);
@@ -149,7 +156,10 @@ describe('DataTable — init() — sorting', () => {
     sortableTh?.click(); // desc
     sortableTh?.click(); // none
 
-    expect(spy.mock.calls[2][0].detail.direction).toBeNull();
+    const sortChangeEvent2 = spy.mock.calls[2]?.[0] as
+      | CustomEvent<{ key: string; direction: string | null }>
+      | undefined;
+    expect(sortChangeEvent2?.detail.direction).toBeNull();
     expect(sortableTh?.getAttribute('aria-sort')).toBe('none');
 
     document.body.removeChild(root);

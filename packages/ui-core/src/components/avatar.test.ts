@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { render, init } from './avatar';
 
 // Tests del componente Avatar
@@ -41,8 +42,8 @@ describe('Avatar — render()', () => {
     const html1 = render({ name: 'Maria Garcia' });
     const html2 = render({ name: 'Maria Garcia' });
     // Extraer el estilo de color de ambos renders
-    const colorMatch1 = html1.match(/--ngr-avatar-\d+/);
-    const colorMatch2 = html2.match(/--ngr-avatar-\d+/);
+    const colorMatch1 = /--ngr-avatar-\d+/.exec(html1);
+    const colorMatch2 = /--ngr-avatar-\d+/.exec(html2);
     expect(colorMatch1?.[0]).toBe(colorMatch2?.[0]);
   });
 
@@ -67,6 +68,8 @@ describe('Avatar — init()', () => {
   it('debe ejecutarse sin errores en un elemento raíz', () => {
     const root = document.createElement('div');
     root.innerHTML = render({ name: 'Test User' });
-    expect(() => init(root)).not.toThrow();
+    expect(() => {
+      init(root);
+    }).not.toThrow();
   });
 });

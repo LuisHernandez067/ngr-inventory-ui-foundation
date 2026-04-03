@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
 import { render, setActive, init, NAV_ITEMS } from './sidebar';
 
 // Tests del módulo de sidebar — render agrupado, active-link y eventos
@@ -167,7 +168,7 @@ describe('sidebar.ts', () => {
   describe('init(root)', () => {
     it('debe reaccionar al evento hashchange actualizando el enlace activo', async () => {
       document.body.innerHTML = render();
-      const root = document.body as HTMLElement;
+      const root = document.body;
       init(root);
 
       // Simular cambio de hash

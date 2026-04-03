@@ -1,5 +1,6 @@
 // Componente EmptyState — pantalla vacía con ícono, mensaje y CTA opcional
 import type { ComponentProps, ButtonVariant } from '../types';
+
 import { render as renderButton } from './button';
 
 /** Props para el componente EmptyState */

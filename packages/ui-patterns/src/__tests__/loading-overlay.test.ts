@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { show, hide, render } from '../patterns/loading-overlay';
 
 // Tests del patrón LoadingOverlay
@@ -102,7 +103,9 @@ describe('LoadingOverlay — hide()', () => {
 
   it('no debe lanzar error si se llama sin overlay activo', () => {
     const root = document.createElement('div');
-    expect(() => hide(root)).not.toThrow();
+    expect(() => {
+      hide(root);
+    }).not.toThrow();
   });
 });
 

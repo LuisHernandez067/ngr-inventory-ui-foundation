@@ -4,7 +4,7 @@ import type { ListQueryParams } from '../common/pagination';
 export type TipoMovimientoKardex = 'entrada' | 'salida' | 'ajuste' | 'saldo_inicial';
 
 /** Entrada del kardex de un producto */
-export type KardexEntry = {
+export interface KardexEntry {
   id: string;
   fecha: string; // ISO 8601
   productoId: string;
@@ -21,7 +21,7 @@ export type KardexEntry = {
   saldoActual: number;
   precioUnitario: number;
   costoMovimiento: number;
-};
+}
 
 /** Parámetros de consulta para el kardex */
 export type KardexQueryParams = ListQueryParams & {

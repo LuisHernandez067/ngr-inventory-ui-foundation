@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
 import { Tooltip } from 'bootstrap';
+import { describe, it, expect, vi } from 'vitest';
+
 import { render, initTooltips, createTooltipAttrs } from './tooltip';
 
 // Tests del componente Tooltip

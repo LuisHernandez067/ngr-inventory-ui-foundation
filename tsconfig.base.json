@@ -7,11 +7,10 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
 
-    // --- Alias de rutas compartidas (baseUrl = monorepo root) ---
-    "baseUrl": ".",
+    // --- Alias de rutas compartidas (relativo al tsconfig) ---
     "paths": {
-      "@tokens/*": ["packages/design-tokens/src/*"],
-      "@theme/*": ["packages/bootstrap-theme/src/*"]
+      "@tokens/*": ["./packages/design-tokens/src/*"],
+      "@theme/*": ["./packages/bootstrap-theme/src/*"]
     },
 
     // --- Modo estricto completo ---

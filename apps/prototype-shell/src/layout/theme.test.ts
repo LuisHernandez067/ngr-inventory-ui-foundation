@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 // Tests del módulo de temas — verifica fallback, persistencia y ciclo de temas
 describe('theme.ts', () => {
   // Simular localStorage para cada test
-  let storageMock: Record<string, string> = {};
+  let storageMock: Record<string, string | undefined> = {};
 
   beforeEach(() => {
     storageMock = {};
@@ -14,7 +14,7 @@ describe('theme.ts', () => {
       storageMock[key] = value;
     });
     vi.spyOn(Storage.prototype, 'removeItem').mockImplementation((key: string) => {
-      delete storageMock[key];
+      storageMock[key] = undefined;
     });
 
     // Restablecer el atributo data-bs-theme en cada test

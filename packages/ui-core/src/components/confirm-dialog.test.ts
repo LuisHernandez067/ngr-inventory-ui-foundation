@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { confirm } from './confirm-dialog';
 
 // Mock de SweetAlert2 para evitar interacción con el DOM real
@@ -92,8 +93,8 @@ describe('ConfirmDialog — confirm()', () => {
     expect(mockSwal.fire).toHaveBeenCalledWith(
       expect.objectContaining({
         customClass: expect.objectContaining({
-          confirmButton: expect.stringContaining('btn-danger'),
-        }),
+          confirmButton: expect.stringContaining('btn-danger') as unknown,
+        }) as unknown,
       })
     );
   });
@@ -106,8 +107,8 @@ describe('ConfirmDialog — confirm()', () => {
     expect(mockSwal.fire).toHaveBeenCalledWith(
       expect.objectContaining({
         customClass: expect.objectContaining({
-          confirmButton: expect.stringContaining('btn-warning'),
-        }),
+          confirmButton: expect.stringContaining('btn-warning') as unknown,
+        }) as unknown,
       })
     );
   });

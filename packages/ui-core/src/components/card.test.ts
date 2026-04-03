@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { render, init } from './card';
 
 // Tests del componente Card
@@ -72,6 +73,8 @@ describe('Card — init()', () => {
   it('debe ejecutarse sin errores en un elemento raíz', () => {
     const root = document.createElement('div');
     root.innerHTML = render({ title: 'Test' }, '<p>Cuerpo</p>');
-    expect(() => init(root)).not.toThrow();
+    expect(() => {
+      init(root);
+    }).not.toThrow();
   });
 });

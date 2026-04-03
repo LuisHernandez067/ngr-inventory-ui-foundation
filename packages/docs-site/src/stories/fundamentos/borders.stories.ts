@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { radiusTokens, shadowTokens } from '@ngr-inventory/design-tokens';
+import type { Meta, StoryObj } from '@storybook/html';
 
 /** Historia de bordes, radios y sombras del sistema */
 const meta = {
@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 export const RadioDeBordes: Story = {
   render: () => {
     // Tokens de radio definidos en el sistema de diseño
-    const radii: Array<{ name: string; cssVar: string; label: string }> = [
+    const radii: { name: string; cssVar: string; label: string }[] = [
       { name: 'none', cssVar: radiusTokens.none, label: '0px' },
       { name: 'sm', cssVar: radiusTokens.sm, label: '0.25rem (4px)' },
       { name: 'md', cssVar: radiusTokens.md, label: '0.375rem (6px)' },
@@ -55,7 +55,7 @@ export const SombrasDeSistema: Story = {
   name: 'Sombras',
   render: () => {
     // Tokens de sombra definidos en el sistema de diseño
-    const shadows: Array<{ name: string; cssVar: string }> = [
+    const shadows: { name: string; cssVar: string }[] = [
       { name: 'xs', cssVar: shadowTokens.xs },
       { name: 'sm', cssVar: shadowTokens.sm },
       { name: 'md', cssVar: shadowTokens.md },

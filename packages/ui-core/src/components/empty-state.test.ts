@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+
 import { render, init } from './empty-state';
 
 // Tests del componente EmptyState
@@ -75,7 +76,8 @@ describe('EmptyState — init()', () => {
     btn?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.action).toBe('add-item');
+    const event = spy.mock.calls[0]?.[0] as CustomEvent<{ action: string }>;
+    expect(event.detail.action).toBe('add-item');
 
     document.body.removeChild(root);
   });
@@ -83,6 +85,8 @@ describe('EmptyState — init()', () => {
   it('debe ejecutarse sin errores cuando no hay CTA', () => {
     const root = document.createElement('div');
     root.innerHTML = render({ icon: 'inbox', title: 'Vacío' });
-    expect(() => init(root)).not.toThrow();
+    expect(() => {
+      init(root);
+    }).not.toThrow();
   });
 });

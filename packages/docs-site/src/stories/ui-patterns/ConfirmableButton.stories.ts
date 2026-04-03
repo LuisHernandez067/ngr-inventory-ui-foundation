@@ -1,6 +1,6 @@
+import { mount } from '@ngr-inventory/ui-patterns/patterns/confirmable-button';
 import type { Meta, StoryObj } from '@storybook/html';
 import { http, HttpResponse } from 'msw';
-import { mount } from '@ngr-inventory/ui-patterns/patterns/confirmable-button';
 
 // Story del patrón ConfirmableButton — botón con confirmación previa y estado de carga
 const meta: Meta = {
@@ -39,7 +39,7 @@ export const EliminarProducto: Story = {
         onConfirmed: async () => {
           // Simular operación async (1.5 segundos)
           await new Promise((res) => setTimeout(res, 1500));
-          console.log('Producto eliminado');
+          // Operación completada — confirmar en la UI
         },
       });
     }, 0);
@@ -68,7 +68,7 @@ export const ConfirmarEnvio: Story = {
         confirmVariant: 'warning',
         onConfirmed: async () => {
           await new Promise((res) => setTimeout(res, 2000));
-          console.log('Envío confirmado');
+          // Envío confirmado — operación completada
         },
       });
     }, 0);
@@ -96,7 +96,7 @@ export const CancelarOrden: Story = {
         confirmVariant: 'warning',
         onConfirmed: async () => {
           await new Promise((res) => setTimeout(res, 1000));
-          console.log('Orden cancelada');
+          // Orden cancelada — operación completada
         },
       });
     }, 0);
@@ -192,7 +192,7 @@ export const CargandoAccion: Story = {
   name: 'Cargando acción (MSW)',
   parameters: {
     msw: {
-      handlers: [http.delete('/api/productos/1', () => new Promise(() => {}))],
+      handlers: [http.delete('/api/productos/1', () => new Promise(() => undefined))],
     },
   },
   render: () => {

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { render, init } from './badge';
 
 // Tests del componente Badge
@@ -46,6 +47,8 @@ describe('Badge — init()', () => {
   it('debe ejecutarse sin errores en un elemento raíz', () => {
     const root = document.createElement('div');
     root.innerHTML = render({ variant: 'primary', text: 'Test' });
-    expect(() => init(root)).not.toThrow();
+    expect(() => {
+      init(root);
+    }).not.toThrow();
   });
 });

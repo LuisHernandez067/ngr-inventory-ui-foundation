@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+
 import { render, init } from '../patterns/filter-chips';
 
 // Tests del patrón FilterChips
@@ -57,9 +58,11 @@ describe('FilterChips — init()', () => {
     btn?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    const detail = spy.mock.calls[0][0].detail;
-    expect(detail.key).toBe('estado');
-    expect(detail.value).toBe('activo');
+    const detail = (
+      spy.mock.calls[0]?.[0] as CustomEvent<{ key: string; value: string }> | undefined
+    )?.detail;
+    expect(detail?.key).toBe('estado');
+    expect(detail?.value).toBe('activo');
 
     document.body.removeChild(root);
   });

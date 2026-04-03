@@ -32,9 +32,9 @@ export function update(hash: string): void {
 
   if (segments.length > 1) {
     // Ruta de detalle — construir breadcrumb jerárquico con link al padre
-    const parentHash = `#/${segments[0]}`;
+    const parentHash = `#/${segments[0] ?? ''}`;
     const parentItem = NAV_ITEMS.find((item) => item.hash === parentHash);
-    const parentLabel = parentItem?.label ?? segments[0];
+    const parentLabel = parentItem?.label ?? segments[0] ?? 'Detalle';
 
     breadcrumbList.innerHTML = `
       <li class="breadcrumb-item">

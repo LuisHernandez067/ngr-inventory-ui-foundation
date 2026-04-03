@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render } from '@ngr-inventory/ui-patterns/patterns/status-badge';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del patrón StatusBadge — badge semántico de estado NGR
 const meta: Meta = {

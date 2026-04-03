@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { render } from '@ngr-inventory/ui-core/components/card';
 import { render as renderBadge } from '@ngr-inventory/ui-core/components/badge';
 import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
+import { render } from '@ngr-inventory/ui-core/components/card';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Card — contenedor con slots opcionales
 const meta: Meta = {

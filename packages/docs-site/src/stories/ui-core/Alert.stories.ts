@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render } from '@ngr-inventory/ui-core/components/alert';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Alert — mensajes de retroalimentación
 const meta: Meta = {

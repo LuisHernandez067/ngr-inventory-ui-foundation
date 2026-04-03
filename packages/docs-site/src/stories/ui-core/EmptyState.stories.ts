@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render, init } from '@ngr-inventory/ui-core/components/empty-state';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente EmptyState — pantalla de estado vacío
 const meta: Meta = {
@@ -52,7 +52,7 @@ export const WithCta: Story = {
         init(root);
         root.addEventListener('ngr:action', (event: Event) => {
           const customEvent = event as CustomEvent;
-          console.log('ngr:action recibido:', customEvent.detail);
+          // Evento de acción registrado — ver panel Actions de Storybook
           alert(`Acción: ${customEvent.detail.action}`);
         });
       }

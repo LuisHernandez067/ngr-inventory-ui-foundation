@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render, init } from '@ngr-inventory/ui-core/components/button';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Button — botón de acción NGR
 const meta: Meta = {
@@ -92,9 +92,8 @@ export const WithAction: Story = {
       const root = document.getElementById(rootId);
       if (root) {
         init(root);
-        root.addEventListener('ngr:action', (event: Event) => {
-          const customEvent = event as CustomEvent;
-          console.log('ngr:action recibido:', customEvent.detail);
+        root.addEventListener('ngr:action', () => {
+          // Evento de acción registrado — ver panel Actions de Storybook
         });
       }
     }, 0);

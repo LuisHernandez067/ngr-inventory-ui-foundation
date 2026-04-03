@@ -7,6 +7,6 @@
     "noEmit": true
   },
   // Solo verificar los archivos de configuración del workspace raíz
-  "include": ["eslint.config.js", "commitlint.config.js"],
+  "include": ["eslint.config.js", "commitlint.config.js", "vitest.workspace.ts"],
   "exclude": ["node_modules", "apps", "packages"]
 }

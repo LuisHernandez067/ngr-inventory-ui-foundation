@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import {
   colorBrandTokens,
   colorSlateTokens,
@@ -6,6 +5,7 @@ import {
   colorDangerTokens,
   colorWarningTokens,
 } from '@ngr-inventory/design-tokens';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story de paleta de tokens de color — verifica que los tokens CSS se resuelven correctamente
 const meta: Meta = {

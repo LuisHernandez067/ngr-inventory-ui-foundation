@@ -8,7 +8,7 @@ export type TipoAccionAuditoria =
   | 'exportar';
 
 /** Entrada del registro de auditoría del sistema */
-export type AuditoriaEntry = {
+export interface AuditoriaEntry {
   id: string;
   fecha: string; // ISO 8601
   usuarioId: string;
@@ -21,4 +21,4 @@ export type AuditoriaEntry = {
   ipAddress?: string;
   datosAnteriores?: unknown;
   datosNuevos?: unknown;
-};
+}

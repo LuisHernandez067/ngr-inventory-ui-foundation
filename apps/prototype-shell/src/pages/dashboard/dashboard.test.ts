@@ -3,6 +3,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as authServiceModule from '../../services/authService';
 
 import { dashboardPage, WIDGET_REGISTRY } from './dashboard';
+import { renderAlertsPanel } from './widgets/alertsPanel';
+import { renderKpiCards } from './widgets/kpiCards';
+import { renderMovementsPanel } from './widgets/movementsPanel';
+import { renderQuickAccess } from './widgets/quickAccess';
 
 // Tests del orquestador del dashboard.
 // Verifica el filtrado de widgets por rol, el ciclo de vida del AbortController
@@ -12,6 +16,7 @@ import { dashboardPage, WIDGET_REGISTRY } from './dashboard';
 
 // Mockeamos cada widget para verificar si fue llamado y con qué argumentos,
 // sin ejecutar la lógica real de fetch ni renderizado.
+// vi.mock es hoisted automáticamente por Vitest, el orden en el código no afecta la ejecución.
 vi.mock('./widgets/kpiCards', () => ({
   renderKpiCards: vi.fn(),
 }));
@@ -28,12 +33,6 @@ vi.mock('./widgets/quickAccess', () => ({
   renderQuickAccess: vi.fn(),
   QUICK_ACCESS_CONFIG: [],
 }));
-
-// Importamos los mocks tipados para verificar las llamadas
-import { renderAlertsPanel } from './widgets/alertsPanel';
-import { renderKpiCards } from './widgets/kpiCards';
-import { renderMovementsPanel } from './widgets/movementsPanel';
-import { renderQuickAccess } from './widgets/quickAccess';
 
 // ── Helpers de setup ─────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { render, initTooltips } from '@ngr-inventory/ui-core/components/tooltip';
 import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
+import { render, initTooltips } from '@ngr-inventory/ui-core/components/tooltip';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Tooltip — wrapper de Bootstrap Tooltip JS
 const meta: Meta = {

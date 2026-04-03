@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+
 import { render as renderBreadcrumb, update } from './breadcrumb';
 import { render as renderSidebar, init as initSidebar } from './sidebar';
+
 import { initLayout } from './index';
 
 // Tests del módulo breadcrumb — actualización de ruta según hash
@@ -20,46 +22,48 @@ describe('breadcrumb.ts', () => {
   });
 
   describe('update(hash)', () => {
+    // Referencia al contenedor del breadcrumb, resuelto en beforeEach
+    let breadcrumb: HTMLElement;
+
     beforeEach(() => {
       // Montar el breadcrumb en el DOM
       document.body.innerHTML = renderBreadcrumb();
+      const el = document.getElementById('breadcrumb-list');
+      if (!el) throw new Error('breadcrumb-list no encontrado en el DOM');
+      breadcrumb = el;
     });
 
     it('debe actualizar el breadcrumb a la etiqueta del módulo activo', () => {
       update('#/stock');
-      const breadcrumb = document.getElementById('breadcrumb-list');
-      expect(breadcrumb?.textContent?.trim()).toBe('Stock');
+      expect(breadcrumb.textContent.trim()).toBe('Stock');
     });
 
     it('debe mostrar Dashboard con hash vacío', () => {
       update('#/');
-      const breadcrumb = document.getElementById('breadcrumb-list');
-      expect(breadcrumb?.textContent?.trim()).toBe('Dashboard');
+      expect(breadcrumb.textContent.trim()).toBe('Dashboard');
     });
 
     it('debe mostrar el label correcto para Productos', () => {
       update('#/productos');
-      const breadcrumb = document.getElementById('breadcrumb-list');
-      expect(breadcrumb?.textContent?.trim()).toBe('Productos');
+      expect(breadcrumb.textContent.trim()).toBe('Productos');
     });
 
     it('debe mostrar el label correcto para Auditoría', () => {
       update('#/auditoria');
-      const breadcrumb = document.getElementById('breadcrumb-list');
-      expect(breadcrumb?.textContent?.trim()).toBe('Auditoría');
+      expect(breadcrumb.textContent.trim()).toBe('Auditoría');
     });
 
     it('debe mantener aria-current="page" en el ítem activo', () => {
       update('#/kardex');
       const activeItem = document.querySelector('[aria-current="page"]');
       expect(activeItem).not.toBeNull();
-      expect(activeItem?.textContent?.trim()).toBe('Kardex');
+      if (!activeItem) throw new Error('Elemento aria-current="page" no encontrado');
+      expect(activeItem.textContent.trim()).toBe('Kardex');
     });
 
     it('debe mostrar Dashboard si el hash no corresponde a ningún módulo', () => {
       update('#/ruta-inexistente');
-      const breadcrumb = document.getElementById('breadcrumb-list');
-      expect(breadcrumb?.textContent?.trim()).toBe('Dashboard');
+      expect(breadcrumb.textContent.trim()).toBe('Dashboard');
     });
   });
 });
@@ -70,9 +74,11 @@ describe('layout/index.ts — initLayout()', () => {
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="app"></div>';
-    appElement = document.getElementById('app') as HTMLElement;
     // Limpiar hash
     window.location.hash = '';
+    const el = document.getElementById('app');
+    if (!el) throw new Error('Elemento #app no encontrado en el DOM');
+    appElement = el;
   });
 
   it('debe montar el shell completo en el elemento #app', () => {
@@ -133,6 +139,8 @@ describe('layout/index.ts — initLayout()', () => {
 describe('sidebar.ts — init con DOM real', () => {
   it('debe inicializar sin errores con un root válido', () => {
     document.body.innerHTML = renderSidebar();
-    expect(() => initSidebar(document.body)).not.toThrow();
+    expect(() => {
+      initSidebar(document.body);
+    }).not.toThrow();
   });
 });

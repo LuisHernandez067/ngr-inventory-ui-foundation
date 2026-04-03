@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { render, init } from '@ngr-inventory/ui-patterns/patterns/action-menu';
 import type { ActionMenuItem } from '@ngr-inventory/ui-patterns';
+import { render, init } from '@ngr-inventory/ui-patterns/patterns/action-menu';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del patrón ActionMenu — menú desplegable de acciones con Bootstrap Dropdown
 const meta: Meta = {
@@ -114,7 +114,7 @@ export const Interactivo: Story = {
         const ce = event as CustomEvent<{ id: string }>;
         const output = document.getElementById('story-action-output');
         if (output) output.textContent = `Acción seleccionada: "${ce.detail.id}"`;
-        console.log('ngr:action recibido:', ce.detail);
+        // Evento de acción registrado — ver panel Actions de Storybook
       });
     }, 0);
 
@@ -217,9 +217,8 @@ export const EnTabla: Story = {
     setTimeout(() => {
       document.querySelectorAll('.action-menu-row').forEach((root) => {
         init(root as HTMLElement);
-        root.addEventListener('ngr:action', (event: Event) => {
-          const ce = event as CustomEvent<{ id: string }>;
-          console.log('Acción en fila:', ce.detail);
+        root.addEventListener('ngr:action', () => {
+          // Evento de acción en fila registrado — ver panel Actions de Storybook
         });
       });
     }, 0);

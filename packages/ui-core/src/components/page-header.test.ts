@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { render, init } from './page-header';
 
 // Tests del componente PageHeader
@@ -69,6 +70,8 @@ describe('PageHeader — init()', () => {
   it('debe ejecutarse sin errores en un elemento raíz', () => {
     const root = document.createElement('div');
     root.innerHTML = render({ title: 'Test' });
-    expect(() => init(root)).not.toThrow();
+    expect(() => {
+      init(root);
+    }).not.toThrow();
   });
 });

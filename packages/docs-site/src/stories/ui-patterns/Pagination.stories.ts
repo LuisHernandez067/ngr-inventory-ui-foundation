@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render, init } from '@ngr-inventory/ui-patterns/patterns/pagination';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del patrón Pagination — control de paginación con elipsis
 const meta: Meta = {
@@ -83,7 +83,7 @@ export const Interactivo: Story = {
         const ce = event as CustomEvent<{ page: number }>;
         const output = document.getElementById('story-page-output');
         if (output) output.textContent = `Página seleccionada: ${ce.detail.page}`;
-        console.log('ngr:page-change recibido:', ce.detail);
+        // Evento de cambio de página registrado — ver panel Actions de Storybook
       });
     }, 0);
 

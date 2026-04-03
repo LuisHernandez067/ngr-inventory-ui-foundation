@@ -1,6 +1,7 @@
 // Módulo de la barra de navegación superior
-import { cycleTheme, getTheme } from './theme';
 import { authService } from '../services/authService';
+
+import { cycleTheme, getTheme } from './theme';
 
 /**
  * Renderiza el HTML de la barra de navegación principal.

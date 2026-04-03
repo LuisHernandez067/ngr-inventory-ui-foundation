@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render, init } from '@ngr-inventory/ui-patterns/patterns/search-bar';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del patrón SearchBar — barra de búsqueda con debounce
 const meta: Meta = {
@@ -123,7 +123,7 @@ export const Interactivo: Story = {
         const ce = event as CustomEvent<{ query: string }>;
         const output = document.getElementById('story-search-output');
         if (output) output.textContent = `Última búsqueda: "${ce.detail.query}"`;
-        console.log('ngr:search recibido:', ce.detail);
+        // Evento de búsqueda registrado — ver panel Actions de Storybook
       });
     }, 0);
 

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render } from '@ngr-inventory/ui-core/components/badge';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Badge — etiqueta de estado
 const meta: Meta = {

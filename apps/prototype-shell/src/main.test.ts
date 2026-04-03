@@ -16,7 +16,7 @@ describe('Prototype Shell — montaje', () => {
     expect(app?.getAttribute('data-bs-theme')).toBe('light');
   });
 
-  it('debe renderizar contenido dentro de #app al montar', async () => {
+  it('debe renderizar contenido dentro de #app al montar', () => {
     const app = document.getElementById('app');
     if (!app) throw new Error('No se encontró #app');
 

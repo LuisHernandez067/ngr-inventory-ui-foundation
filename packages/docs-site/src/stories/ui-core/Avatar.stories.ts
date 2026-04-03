@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render } from '@ngr-inventory/ui-core/components/avatar';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente Avatar — representación visual de usuario
 const meta: Meta = {

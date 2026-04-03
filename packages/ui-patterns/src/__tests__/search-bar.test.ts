@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { render, init } from '../patterns/search-bar';
 
 // Tests del patrón SearchBar
@@ -64,7 +65,8 @@ describe('SearchBar — init()', () => {
     // Después del delay debe emitir una vez
     vi.advanceTimersByTime(300);
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.query).toBe('laptop');
+    const searchEvent0 = spy.mock.calls[0]?.[0] as CustomEvent<{ query: string }> | undefined;
+    expect(searchEvent0?.detail.query).toBe('laptop');
 
     document.body.removeChild(root);
   });
@@ -83,7 +85,8 @@ describe('SearchBar — init()', () => {
 
     // El botón de limpiar emite inmediatamente (sin debounce)
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.query).toBe('');
+    const event = spy.mock.calls[0]?.[0] as CustomEvent<{ query: string }>;
+    expect(event.detail.query).toBe('');
 
     const input = root.querySelector<HTMLInputElement>('input');
     expect(input?.value).toBe('');

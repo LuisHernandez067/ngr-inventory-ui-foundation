@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { render, init } from '@ngr-inventory/ui-patterns/patterns/filter-chips';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del patrón FilterChips — chips dismissibles para filtros activos
 const meta: Meta = {
@@ -116,9 +116,8 @@ export const Interactivo: Story = {
       const root = document.getElementById(rootId);
       if (!root) return;
       init(root);
-      root.addEventListener('ngr:filter-remove', (event: Event) => {
-        const ce = event as CustomEvent;
-        console.log('ngr:filter-remove recibido:', ce.detail);
+      root.addEventListener('ngr:filter-remove', () => {
+        // Evento de filtro removido registrado — ver panel Actions de Storybook
       });
     }, 0);
 

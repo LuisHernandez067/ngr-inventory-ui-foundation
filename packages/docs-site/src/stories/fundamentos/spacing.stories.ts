@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/html';
 import { spaceTokens } from '@ngr-inventory/design-tokens';
+import type { Meta, StoryObj } from '@storybook/html';
 
 /** Historia de la escala de espaciado del sistema de diseño */
 const meta = {
@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 export const EscalaDeEspaciado: Story = {
   render: () => {
     // Escala numérica de tokens: clave → valor CSS + equivalente en px
-    const spacingScale: Array<{ name: string; cssVar: string; px: number }> = [
+    const spacingScale: { name: string; cssVar: string; px: number }[] = [
       { name: '1', cssVar: spaceTokens[1], px: 4 },
       { name: '2', cssVar: spaceTokens[2], px: 8 },
       { name: '3', cssVar: spaceTokens[3], px: 12 },
@@ -53,7 +53,7 @@ export const AliasesSemanticos: Story = {
   name: 'Aliases semánticos',
   render: () => {
     // Aliases legibles para uso expresivo en código
-    const aliases: Array<{ alias: string; cssVar: string; px: number }> = [
+    const aliases: { alias: string; cssVar: string; px: number }[] = [
       { alias: 'xs', cssVar: spaceTokens.xs, px: 8 },
       { alias: 'sm', cssVar: spaceTokens.sm, px: 12 },
       { alias: 'md', cssVar: spaceTokens.md, px: 16 },

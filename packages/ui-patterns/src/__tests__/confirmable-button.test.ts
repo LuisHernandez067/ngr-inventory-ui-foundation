@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, mount } from '../patterns/confirmable-button';
 import * as UiCore from '@ngr-inventory/ui-core';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+import { render, mount } from '../patterns/confirmable-button';
 
 // Tests del patrón ConfirmableButton
 describe('ConfirmableButton — render()', () => {
@@ -66,7 +67,9 @@ describe('ConfirmableButton — mount() + init()', () => {
     btn?.click();
 
     // Esperar resolución de promesas
-    await vi.waitFor(() => expect(onConfirmed).toHaveBeenCalledOnce());
+    await vi.waitFor(() => {
+      expect(onConfirmed).toHaveBeenCalledOnce();
+    });
 
     document.body.removeChild(root);
   });
@@ -87,7 +90,9 @@ describe('ConfirmableButton — mount() + init()', () => {
     const btn = root.querySelector<HTMLButtonElement>('button');
     btn?.click();
 
-    await vi.waitFor(() => expect(confirmSpy).toHaveBeenCalledOnce());
+    await vi.waitFor(() => {
+      expect(confirmSpy).toHaveBeenCalledOnce();
+    });
     expect(onConfirmed).not.toHaveBeenCalled();
 
     document.body.removeChild(root);
@@ -114,13 +119,17 @@ describe('ConfirmableButton — mount() + init()', () => {
     btn?.click();
 
     // Esperar que el confirm se llame y el botón se deshabilite
-    await vi.waitFor(() => expect(onConfirmed).toHaveBeenCalled());
+    await vi.waitFor(() => {
+      expect(onConfirmed).toHaveBeenCalled();
+    });
     expect(btn?.disabled).toBe(true);
     expect(btn?.querySelector('.spinner-border')).not.toBeNull();
 
     // Resolver la acción — el botón debe restaurarse
     resolveAction();
-    await vi.waitFor(() => expect(btn?.disabled).toBe(false));
+    await vi.waitFor(() => {
+      expect(btn?.disabled).toBe(false);
+    });
 
     document.body.removeChild(root);
   });

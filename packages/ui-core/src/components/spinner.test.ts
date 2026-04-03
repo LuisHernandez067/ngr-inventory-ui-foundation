@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { render, init } from './spinner';
 
 // Tests del componente Spinner
@@ -52,6 +53,8 @@ describe('Spinner — init()', () => {
   it('debe ejecutarse sin errores en un elemento raíz', () => {
     const root = document.createElement('div');
     root.innerHTML = render({});
-    expect(() => init(root)).not.toThrow();
+    expect(() => {
+      init(root);
+    }).not.toThrow();
   });
 });

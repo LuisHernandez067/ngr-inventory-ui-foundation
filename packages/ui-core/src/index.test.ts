@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { UI_CORE_VERSION } from './index';
 
 // Smoke test para verificar que el paquete ui-core está correctamente configurado

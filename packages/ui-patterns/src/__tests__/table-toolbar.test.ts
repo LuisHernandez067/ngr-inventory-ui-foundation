@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { render, init } from '../patterns/table-toolbar';
 
 // Tests del patrón TableToolbar
@@ -89,7 +90,8 @@ describe('TableToolbar — init() — event forwarding', () => {
     btn?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.key).toBe('categoria');
+    const event = spy.mock.calls[0]?.[0] as CustomEvent<{ key: string }>;
+    expect(event.detail.key).toBe('categoria');
 
     document.body.removeChild(root);
   });

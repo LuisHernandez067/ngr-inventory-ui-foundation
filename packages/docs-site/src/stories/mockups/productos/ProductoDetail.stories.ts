@@ -1,6 +1,6 @@
+import { render as renderPageHeader } from '@ngr-inventory/ui-core/components/page-header';
 import type { Meta, StoryObj } from '@storybook/html';
 import { http, HttpResponse } from 'msw';
-import { render as renderPageHeader } from '@ngr-inventory/ui-core/components/page-header';
 
 const meta = {
   title: 'Mockups/Productos/Detalle de producto',

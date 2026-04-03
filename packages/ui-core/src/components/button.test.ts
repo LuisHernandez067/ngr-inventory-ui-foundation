@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+
 import { render, init } from './button';
 
 // Tests del componente Button
@@ -58,7 +59,7 @@ describe('Button — render()', () => {
     const children = Array.from(btn?.childNodes ?? []).filter((n) => n.nodeType === 1);
     // El último elemento hijo es el ícono
     const lastElement = children[children.length - 1] as Element;
-    expect(lastElement?.tagName).toBe('I');
+    expect(lastElement.tagName).toBe('I');
   });
 
   it('debe mostrar spinner y estar deshabilitado en estado loading', () => {
@@ -100,7 +101,8 @@ describe('Button — init()', () => {
     btn?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.action).toBe('test-action');
+    const event = spy.mock.calls[0]?.[0] as CustomEvent<{ action: string }>;
+    expect(event.detail.action).toBe('test-action');
 
     document.body.removeChild(root);
   });

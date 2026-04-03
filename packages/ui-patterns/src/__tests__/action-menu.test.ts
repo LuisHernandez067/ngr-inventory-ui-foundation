@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
 import { Dropdown } from 'bootstrap';
+import { describe, it, expect, vi } from 'vitest';
+
 import { render, init } from '../patterns/action-menu';
 import type { ActionMenuItem } from '../types';
 
@@ -83,7 +84,8 @@ describe('ActionMenu — init()', () => {
     btn?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.id).toBe('editar');
+    const actionEvent = spy.mock.calls[0]?.[0] as CustomEvent<{ id: string }> | undefined;
+    expect(actionEvent?.detail.id).toBe('editar');
 
     document.body.removeChild(root);
   });

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html';
+
 import { render, init } from '../../../../apps/prototype-shell/src/layout/navbar';
 
 // Story del componente Navbar — barra de navegación superior del admin shell

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { render } from '@ngr-inventory/ui-core/components/page-header';
 import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
+import { render } from '@ngr-inventory/ui-core/components/page-header';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente PageHeader — encabezado de página landmark
 const meta: Meta = {

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { confirm } from '@ngr-inventory/ui-core/components/confirm-dialog';
 import { render as renderButton } from '@ngr-inventory/ui-core/components/button';
+import { confirm } from '@ngr-inventory/ui-core/components/confirm-dialog';
+import type { Meta, StoryObj } from '@storybook/html';
 
 // Story del componente ConfirmDialog — diálogo de confirmación SweetAlert2
 const meta: Meta = {

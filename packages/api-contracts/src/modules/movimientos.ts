@@ -7,7 +7,7 @@ export type TipoMovimiento = 'entrada' | 'salida' | 'transferencia' | 'ajuste' |
 export type EstadoMovimiento = 'borrador' | 'pendiente' | 'aprobado' | 'ejecutado' | 'anulado';
 
 /** Ítem individual dentro de un movimiento */
-export type MovimientoItem = {
+export interface MovimientoItem {
   id: string;
   productoId: string;
   productoCodigo: string;
@@ -16,7 +16,7 @@ export type MovimientoItem = {
   precioUnitario: number;
   lote?: string;
   vencimiento?: string; // ISO 8601
-};
+}
 
 /** Movimiento de inventario completo */
 export type Movimiento = AuditFields & {

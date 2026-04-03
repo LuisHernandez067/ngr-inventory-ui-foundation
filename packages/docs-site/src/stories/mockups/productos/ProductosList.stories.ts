@@ -1,17 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { http, HttpResponse } from 'msw';
-import {
-  render as renderToolbar,
-  init as initToolbar,
-} from '@ngr-inventory/ui-patterns/patterns/table-toolbar';
+import type { PaginatedResponse } from '@ngr-inventory/api-contracts';
+import { render as renderPageHeader } from '@ngr-inventory/ui-core/components/page-header';
+import type { ColumnDef } from '@ngr-inventory/ui-patterns';
 import {
   render as renderDataTable,
   init as initDataTable,
 } from '@ngr-inventory/ui-patterns/patterns/data-table';
-import { render as renderPageHeader } from '@ngr-inventory/ui-core/components/page-header';
 import { render as renderStatusBadge } from '@ngr-inventory/ui-patterns/patterns/status-badge';
-import type { ColumnDef } from '@ngr-inventory/ui-patterns';
-import type { PaginatedResponse } from '@ngr-inventory/api-contracts';
+import {
+  render as renderToolbar,
+  init as initToolbar,
+} from '@ngr-inventory/ui-patterns/patterns/table-toolbar';
+import type { Meta, StoryObj } from '@storybook/html';
+import { http, HttpResponse } from 'msw';
 
 const meta = {
   title: 'Mockups/Productos/Lista de productos',

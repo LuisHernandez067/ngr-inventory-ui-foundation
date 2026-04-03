@@ -1,14 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/html';
-import { http, HttpResponse } from 'msw';
-import { render, init } from '@ngr-inventory/ui-patterns/patterns/data-table';
-import { render as renderStatusBadge } from '@ngr-inventory/ui-patterns/patterns/status-badge';
+import type { Producto, PaginatedResponse } from '@ngr-inventory/api-contracts';
+import type { ColumnDef, ActionMenuItem } from '@ngr-inventory/ui-patterns';
 import {
   render as renderActionMenu,
   init as initActionMenu,
 } from '@ngr-inventory/ui-patterns/patterns/action-menu';
-import type { ColumnDef } from '@ngr-inventory/ui-patterns';
-import type { ActionMenuItem } from '@ngr-inventory/ui-patterns';
-import type { Producto, PaginatedResponse } from '@ngr-inventory/api-contracts';
+import { render, init } from '@ngr-inventory/ui-patterns/patterns/data-table';
+import { render as renderStatusBadge } from '@ngr-inventory/ui-patterns/patterns/status-badge';
+import type { Meta, StoryObj } from '@storybook/html';
+import { http, HttpResponse } from 'msw';
 
 // Story del patrón DataTable — tabla de datos completa
 const meta: Meta = {
@@ -207,7 +206,7 @@ export const ConClicEnFila: Story = {
       const onRowClick = (row: Producto) => {
         const output = document.getElementById('story-rowclick-output');
         if (output) output.textContent = `Fila clicada: ${row.nombre} (SKU: ${row.sku})`;
-        console.log('Row click:', row);
+        // Fila clicada — ver panel Actions de Storybook
       };
 
       init(root, { columns, rows: productos, onRowClick });
@@ -216,7 +215,7 @@ export const ConClicEnFila: Story = {
     return `
       <div class="p-3">
         <div id="${rootId}">
-          ${render({ columns, rows: productos, onRowClick: () => {} })}
+          ${render({ columns, rows: productos, onRowClick: () => undefined })}
         </div>
         <p id="story-rowclick-output" class="mt-2 text-muted fst-italic">
           Hacé clic en una fila...
@@ -250,9 +249,8 @@ export const ConMenuDeAcciones: Story = {
     setTimeout(() => {
       document.querySelectorAll('.ngr-action-menu').forEach((el) => {
         initActionMenu(el as HTMLElement);
-        el.addEventListener('ngr:action', (event: Event) => {
-          const ce = event as CustomEvent<{ id: string }>;
-          console.log('Acción en fila:', ce.detail);
+        el.addEventListener('ngr:action', () => {
+          // Evento de acción en fila registrado — ver panel Actions de Storybook
         });
       });
     }, 0);
@@ -319,7 +317,7 @@ export const Cargando: Story = {
   name: 'Cargando (MSW)',
   parameters: {
     msw: {
-      handlers: [http.get('/api/productos', () => new Promise(() => {}))],
+      handlers: [http.get('/api/productos', () => new Promise(() => undefined))],
     },
   },
   render: () => {
@@ -336,7 +334,7 @@ export const Cargando: Story = {
       });
 
       // La promesa nunca resuelve — el spinner queda visible
-      await fetch('/api/productos').catch(() => {});
+      await fetch('/api/productos').catch(() => undefined);
     }, 0);
 
     return `

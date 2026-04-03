@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+
 import { render, init } from '../patterns/pagination';
 
 // Tests del patrón Pagination
@@ -86,7 +87,8 @@ describe('Pagination — init()', () => {
     page3?.click();
 
     expect(spy).toHaveBeenCalledOnce();
-    expect(spy.mock.calls[0][0].detail.page).toBe(3);
+    const pageChangeEvent = spy.mock.calls[0]?.[0] as CustomEvent<{ page: number }> | undefined;
+    expect(pageChangeEvent?.detail.page).toBe(3);
 
     document.body.removeChild(root);
   });

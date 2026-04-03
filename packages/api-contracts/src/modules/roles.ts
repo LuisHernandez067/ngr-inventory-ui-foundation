@@ -1,13 +1,13 @@
 import type { AuditFields } from '../common/audit';
 
 /** Permiso individual del sistema */
-export type Permiso = {
+export interface Permiso {
   id: string;
   clave: string;
   nombre: string;
   modulo: string;
   descripcion?: string;
-};
+}
 
 /** Rol de usuario con sus permisos asignados */
 export type Rol = AuditFields & {
@@ -19,10 +19,10 @@ export type Rol = AuditFields & {
 };
 
 /** Permisos efectivos de un usuario (claves planas) */
-export type PermisosEfectivos = {
+export interface PermisosEfectivos {
   userId: string;
   permisos: string[]; // lista de claves de permisos
-};
+}
 
 /** DTO para crear un rol */
 export type CreateRolDto = Omit<Rol, 'id' | keyof AuditFields>;

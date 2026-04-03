@@ -18,6 +18,7 @@ export default tseslint.config(
       '**/.cache/**',
       '**/*.tsbuildinfo',
       'storybook-static/**',
+      '**/public/**',
     ],
   },
 
@@ -76,6 +77,12 @@ export default tseslint.config(
       '**/*.config.ts',
       'commitlint.config.js',
     ],
+    ...tseslint.configs.disableTypeChecked,
+  },
+
+  // --- Story files (sin type-checking — Storybook HTML types son any) ---
+  {
+    files: ['**/*.stories.ts'],
     ...tseslint.configs.disableTypeChecked,
   }
 );

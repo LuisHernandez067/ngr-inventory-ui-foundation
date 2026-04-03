@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html';
+
 import { initLayout } from '../../../../apps/prototype-shell/src/layout/index';
 
 // Story del admin shell completo — combina todos los módulos de layout

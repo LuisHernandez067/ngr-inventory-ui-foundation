@@ -1,4 +1,5 @@
 import { setupWorker } from 'msw/browser';
+
 import { handlers } from './handlers';
 
 // Configuración del Service Worker de MSW para entornos de navegador
