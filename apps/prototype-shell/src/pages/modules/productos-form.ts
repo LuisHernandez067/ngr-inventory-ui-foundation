@@ -123,7 +123,7 @@ function renderForm(
       </div>
 
       <!-- Formulario principal -->
-      <form id="productos-form" novalidate>
+      <form id="productos-form" novalidate aria-label="Formulario de producto">
         ${FormField.render({
           name: 'nombre',
           label: 'Nombre del producto',

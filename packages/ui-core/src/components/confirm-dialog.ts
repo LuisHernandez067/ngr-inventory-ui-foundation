@@ -29,8 +29,12 @@ export async function confirm(props: NgrConfirmDialogProps): Promise<boolean> {
     variant = 'danger',
   } = props;
 
+  // Guardar elemento enfocado antes de abrir el diálogo
+  const previouslyFocused = document.activeElement as HTMLElement | null;
+
   const result = await Swal.fire({
-    title,
+    // Si el título está vacío, usar titleText como fallback para que el diálogo tenga nombre accesible
+    ...(title ? { title } : { titleText: 'Confirmar acción' }),
     html: message,
     showCancelButton: true,
     confirmButtonText: confirmLabel,
@@ -41,8 +45,12 @@ export async function confirm(props: NgrConfirmDialogProps): Promise<boolean> {
       cancelButton: 'btn btn-secondary',
     },
     buttonsStyling: false,
-    // El foco queda atrapado dentro del diálogo por SweetAlert2 automáticamente
-    focusConfirm: false,
+    // Enfocar el botón de confirmación al abrir para que el focus trap sea inmediato
+    focusConfirm: true,
+    // Restaurar foco al elemento previo cuando se cierra el diálogo
+    didClose: () => {
+      previouslyFocused?.focus();
+    },
   });
 
   return result.isConfirmed;

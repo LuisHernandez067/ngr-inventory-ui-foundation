@@ -143,6 +143,7 @@ export function createListPage<T extends Record<string, unknown>>(
     const dataTableProps = {
       columns: uiColumns,
       rows: response.data,
+      ariaLabel: `Lista de ${options.title}`,
       ...(rowClickHandler !== undefined ? { onRowClick: rowClickHandler } : {}),
     };
 
@@ -153,6 +154,26 @@ export function createListPage<T extends Record<string, unknown>>(
     const tableRoot = tableContainer.querySelector<HTMLElement>('.ngr-datatable-wrapper');
     if (tableRoot) {
       DataTable.init<T>(tableRoot, dataTableProps);
+
+      // Soporte de teclado para filas navegables — agrega tabindex y keydown a cada fila clicable
+      if (rowClickHandler !== undefined) {
+        tableRoot.querySelectorAll<HTMLElement>('tr.cursor-pointer').forEach((tr) => {
+          tr.setAttribute('tabindex', '0');
+          tr.setAttribute('role', 'button');
+          tr.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              tr.click(); // Reutiliza el handler de click existente
+            }
+          });
+        });
+      }
+    }
+
+    // Actualizar región live con el conteo de resultados — anuncia a lectores de pantalla
+    const resultCountEl = rootContainer?.querySelector<HTMLElement>('#result-count-live');
+    if (resultCountEl) {
+      resultCountEl.textContent = `${String(response.data.length)} registros encontrados`;
     }
 
     // Actualizar paginación — solo mostrar si hay más de una página
@@ -232,7 +253,9 @@ export function createListPage<T extends Record<string, unknown>>(
         <div class="p-4">
           <h1 class="h3 mb-4">${options.title}</h1>
           <div id="toolbar-container" class="mb-3"></div>
-          <div id="table-container" class="position-relative"></div>
+          <!-- Región live para anunciar el conteo de resultados a lectores de pantalla -->
+          <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" id="result-count-live"></div>
+          <div id="table-container" class="position-relative" tabindex="0"></div>
           <div id="pagination-container" class="mt-3"></div>
         </div>
       `;

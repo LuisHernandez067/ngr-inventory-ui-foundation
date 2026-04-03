@@ -61,6 +61,8 @@ export interface DataTableProps<T = Record<string, unknown>> extends ComponentPr
   emptyDescription?: string;
   /** Callback invocado al hacer clic en una fila */
   onRowClick?: (row: T) => void;
+  /** Etiqueta accesible para el elemento <table> — útil cuando no hay caption visible */
+  ariaLabel?: string;
 }
 
 /** Props para el componente TableToolbar */

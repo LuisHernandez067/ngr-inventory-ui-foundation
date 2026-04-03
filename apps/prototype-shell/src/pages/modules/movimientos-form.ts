@@ -303,7 +303,7 @@ function renderForm(
       </div>
 
       <!-- Formulario principal -->
-      <form id="movimientos-form" novalidate>
+      <form id="movimientos-form" novalidate aria-label="Formulario de movimiento de stock">
 
         <!-- Campos de cabecera -->
         <div class="card mb-4">

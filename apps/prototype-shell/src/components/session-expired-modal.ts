@@ -5,6 +5,9 @@ import { authService } from '../services/authService';
 // ID del overlay para evitar duplicados
 const OVERLAY_ID = 'session-expired-overlay';
 
+// Referencia al elemento enfocado antes de mostrar el modal — para restaurar foco al cerrar
+let previouslyFocused: HTMLElement | null = null;
+
 /**
  * Maneja el click del botón de re-login dentro del modal.
  * Cierra sesión, redirige al login y oculta el modal.
@@ -27,6 +30,9 @@ export const sessionExpiredModal = {
   show(): void {
     // Evitar duplicados si ya está montado
     if (document.getElementById(OVERLAY_ID)) return;
+
+    // Guardar elemento enfocado antes de montar el modal para restaurarlo al cerrar
+    previouslyFocused = document.activeElement as HTMLElement | null;
 
     // Crear el elemento overlay
     const overlay = document.createElement('div');
@@ -80,6 +86,10 @@ export const sessionExpiredModal = {
       reloginBtn?.removeEventListener('click', handleReloginClick);
 
       overlay.remove();
+
+      // Restaurar foco al elemento que estaba activo antes de abrir el modal
+      previouslyFocused?.focus();
+      previouslyFocused = null;
     }
   },
 };

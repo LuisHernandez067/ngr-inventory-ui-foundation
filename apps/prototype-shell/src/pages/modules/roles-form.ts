@@ -124,7 +124,7 @@ function renderForm(
       </div>
 
       <!-- Formulario principal -->
-      <form id="rol-form" novalidate>
+      <form id="rol-form" novalidate aria-label="Formulario de rol">
         <!-- Datos básicos -->
         <div class="card mb-4">
           <div class="card-header fw-semibold">

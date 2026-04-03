@@ -1,0 +1,38 @@
+// ============================================================
+// Estilos de foco accesibles — WCAG 2.2 AA
+// Usa :focus-visible para mostrar el anillo solo en navegación
+// por teclado, no al hacer clic con el ratón.
+// ============================================================
+
+// Anillo de foco visible para navegación por teclado
+*:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+// Eliminamos el outline genérico de :focus para evitar el anillo
+// en interacciones de ratón/táctil
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// Enlace "saltar al contenido" — visualmente oculto hasta recibir foco
+// Permite a usuarios de teclado omitir la navegación
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 4px;
+  transition: top 0.1s;
+
+  &:focus-visible {
+    top: 0;
+  }
+}

@@ -167,7 +167,7 @@ function renderForm(
       </div>
 
       <!-- Formulario principal -->
-      <form id="conteos-nuevo-form" novalidate>
+      <form id="conteos-nuevo-form" novalidate aria-label="Formulario de conteo físico">
 
         <!-- Información general del conteo -->
         <div class="card mb-4">

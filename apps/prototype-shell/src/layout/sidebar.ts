@@ -259,7 +259,7 @@ export function render(): string {
 
       <!-- Cuerpo de la navegación -->
       <div class="offcanvas-body d-flex flex-column p-0">
-        <nav id="sidebar-nav" class="sidebar-nav flex-grow-1 p-2" aria-label="Módulos del sistema">
+        <nav id="sidebar-nav" class="sidebar-nav flex-grow-1 p-2" aria-label="Navegación principal">
           ${renderGroup('top')}
           ${renderGroup('inventario')}
           ${renderGroup('movimientos')}
@@ -286,7 +286,7 @@ function resolveActiveHash(hash: string): string {
 
   if (segments.length > 1) {
     // Ruta de detalle — activar el ítem padre del primer segmento
-    return `#/${segments[0]}`;
+    return `#/${String(segments[0])}`;
   }
 
   return normalized;

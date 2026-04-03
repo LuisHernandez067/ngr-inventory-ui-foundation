@@ -1,7 +1,9 @@
 // Patrón DataTable — tabla de datos con ordenamiento, estado vacío y overlay de carga
 import { Spinner, EmptyState } from '@ngr-inventory/ui-core';
-import * as LoadingOverlay from './loading-overlay';
+
 import type { DataTableProps, ColumnDef } from '../types';
+
+import * as LoadingOverlay from './loading-overlay';
 
 /** Estado de ordenamiento por instancia de tabla */
 interface SortState {
@@ -32,7 +34,7 @@ function renderHeader<T>(columns: ColumnDef<T>[]): string {
  */
 function renderBody<T>(rows: T[], columns: ColumnDef<T>[], onRowClick?: (row: T) => void): string {
   if (!rows.length) {
-    return `<tbody><tr><td colspan="${columns.length}" class="p-0 border-0"></td></tr></tbody>`;
+    return `<tbody><tr><td colspan="${String(columns.length)}" class="p-0 border-0"></td></tr></tbody>`;
   }
 
   const rowsHtml = rows
@@ -42,7 +44,13 @@ function renderBody<T>(rows: T[], columns: ColumnDef<T>[], onRowClick?: (row: T)
       const cells = columns
         .map((col) => {
           const value = rowRecord[col.key];
-          const cellContent = col.render ? col.render(value, row) : String(value ?? '');
+          const cellContent = col.render
+            ? col.render(value, row)
+            : value === null || value === undefined
+              ? ''
+              : typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+                ? String(value)
+                : '';
           return `<td>${cellContent}</td>`;
         })
         .join('');
@@ -67,6 +75,7 @@ export function render<T = Record<string, unknown>>(props: DataTableProps<T>): s
     onRowClick,
     id,
     className,
+    ariaLabel,
   } = props;
 
   const idAttr = id ? ` id="${id}"` : '';
@@ -84,7 +93,7 @@ export function render<T = Record<string, unknown>>(props: DataTableProps<T>): s
     : '';
 
   const tableHtml = !loading
-    ? `<table class="table table-hover mb-0" role="grid">` +
+    ? `<table class="table table-hover mb-0" role="grid"${ariaLabel !== undefined ? ` aria-label="${ariaLabel}"` : ''}>` +
       renderHeader(columns) +
       renderBody(rows, columns, onRowClick) +
       `</table>`

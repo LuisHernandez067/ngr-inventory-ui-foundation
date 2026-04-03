@@ -1,9 +1,9 @@
 // Orquestador de layout — ensambla todos los módulos del admin shell
-import { init as initTheme } from './theme';
-import { render as renderNavbar, init as initNavbar, refreshNavbar } from './navbar';
-import { render as renderSidebar, init as initSidebar, refreshSidebar } from './sidebar';
 import { render as renderBreadcrumb, update as updateBreadcrumb } from './breadcrumb';
 import { render as renderFooter } from './footer';
+import { render as renderNavbar, init as initNavbar, refreshNavbar } from './navbar';
+import { render as renderSidebar, init as initSidebar, refreshSidebar } from './sidebar';
+import { init as initTheme } from './theme';
 
 export { update as updateBreadcrumb } from './breadcrumb';
 export { setActive } from './sidebar';
@@ -23,8 +23,12 @@ export { setActive } from './sidebar';
 export function initLayout(app: HTMLElement): void {
   // Construir el HTML completo del shell
   const shellHTML = `
+    <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
+
     <div class="layout-wrapper">
-      ${renderNavbar()}
+      <header role="banner">
+        ${renderNavbar()}
+      </header>
 
       ${renderSidebar()}
 

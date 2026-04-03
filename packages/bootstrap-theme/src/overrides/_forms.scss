@@ -10,7 +10,7 @@
     border-color $transition-base,
     box-shadow $transition-base;
 
-  &:focus {
+  &:focus-visible {
     border-color: $primary;
     box-shadow: 0 0 0 $focus-ring-width rgba($primary, 0.25);
     outline: none;
@@ -27,7 +27,7 @@
 .form-select.is-valid {
   border-color: $success;
 
-  &:focus {
+  &:focus-visible {
     box-shadow: 0 0 0 $focus-ring-width rgba($success, 0.25);
   }
 }
@@ -36,7 +36,7 @@
 .form-select.is-invalid {
   border-color: $danger;
 
-  &:focus {
+  &:focus-visible {
     box-shadow: 0 0 0 $focus-ring-width rgba($danger, 0.25);
   }
 }

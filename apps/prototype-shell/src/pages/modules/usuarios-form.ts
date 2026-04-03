@@ -71,7 +71,7 @@ function renderForm(
       </div>
 
       <!-- Formulario principal -->
-      <form id="usuario-form" novalidate>
+      <form id="usuario-form" novalidate aria-label="Formulario de usuario">
         <div class="card mb-4">
           <div class="card-header fw-semibold">
             <i class="bi bi-person me-2" aria-hidden="true"></i>
