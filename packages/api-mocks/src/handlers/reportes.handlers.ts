@@ -1,57 +1,20 @@
-import { http, HttpResponse } from 'msw';
 import type {
   ReporteDefinicion,
   ExportacionJob,
   PaginatedResponse,
   ProblemDetails,
+  ReporteDatos,
 } from '@ngr-inventory/api-contracts';
+import { http, HttpResponse } from 'msw';
+
+import { kardexFixtures } from '../fixtures/kardex.fixtures';
+import { movimientoFixtures } from '../fixtures/movimientos.fixtures';
+import { reporteDefinicionFixtures } from '../fixtures/reportes.fixtures';
+import { stockConsolidadoFixtures } from '../fixtures/stock.fixtures';
 import { resolveScenario } from '../scenarios/error-scenarios';
 
 /** Definiciones de reportes disponibles en el sistema */
-const reporteDefiniciones: ReporteDefinicion[] = [
-  {
-    id: 'rep-001',
-    nombre: 'Stock Actual',
-    tipo: 'stock_actual',
-    descripcion: 'Listado completo del stock disponible por producto y almacén',
-    formatos: ['pdf', 'xlsx', 'csv'],
-  },
-  {
-    id: 'rep-002',
-    nombre: 'Kardex de Movimientos',
-    tipo: 'kardex',
-    descripcion: 'Historial de entradas y salidas de un producto con saldo calculado',
-    formatos: ['pdf', 'xlsx'],
-  },
-  {
-    id: 'rep-003',
-    nombre: 'Movimientos del Período',
-    tipo: 'movimientos',
-    descripcion: 'Todos los movimientos de inventario en un rango de fechas',
-    formatos: ['pdf', 'xlsx', 'csv'],
-  },
-  {
-    id: 'rep-004',
-    nombre: 'Inventario Valorizado',
-    tipo: 'valorizado',
-    descripcion: 'Stock actual valorizado al precio unitario de cada producto',
-    formatos: ['pdf', 'xlsx'],
-  },
-  {
-    id: 'rep-005',
-    nombre: 'Productos Bajo Mínimo',
-    tipo: 'bajo_stock',
-    descripcion: 'Productos cuyo stock actual está por debajo del mínimo configurado',
-    formatos: ['pdf', 'xlsx', 'csv'],
-  },
-  {
-    id: 'rep-006',
-    nombre: 'Log de Auditoría',
-    tipo: 'auditoria',
-    descripcion: 'Registro de acciones de usuarios en el sistema',
-    formatos: ['pdf', 'csv'],
-  },
-];
+const reporteDefiniciones: ReporteDefinicion[] = reporteDefinicionFixtures;
 
 /** Jobs de exportación en memoria para el mock */
 const exportacionJobs: ExportacionJob[] = [];
@@ -81,6 +44,171 @@ export const reportesHandlers = [
     return HttpResponse.json(response);
   }),
 
+  // GET /api/reportes/:id/datos — datos de preview para un reporte con filtros
+  http.get('/api/reportes/:id/datos', ({ params, request }) => {
+    const url = new URL(request.url);
+    const scenario = url.searchParams.get('_scenario');
+    const errorResponse = resolveScenario(scenario);
+    if (errorResponse) return errorResponse;
+
+    const reporteId = String(params['id']);
+    const reporte = reporteDefiniciones.find((r) => r.id === reporteId);
+    if (!reporte) {
+      const err: ProblemDetails = {
+        type: '/errors/not-found',
+        title: 'Reporte no encontrado',
+        status: 404,
+        detail: `No existe un reporte con id "${reporteId}"`,
+      };
+      return HttpResponse.json(err, { status: 404 });
+    }
+
+    const tipo = reporte.tipo;
+
+    if (tipo === 'stock_actual') {
+      const almacenId = url.searchParams.get('almacenId');
+      const filtered = almacenId
+        ? stockConsolidadoFixtures.filter((s) => s.items.some((i) => i.almacenId === almacenId))
+        : stockConsolidadoFixtures;
+      const filtrosAplicados = almacenId
+        ? { tipo: 'stock_actual' as const, almacenId }
+        : { tipo: 'stock_actual' as const };
+      const response: ReporteDatos = {
+        reporteId,
+        tipo,
+        filtrosAplicados,
+        data: filtered,
+        total: filtered.length,
+      };
+      return HttpResponse.json(response);
+    }
+
+    if (tipo === 'movimientos') {
+      const fechaDesde = url.searchParams.get('fechaDesde');
+      const fechaHasta = url.searchParams.get('fechaHasta');
+      const almacenId = url.searchParams.get('almacenId');
+      const tipoMovimiento = url.searchParams.get('tipoMovimiento');
+
+      let filtered = movimientoFixtures;
+
+      if (fechaDesde) {
+        const desde = new Date(fechaDesde).getTime();
+        filtered = filtered.filter((m) => new Date(m.createdAt).getTime() >= desde);
+      }
+      if (fechaHasta) {
+        const hasta = new Date(fechaHasta).getTime();
+        filtered = filtered.filter((m) => new Date(m.createdAt).getTime() <= hasta);
+      }
+      if (almacenId) {
+        filtered = filtered.filter(
+          (m) => m.almacenOrigenId === almacenId || m.almacenDestinoId === almacenId
+        );
+      }
+      if (tipoMovimiento) {
+        filtered = filtered.filter((m) => m.tipo === tipoMovimiento);
+      }
+
+      const filtrosAplicados = {
+        tipo: 'movimientos' as const,
+        ...(fechaDesde !== null ? { fechaDesde } : {}),
+        ...(fechaHasta !== null ? { fechaHasta } : {}),
+        ...(almacenId !== null ? { almacenId } : {}),
+        ...(tipoMovimiento !== null
+          ? { tipoMovimiento: tipoMovimiento as 'entrada' | 'salida' | 'transferencia' | 'ajuste' }
+          : {}),
+      };
+
+      const response: ReporteDatos = {
+        reporteId,
+        tipo,
+        filtrosAplicados,
+        data: filtered,
+        total: filtered.length,
+      };
+      return HttpResponse.json(response);
+    }
+
+    if (tipo === 'kardex') {
+      const productoId = url.searchParams.get('productoId');
+      const fechaDesde = url.searchParams.get('fechaDesde');
+      const fechaHasta = url.searchParams.get('fechaHasta');
+      const almacenId = url.searchParams.get('almacenId');
+
+      if (!productoId) {
+        const err: ProblemDetails = {
+          type: '/errors/bad-request',
+          title: 'Parámetro requerido',
+          status: 400,
+          detail: 'El parámetro productoId es requerido para el reporte kardex',
+        };
+        return HttpResponse.json(err, { status: 400 });
+      }
+
+      let filtered = kardexFixtures.filter((k) => k.productoId === productoId);
+
+      if (almacenId) {
+        filtered = filtered.filter((k) => k.almacenId === almacenId);
+      }
+      if (fechaDesde) {
+        const desde = new Date(fechaDesde).getTime();
+        filtered = filtered.filter((k) => new Date(k.fecha).getTime() >= desde);
+      }
+      if (fechaHasta) {
+        const hasta = new Date(fechaHasta).getTime();
+        filtered = filtered.filter((k) => new Date(k.fecha).getTime() <= hasta);
+      }
+
+      const filtrosAplicados = {
+        tipo: 'kardex' as const,
+        productoId,
+        ...(almacenId !== null ? { almacenId } : {}),
+        ...(fechaDesde !== null ? { fechaDesde } : {}),
+        ...(fechaHasta !== null ? { fechaHasta } : {}),
+      };
+
+      const response: ReporteDatos = {
+        reporteId,
+        tipo,
+        filtrosAplicados,
+        data: filtered,
+        total: filtered.length,
+      };
+      return HttpResponse.json(response);
+    }
+
+    if (tipo === 'bajo_stock') {
+      const umbralParam = url.searchParams.get('umbral');
+      const umbral = umbralParam !== null ? Number(umbralParam) : null;
+
+      const filtered =
+        umbral !== null
+          ? stockConsolidadoFixtures.filter((s) => s.cantidadTotal < umbral)
+          : stockConsolidadoFixtures.filter((s) => s.bajoMinimo);
+
+      const filtrosAplicados =
+        umbral !== null ? { tipo: 'bajo_stock' as const, umbral } : { tipo: 'bajo_stock' as const };
+
+      const response: ReporteDatos = {
+        reporteId,
+        tipo,
+        filtrosAplicados,
+        data: filtered,
+        total: filtered.length,
+      };
+      return HttpResponse.json(response);
+    }
+
+    // Tipos sin datos de preview (valorizado, auditoria) — respuesta vacía
+    const response: ReporteDatos = {
+      reporteId,
+      tipo,
+      filtrosAplicados: { tipo: 'stock_actual' as const },
+      data: [],
+      total: 0,
+    };
+    return HttpResponse.json(response);
+  }),
+
   // POST /api/reportes/:id/exportar — iniciar job de exportación
   http.post('/api/reportes/:id/exportar', async ({ params, request }) => {
     const url = new URL(request.url);
@@ -104,7 +232,7 @@ export const reportesHandlers = [
     const job: ExportacionJob = {
       id: `job-${String(Date.now()).slice(-8)}`,
       reporteId: String(params['id']),
-      formato: (body.formato as ExportacionJob['formato']) ?? 'pdf',
+      formato: (body.formato ?? 'pdf') as ExportacionJob['formato'],
       estado: 'pendiente',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

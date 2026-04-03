@@ -20,3 +20,4 @@ export { kardexFixtures } from './fixtures/kardex.fixtures';
 export { conteoFixtures } from './fixtures/conteos.fixtures';
 export { usuarioFixtures } from './fixtures/usuarios.fixtures';
 export { rolFixtures } from './fixtures/roles.fixtures';
+export { reporteDefinicionFixtures } from './fixtures/reportes.fixtures';
