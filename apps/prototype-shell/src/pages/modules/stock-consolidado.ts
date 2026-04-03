@@ -48,7 +48,7 @@ function buildTableRows(items: StockConsolidado[]): string {
         <td>${consolidadoBadge(s)}</td>
         <td>
           <a href="#/stock?productoId=${encodeURIComponent(s.productoId)}"
-             class="btn btn-sm btn-outline-secondary ver-detalle-btn">
+             class="btn btn-sm btn-outline-secondary btn-touch-target ver-detalle-btn">
             Ver detalle
           </a>
         </td>

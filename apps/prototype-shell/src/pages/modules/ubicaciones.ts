@@ -61,7 +61,7 @@ function buildTableRows(ubicaciones: Ubicacion[], isConsulta: boolean): string {
             isConsulta
               ? ''
               : `<td class="text-end">
-              <button class="btn btn-sm btn-outline-danger ubicacion-delete-btn" title="Eliminar">
+              <button class="btn btn-sm btn-outline-danger btn-touch-target ubicacion-delete-btn" title="Eliminar">
                 <i class="bi bi-trash" aria-hidden="true"></i>
               </button>
             </td>`
