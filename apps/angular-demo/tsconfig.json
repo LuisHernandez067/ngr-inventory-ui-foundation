@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "verbatimModuleSyntax": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@ngr-inventory/design-tokens": ["../../packages/design-tokens/src/index.ts"],
+      "@ngr-inventory/design-tokens/*": ["../../packages/design-tokens/src/*"],
+      "@ngr-inventory/bootstrap-theme": ["../../packages/bootstrap-theme/src/index.ts"],
+      "@ngr-inventory/api-contracts": ["../../packages/api-contracts/src/index.ts"],
+      "@ngr-inventory/api-contracts/*": ["../../packages/api-contracts/src/*"],
+      "@ngr-inventory/api-mocks": ["../../packages/api-mocks/src/index.ts"],
+      "@ngr-inventory/api-mocks/*": ["../../packages/api-mocks/src/*"]
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["src", "vite.config.ts"]
+}

@@ -67,9 +67,15 @@ export default tseslint.config(
     },
   },
 
-  // --- Archivos de configuración en raíz (sin type-checking) ---
+  // --- Archivos de configuración en raíz y apps (sin type-checking) ---
   {
-    files: ['*.config.js', '*.config.ts', 'commitlint.config.js'],
+    files: [
+      '*.config.js',
+      '*.config.ts',
+      '**/*.config.js',
+      '**/*.config.ts',
+      'commitlint.config.js',
+    ],
     ...tseslint.configs.disableTypeChecked,
   }
 );

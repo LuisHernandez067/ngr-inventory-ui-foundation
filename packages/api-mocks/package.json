@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "postinstall": "npx msw init ../../apps/prototype-shell/public --save"
+    "postinstall": "npx msw init ../../apps/prototype-shell/public --save && npx msw init ../../apps/react-demo/public --save && npx msw init ../../apps/angular-demo/public --save"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -26,7 +26,9 @@
   },
   "msw": {
     "workerDirectory": [
-      "../../apps/prototype-shell/public"
+      "../../apps/prototype-shell/public",
+      "../../apps/react-demo/public",
+      "../../apps/angular-demo/public"
     ]
   }
 }

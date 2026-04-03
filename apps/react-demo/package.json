@@ -1,0 +1,23 @@
+{
+  "name": "@ngr-inventory/react-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@ngr-inventory/api-mocks": "*",
+    "@ngr-inventory/bootstrap-theme": "*",
+    "@ngr-inventory/design-tokens": "*",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "msw": "^2.7.0",
+    "sass": "^1.83.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.1"
+  }
+}
