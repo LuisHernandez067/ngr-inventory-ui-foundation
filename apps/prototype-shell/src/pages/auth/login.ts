@@ -43,7 +43,7 @@ function handleSubmit(container: HTMLElement): void {
       // Persistir sesión a través del servicio de autenticación y navegar al dashboard
       authService.login(
         { nombre: user.nombre, email: user.email, rol: user.rol, perfil: user.perfil },
-        'mock-token-xyz',
+        'mock-token-xyz'
       );
       window.location.hash = '#/dashboard';
     } else {

@@ -84,7 +84,8 @@ export const Default: Story = {
 };
 
 export const PasswordMismatch: Story = {
-  render: () => resetPasswordHtml.replace('class="alert alert-danger d-none"', 'class="alert alert-danger"'),
+  render: () =>
+    resetPasswordHtml.replace('class="alert alert-danger d-none"', 'class="alert alert-danger"'),
 };
 
 export const Success: Story = {
