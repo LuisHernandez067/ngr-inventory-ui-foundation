@@ -248,7 +248,7 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
         <!-- Filtro por almacén -->
         <div>
           <label for="almacen-filter" class="form-label small mb-1">Almacén</label>
-          <select id="almacen-filter" class="form-select form-select-sm" style="min-width:200px;">
+          <select id="almacen-filter" class="form-select form-select-sm">
             ${almacenOptions}
           </select>
         </div>
@@ -256,7 +256,7 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
         <!-- Filtro por ubicación -->
         <div>
           <label for="ubicacion-filter" class="form-label small mb-1">Ubicación</label>
-          <select id="ubicacion-filter" class="form-select form-select-sm" style="min-width:200px;">
+          <select id="ubicacion-filter" class="form-select form-select-sm">
             <option value="">Todas las ubicaciones</option>
           </select>
         </div>
@@ -264,7 +264,7 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
         <!-- Filtro por estado -->
         <div>
           <label for="estado-filter" class="form-label small mb-1">Estado</label>
-          <select id="estado-filter" class="form-select form-select-sm" style="min-width:160px;">
+          <select id="estado-filter" class="form-select form-select-sm">
             <option value="">Todos</option>
             <option value="disponible" ${selectedEstado === 'disponible' ? 'selected' : ''}>Disponible</option>
             <option value="sinstock" ${selectedEstado === 'sinstock' ? 'selected' : ''}>Sin stock</option>
@@ -286,9 +286,9 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
               <th>Producto</th>
               <th>Ubicación</th>
               <th>Almacén</th>
-              <th style="width:100px;" class="text-end">Disponible</th>
-              <th style="width:100px;">Unidad</th>
-              <th style="width:120px;">Estado</th>
+              <th class="text-end">Disponible</th>
+              <th>Unidad</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody id="stock-tbody">

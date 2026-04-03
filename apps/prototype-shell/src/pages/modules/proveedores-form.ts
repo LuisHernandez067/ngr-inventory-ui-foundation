@@ -98,7 +98,7 @@ function renderForm(
     .join('');
 
   container.innerHTML = `
-    <div class="p-4" style="max-width: 720px;">
+    <div class="p-4 page-form-container">
       <!-- Barra superior con título y botón volver -->
       <div class="d-flex align-items-center gap-3 mb-4">
         <a href="#/proveedores" id="btn-back" class="text-decoration-none text-secondary">

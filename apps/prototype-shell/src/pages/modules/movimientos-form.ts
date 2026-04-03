@@ -292,7 +292,7 @@ function renderForm(
     .join('');
 
   container.innerHTML = `
-    <div class="p-4" style="max-width: 900px;">
+    <div class="p-4 page-form-container">
       <!-- Barra superior: título y botón volver -->
       <div class="d-flex align-items-center gap-3 mb-4">
         <button id="btn-back" type="button" class="btn btn-sm btn-outline-secondary">
@@ -405,11 +405,11 @@ function renderForm(
                 <thead>
                   <tr>
                     <th>Producto</th>
-                    <th style="width: 100px;">Cantidad</th>
-                    <th style="width: 130px;">Precio Unit.</th>
-                    <th style="width: 120px;">Lote</th>
-                    <th style="width: 140px;">Vencimiento</th>
-                    <th style="width: 50px;"></th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit.</th>
+                    <th>Lote</th>
+                    <th>Vencimiento</th>
+                    <th class="col-actions"></th>
                   </tr>
                 </thead>
                 <tbody id="items-tbody">

@@ -29,3 +29,17 @@
   font-size: 0.7rem;
   font-weight: $font-weight-medium;
 }
+
+// Contenedor estándar para páginas de formulario — limita el ancho máximo
+.page-form-container {
+  width: 100%;
+  max-width: var(--ngr-form-max-width, 720px);
+}
+
+// Modificador de touch target para botones pequeños en dispositivos táctiles
+.btn-touch-target {
+  @media (pointer: coarse) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

@@ -97,9 +97,9 @@ function buildItemsTable(conteo: Conteo): string {
           <tr>
             <th scope="col">Código</th>
             <th scope="col">Producto</th>
-            <th scope="col" class="text-end" style="width: 120px;">Cant. Sistema</th>
-            <th scope="col" class="text-end" style="width: 140px;">Cant. Contada</th>
-            <th scope="col" class="text-end" style="width: 100px;">Diferencia</th>
+            <th scope="col" class="text-end">Cant. Sistema</th>
+            <th scope="col" class="text-end">Cant. Contada</th>
+            <th scope="col" class="text-end">Diferencia</th>
           </tr>
         </thead>
         <tbody id="carga-items-tbody">

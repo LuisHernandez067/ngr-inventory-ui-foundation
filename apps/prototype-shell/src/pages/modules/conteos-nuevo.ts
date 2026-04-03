@@ -155,7 +155,7 @@ function renderForm(
   const almacenesOptions = almacenes.map((a) => almacenOption(a)).join('');
 
   container.innerHTML = `
-    <div class="p-4" style="max-width: 900px;">
+    <div class="p-4 page-form-container">
       <!-- Barra superior: título y botón volver -->
       <div class="d-flex align-items-center gap-3 mb-4">
         <button id="btn-back" type="button" class="btn btn-sm btn-outline-secondary"
@@ -240,9 +240,9 @@ function renderForm(
                 <thead>
                   <tr>
                     <th>Producto</th>
-                    <th style="width:120px;">Código</th>
-                    <th style="width:160px;">Cant. Sistema</th>
-                    <th style="width:60px;"></th>
+                    <th>Código</th>
+                    <th>Cant. Sistema</th>
+                    <th class="col-actions"></th>
                   </tr>
                 </thead>
                 <tbody id="items-tbody">

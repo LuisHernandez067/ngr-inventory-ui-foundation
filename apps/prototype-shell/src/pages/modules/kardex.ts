@@ -104,11 +104,11 @@ function renderKardexTable(tableArea: HTMLElement, entries: KardexEntry[]): void
       <table class="table table-sm table-hover table-bordered" id="kardex-table">
         <thead class="table-light">
           <tr>
-            <th style="width: 110px;">Fecha</th>
-            <th style="width: 120px;">Tipo</th>
-            <th style="width: 130px;" class="text-end">Entrada</th>
-            <th style="width: 130px;" class="text-end">Salida</th>
-            <th style="width: 130px;" class="text-end">Saldo</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th class="text-end">Entrada</th>
+            <th class="text-end">Salida</th>
+            <th class="text-end">Saldo</th>
             <th>Referencia</th>
           </tr>
         </thead>
@@ -185,7 +185,7 @@ function renderPage(container: HTMLElement, productos: Producto[], signal: Abort
   const productosOptions = productos.map((p) => productoOption(p)).join('');
 
   container.innerHTML = `
-    <div class="p-4" style="max-width: 1000px;">
+    <div class="p-4 page-form-container">
       <!-- Encabezado de la página -->
       <div class="mb-4">
         <h1 class="h3 mb-0" id="kardex-title">Kardex de Movimientos</h1>

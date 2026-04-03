@@ -112,7 +112,7 @@ function renderForm(
   const checkboxMatrix = buildCheckboxMatrix(catalog, assignedClaves);
 
   container.innerHTML = `
-    <div class="p-4" style="max-width: 820px;">
+    <div class="p-4 page-form-container">
       <!-- Barra superior: título y botón volver -->
       <div class="d-flex align-items-center gap-3 mb-4">
         <button id="btn-back" type="button" class="btn btn-sm btn-outline-secondary"

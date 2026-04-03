@@ -3,7 +3,7 @@
 
 // Wrapper del contenido principal — margen para el sidebar en desktop
 .main-wrapper {
-  @media (min-width: 992px) {
+  @media (width >= 992px) {
     margin-left: 260px;
   }
 
@@ -22,14 +22,21 @@
   }
 }
 
+// Reduce padding en viewports pequeños (mobile/tablet)
+@media (width <= 767.98px) {
+  .main-content {
+    padding: 1rem;
+  }
+}
+
 // Contenedor de contenido de cada módulo — animación de entrada suave al navegar
 .page-content {
   min-height: calc(100vh - var(--navbar-height, 56px) - 120px);
-  animation: pageEnter 0.15s ease-out;
+  animation: page-enter 0.15s ease-out;
 }
 
 // Animación de fade-in con leve desplazamiento vertical para transiciones de página
-@keyframes pageEnter {
+@keyframes page-enter {
   from {
     opacity: 0;
     transform: translateY(4px);

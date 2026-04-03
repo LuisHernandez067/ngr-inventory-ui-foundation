@@ -90,7 +90,7 @@ function renderDetail(container: HTMLElement, rol: Rol): void {
   ].join('');
 
   container.innerHTML = `
-    <div class="p-4" style="max-width: 860px;">
+    <div class="p-4 page-form-container">
       <!-- Barra superior: botón volver -->
       <div class="d-flex align-items-center justify-content-between mb-4">
         <button id="btn-back" type="button" class="btn btn-sm btn-outline-secondary"

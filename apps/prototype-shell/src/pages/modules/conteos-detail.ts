@@ -132,10 +132,10 @@ function buildItemsTable(conteo: Conteo): string {
           <tr>
             <th>Código</th>
             <th>Producto</th>
-            <th class="text-end" style="width:110px;">Cant. Sistema</th>
-            <th class="text-end" style="width:110px;">Cant. Contada</th>
-            <th class="text-end" style="width:100px;">Diferencia</th>
-            <th class="text-center" style="width:100px;">Ajustado</th>
+            <th class="text-end">Cant. Sistema</th>
+            <th class="text-end">Cant. Contada</th>
+            <th class="text-end">Diferencia</th>
+            <th class="text-center">Ajustado</th>
           </tr>
         </thead>
         <tbody id="items-tbody">

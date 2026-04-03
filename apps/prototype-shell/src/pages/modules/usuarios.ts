@@ -200,7 +200,7 @@ function renderPage(container: HTMLElement): void {
         <!-- Filtro por rol (se rellena dinámicamente) -->
         <div>
           <label for="rol-filter" class="form-label small mb-1">Rol</label>
-          <select id="rol-filter" class="form-select form-select-sm" style="min-width:180px;">
+          <select id="rol-filter" class="form-select form-select-sm">
             <option value="">Todos los roles</option>
           </select>
         </div>
@@ -208,7 +208,7 @@ function renderPage(container: HTMLElement): void {
         <!-- Filtro por estado activo -->
         <div>
           <label for="activo-filter" class="form-label small mb-1">Estado</label>
-          <select id="activo-filter" class="form-select form-select-sm" style="min-width:160px;">
+          <select id="activo-filter" class="form-select form-select-sm">
             <option value="">Todos</option>
             <option value="true" ${selectedActivo === 'true' ? 'selected' : ''}>Activos</option>
             <option value="false" ${selectedActivo === 'false' ? 'selected' : ''}>Inactivos</option>
@@ -223,8 +223,8 @@ function renderPage(container: HTMLElement): void {
             <tr>
               <th>Nombre completo</th>
               <th>Email</th>
-              <th style="width:160px;">Rol</th>
-              <th style="width:100px;">Estado</th>
+              <th>Rol</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody id="usuarios-tbody">

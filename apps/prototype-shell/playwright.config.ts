@@ -21,6 +21,14 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'tablet',
+      use: { ...devices['iPad (gen 7)'] },
+    },
+    {
+      name: 'mobile',
+      use: { ...devices['iPhone 12'] },
+    },
   ],
 
   // Inicia el servidor de desarrollo antes de ejecutar los tests

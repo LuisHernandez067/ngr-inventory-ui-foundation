@@ -204,7 +204,7 @@ function renderPage(container: HTMLElement): void {
         <!-- Filtro por tipo -->
         <div>
           <label for="tipo-filter" class="form-label small mb-1">Tipo</label>
-          <select id="tipo-filter" class="form-select form-select-sm" style="min-width:160px;">
+          <select id="tipo-filter" class="form-select form-select-sm">
             <option value="">Todos los tipos</option>
             <option value="entrada" ${selectedTipo === 'entrada' ? 'selected' : ''}>Entrada</option>
             <option value="salida" ${selectedTipo === 'salida' ? 'selected' : ''}>Salida</option>
@@ -217,7 +217,7 @@ function renderPage(container: HTMLElement): void {
         <!-- Filtro por estado -->
         <div>
           <label for="estado-filter" class="form-label small mb-1">Estado</label>
-          <select id="estado-filter" class="form-select form-select-sm" style="min-width:160px;">
+          <select id="estado-filter" class="form-select form-select-sm">
             <option value="">Todos los estados</option>
             <option value="borrador" ${selectedEstado === 'borrador' ? 'selected' : ''}>Borrador</option>
             <option value="pendiente" ${selectedEstado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -247,13 +247,13 @@ function renderPage(container: HTMLElement): void {
         <table class="table table-hover">
           <thead>
             <tr>
-              <th style="width:110px;">Número</th>
-              <th style="width:130px;">Tipo</th>
-              <th style="width:110px;">Estado</th>
-              <th style="width:130px;">Fecha</th>
+              <th>Número</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Fecha</th>
               <th>Almacén</th>
-              <th style="width:70px;">Items</th>
-              <th style="width:140px;">Total</th>
+              <th>Items</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody id="movimientos-tbody">

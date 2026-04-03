@@ -133,9 +133,9 @@ function renderPage(container: HTMLElement): void {
         <table class="table table-hover">
           <thead>
             <tr>
-              <th style="width:200px;">Nombre</th>
+              <th>Nombre</th>
               <th>Descripción</th>
-              <th style="width:120px;" class="text-center">Nº de permisos</th>
+              <th class="text-center">Nº de permisos</th>
             </tr>
           </thead>
           <tbody id="roles-tbody">

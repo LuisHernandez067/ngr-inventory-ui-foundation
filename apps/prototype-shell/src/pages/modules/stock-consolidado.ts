@@ -137,11 +137,11 @@ export const stockConsolidadoPage: PageModule = {
           <table class="table table-hover">
             <thead>
               <tr>
-                <th style="width:130px;">Código</th>
+                <th>Código</th>
                 <th>Producto</th>
-                <th style="width:110px;" class="text-end">Total</th>
-                <th style="width:130px;">Estado</th>
-                <th style="width:110px;"></th>
+                <th class="text-end">Total</th>
+                <th>Estado</th>
+                <th class="col-actions"></th>
               </tr>
             </thead>
             <tbody id="consolidado-tbody">

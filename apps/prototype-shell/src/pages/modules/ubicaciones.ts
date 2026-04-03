@@ -188,7 +188,7 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
         Nueva ubicación
       </a>`;
 
-  const deleteColHeader = isConsulta ? '' : '<th style="width:80px;"></th>';
+  const deleteColHeader = isConsulta ? '' : '<th class="col-actions"></th>';
 
   container.innerHTML = `
     <div class="p-4">
@@ -203,7 +203,7 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
         <!-- Filtro por almacén -->
         <div>
           <label for="almacen-filter" class="form-label small mb-1">Filtrar por almacén</label>
-          <select id="almacen-filter" class="form-select form-select-sm" style="min-width:200px;">
+          <select id="almacen-filter" class="form-select form-select-sm">
             ${almacenOptions}
           </select>
         </div>
@@ -221,11 +221,11 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
         <table class="table table-hover">
           <thead>
             <tr>
-              <th style="width:110px;">Código</th>
+              <th>Código</th>
               <th>Nombre</th>
               <th>Almacén</th>
-              <th style="width:100px;">Tipo</th>
-              <th style="width:100px;">Estado</th>
+              <th>Tipo</th>
+              <th>Estado</th>
               ${deleteColHeader}
             </tr>
           </thead>

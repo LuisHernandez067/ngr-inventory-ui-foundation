@@ -281,11 +281,11 @@ function renderPage(container: HTMLElement): void {
         <table class="table table-hover table-sm">
           <thead>
             <tr>
-              <th style="width:150px;">Fecha y hora</th>
-              <th style="width:200px;">Usuario</th>
-              <th style="width:110px;">Acción</th>
-              <th style="width:120px;">Módulo</th>
-              <th style="width:120px;">Entidad</th>
+              <th>Fecha y hora</th>
+              <th>Usuario</th>
+              <th>Acción</th>
+              <th>Módulo</th>
+              <th>Entidad</th>
               <th>Detalles</th>
             </tr>
           </thead>

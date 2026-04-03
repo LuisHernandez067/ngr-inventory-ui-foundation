@@ -213,7 +213,7 @@ function renderPage(container: HTMLElement): void {
         <!-- Filtro por estado -->
         <div>
           <label for="estado-filter" class="form-label small mb-1">Estado</label>
-          <select id="estado-filter" class="form-select form-select-sm" style="min-width:180px;">
+          <select id="estado-filter" class="form-select form-select-sm">
             <option value="">Todos los estados</option>
             <option value="planificado" ${selectedEstado === 'planificado' ? 'selected' : ''}>Planificado</option>
             <option value="en_curso" ${selectedEstado === 'en_curso' ? 'selected' : ''}>En curso</option>
@@ -226,7 +226,7 @@ function renderPage(container: HTMLElement): void {
         <!-- Filtro por almacén (se rellena dinámicamente) -->
         <div>
           <label for="almacen-filter" class="form-label small mb-1">Almacén</label>
-          <select id="almacen-filter" class="form-select form-select-sm" style="min-width:200px;">
+          <select id="almacen-filter" class="form-select form-select-sm">
             <option value="">Todos los almacenes</option>
           </select>
         </div>
@@ -237,12 +237,12 @@ function renderPage(container: HTMLElement): void {
         <table class="table table-hover">
           <thead>
             <tr>
-              <th style="width:110px;">Número</th>
+              <th>Número</th>
               <th>Descripción</th>
               <th>Almacén</th>
-              <th style="width:130px;">Estado</th>
-              <th style="width:140px;">Fecha planificada</th>
-              <th style="width:140px;">Fecha creación</th>
+              <th>Estado</th>
+              <th>Fecha planificada</th>
+              <th>Fecha creación</th>
             </tr>
           </thead>
           <tbody id="conteos-tbody">
