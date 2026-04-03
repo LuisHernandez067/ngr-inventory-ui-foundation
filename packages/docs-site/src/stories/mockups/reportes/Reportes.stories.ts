@@ -715,6 +715,22 @@ export const ExportacionExitosa: Story = {
 };
 
 /**
+ * Exportación inmediata — dataset pequeño (≤ 200 filas).
+ * `handleExportar()` genera el Blob directamente desde `previewRows` sin
+ * hacer POST /exportar ni iniciar polling.
+ * El panel salta directo al estado `done` con el mensaje de descarga.
+ */
+export const ExportacionInmediata: Story = {
+  name: 'Exportación inmediata (dataset pequeño)',
+  render: () =>
+    buildLayout({
+      reportes: reporteDefinicionFixtures,
+      selectedId: reporteStockActual.id,
+      rightPanel: buildExportacionExitosaPanel(),
+    }),
+};
+
+/**
  * Estado error — alerta de error visible, botón "Reintentar" disponible.
  * El job de exportación terminó en error.
  */

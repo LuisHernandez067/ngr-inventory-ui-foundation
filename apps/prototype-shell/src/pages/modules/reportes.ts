@@ -844,13 +844,30 @@ function buildPreviewUrl(reporteId: string, filters: ReporteFilter): string {
   return qs ? `${base}?${qs}` : base;
 }
 
+/** Umbral de filas para exportación inmediata sin polling */
+const IMMEDIATE_THRESHOLD = 200;
+
 /**
- * Inicia el flujo de exportación: POST /exportar → polling cada 1.5s.
+ * Inicia el flujo de exportación.
+ *
+ * - Si `previewRows.length <= IMMEDIATE_THRESHOLD`: genera el Blob directamente
+ *   desde los datos en memoria y dispara la descarga sin llamada al backend.
+ * - Si `previewRows.length > IMMEDIATE_THRESHOLD`: POST /exportar → polling cada 1.5s.
  */
 async function handleExportar(reportes: ReporteDefinicion[]): Promise<void> {
   const reporte = state.selectedReporte;
   if (!reporte) return;
 
+  // ── Exportación inmediata (dataset pequeño) ──────────────────────────────
+  if (state.previewRows.length <= IMMEDIATE_THRESHOLD) {
+    const filename = `reporte-${reporte.tipo}-${String(Date.now())}.${state.selectedFormato}`;
+    triggerCsvDownload(state.previewRows, filename);
+    state.phase = 'done';
+    renderDetail(reportes);
+    return;
+  }
+
+  // ── Exportación en segundo plano (dataset grande) ────────────────────────
   state.phase = 'exporting';
   state.activeJob = null;
   state.errorMessage = null;
