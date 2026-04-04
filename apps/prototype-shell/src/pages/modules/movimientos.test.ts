@@ -96,6 +96,9 @@ describe('movimientosPage', () => {
     container = document.createElement('div');
     document.body.appendChild(container);
     vi.clearAllMocks();
+    // Simular sesión de admin para que el botón "Nuevo Movimiento" se renderice
+    localStorage.setItem('ngr_auth_token', 'fake-token');
+    localStorage.setItem('ngr_auth_profile', 'admin');
     // Mock que resuelve con datos por defecto
     mockApiFetch.mockResolvedValue(movimientosResponse);
     // Resetear la URL entre tests
@@ -106,6 +109,7 @@ describe('movimientosPage', () => {
     document.body.removeChild(container);
     movimientosPage.destroy();
     vi.restoreAllMocks();
+    localStorage.clear();
   });
 
   // ── Renderizado básico ────────────────────────────────────────────────────────

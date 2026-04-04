@@ -40,9 +40,39 @@ function handleSubmit(container: HTMLElement): void {
     const user = findMockUser(email, password);
 
     if (user) {
+      // Permisos por perfil — idénticos a los devueltos por la API mock
+      const permisosByPerfil: Record<string, string[]> = {
+        admin: [
+          'productos.ver',
+          'productos.crear',
+          'productos.editar',
+          'productos.eliminar',
+          'movimientos.ver',
+          'movimientos.crear',
+          'movimientos.aprobar',
+          'usuarios.ver',
+          'usuarios.gestionar',
+          'reportes.exportar',
+        ],
+        operador: [
+          'productos.ver',
+          'productos.crear',
+          'productos.editar',
+          'movimientos.ver',
+          'movimientos.crear',
+        ],
+        consulta: ['productos.ver', 'movimientos.ver'],
+      };
+
       // Persistir sesión a través del servicio de autenticación y navegar al dashboard
       authService.login(
-        { nombre: user.nombre, email: user.email, rol: user.rol, perfil: user.perfil },
+        {
+          nombre: user.nombre,
+          email: user.email,
+          rol: user.rol,
+          perfil: user.perfil,
+          permisos: permisosByPerfil[user.perfil] ?? [],
+        },
         'mock-token-xyz'
       );
       window.location.hash = '#/dashboard';

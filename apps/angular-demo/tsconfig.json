@@ -9,7 +9,7 @@
     "target": "ES2022",
     "useDefineForClassFields": false,
     "outDir": "./dist",
-    "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
       "@ngr-inventory/design-tokens": ["../../packages/design-tokens/src/index.ts"],
       "@ngr-inventory/design-tokens/*": ["../../packages/design-tokens/src/*"],

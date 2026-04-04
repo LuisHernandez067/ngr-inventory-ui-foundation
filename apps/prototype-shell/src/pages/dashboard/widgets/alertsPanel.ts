@@ -24,7 +24,7 @@ function renderSeverityBadge(severity: DashboardAlert['severity']): string {
 function renderAlertRow(alert: DashboardAlert): string {
   const severityBadge = renderSeverityBadge(alert.severity);
   const enlaceHtml = alert.enlace
-    ? `<a href="${alert.enlace}" class="stretched-link text-decoration-none">
+    ? `<a href="${alert.enlace}" class="stretched-link text-decoration-none" aria-label="Ver detalle: ${alert.titulo}">
          <i class="bi bi-arrow-right-circle ms-2" aria-hidden="true"></i>
        </a>`
     : '';

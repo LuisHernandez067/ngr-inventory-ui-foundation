@@ -64,6 +64,16 @@ async function loginAsConsulta(page: Page): Promise<void> {
   await page.waitForFunction(() => window.location.hash === '#/dashboard', { timeout: 8000 });
 }
 
+/** Abre el offcanvas del sidebar si está oculto (viewport tablet/mobile) */
+async function ensureSidebarVisible(page: Page): Promise<void> {
+  const sidebar = page.locator('#sidebar-nav');
+  if (!(await sidebar.isVisible())) {
+    const toggle = page.locator('#sidebar-toggle');
+    await toggle.click();
+    await expect(sidebar).toBeVisible({ timeout: 5000 });
+  }
+}
+
 // ── Suite 1: Admin — nav completo ─────────────────────────────────────────────
 // Cubre: P1 — admin ve todos los ítems de navegación
 
@@ -75,8 +85,8 @@ test.describe('Permisos: Admin — acceso completo (P1)', () => {
   });
 
   test('admin ve todos los módulos principales en el sidebar (P1)', async ({ page }) => {
-    // Esperar a que el sidebar esté renderizado con los permisos del admin
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
+    // Abrir el offcanvas del sidebar si estamos en viewport reducido
+    await ensureSidebarVisible(page);
 
     // Verificar que todos los módulos críticos estén presentes en el nav
     for (const hash of ADMIN_NAV_HASHES) {
@@ -86,8 +96,7 @@ test.describe('Permisos: Admin — acceso completo (P1)', () => {
   });
 
   test('admin ve el enlace de Reportes en el sidebar (P1)', async ({ page }) => {
-    // Esperar el sidebar
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
+    await ensureSidebarVisible(page);
 
     // El enlace a reportes debe estar visible para admin
     const reportesLink = page.locator('#sidebar-nav a[data-hash="#/reportes"]');
@@ -114,7 +123,7 @@ test.describe('Permisos: Admin — acceso completo (P1)', () => {
   test('admin ve el botón "Nuevo Movimiento" en la lista de movimientos (P1)', async ({ page }) => {
     // Navegar a movimientos
     await page.goto('/#/movimientos');
-    await page.waitForSelector('h1', { timeout: 5000 });
+    await page.waitForSelector('#btn-nuevo-movimiento', { timeout: 8000 });
 
     // El botón de crear debe ser visible para admin
     const btnNuevo = page.locator('#btn-nuevo-movimiento');
@@ -133,11 +142,7 @@ test.describe('Permisos: Operador — Reportes oculto del sidebar (P2)', () => {
   });
 
   test('operador NO ve el enlace de Reportes en el sidebar (P2)', async ({ page }) => {
-    // Esperar el sidebar renderizado con permisos de operador
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
-
-    // Dar tiempo para que refreshSidebar se ejecute tras el login
-    await page.waitForTimeout(500);
+    await ensureSidebarVisible(page);
 
     // El enlace de reportes NO debe estar en el sidebar
     const reportesLink = page.locator('#sidebar-nav a[data-hash="#/reportes"]');
@@ -145,9 +150,7 @@ test.describe('Permisos: Operador — Reportes oculto del sidebar (P2)', () => {
   });
 
   test('operador NO ve enlaces de administración ocultos (P2)', async ({ page }) => {
-    // Esperar el sidebar con permisos de operador
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
-    await page.waitForTimeout(500);
+    await ensureSidebarVisible(page);
 
     // Verificar que los módulos de administración no estén visibles
     for (const hash of OPERADOR_HIDDEN_HASHES) {
@@ -157,9 +160,7 @@ test.describe('Permisos: Operador — Reportes oculto del sidebar (P2)', () => {
   });
 
   test('operador SÍ ve el enlace de Movimientos en el sidebar (P2)', async ({ page }) => {
-    // El operador tiene acceso a movimientos
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
-    await page.waitForTimeout(500);
+    await ensureSidebarVisible(page);
 
     const movimientosLink = page.locator('#sidebar-nav a[data-hash="#/movimientos"]');
     await expect(movimientosLink).toBeVisible();
@@ -213,9 +214,7 @@ test.describe('Permisos: Consulta — botones de acción ocultos (P3)', () => {
   });
 
   test('consulta NO ve enlace de Usuarios en el sidebar (P3)', async ({ page }) => {
-    // Dar tiempo al sidebar para actualizar con permisos de consulta
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
-    await page.waitForTimeout(500);
+    await ensureSidebarVisible(page);
 
     // Consulta tiene ['productos', 'stock', 'reportes'] — usuarios NO está permitido
     const usuariosLink = page.locator('#sidebar-nav a[data-hash="#/usuarios"]');
@@ -223,9 +222,7 @@ test.describe('Permisos: Consulta — botones de acción ocultos (P3)', () => {
   });
 
   test('consulta NO ve enlace de Movimientos en el sidebar (P3)', async ({ page }) => {
-    // Dar tiempo al sidebar para actualizar con permisos de consulta
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
-    await page.waitForTimeout(500);
+    await ensureSidebarVisible(page);
 
     // Consulta NO tiene acceso a movimientos
     const movimientosLink = page.locator('#sidebar-nav a[data-hash="#/movimientos"]');
@@ -233,9 +230,7 @@ test.describe('Permisos: Consulta — botones de acción ocultos (P3)', () => {
   });
 
   test('consulta SÍ ve enlace de Reportes en el sidebar (P3)', async ({ page }) => {
-    // Reportes es uno de los módulos permitidos para consulta
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
-    await page.waitForTimeout(500);
+    await ensureSidebarVisible(page);
 
     const reportesLink = page.locator('#sidebar-nav a[data-hash="#/reportes"]');
     await expect(reportesLink).toBeVisible();
@@ -298,7 +293,7 @@ test.describe('Permisos: Consulta — rutas restringidas bloqueadas (P4)', () =>
 
     // Independiente de si la página carga (el prototipo no tiene guards de route),
     // el sidebar NO debe mostrar el enlace de usuarios para consulta
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
+    await ensureSidebarVisible(page);
     const usuariosLink = page.locator('#sidebar-nav a[data-hash="#/usuarios"]');
     await expect(usuariosLink).toHaveCount(0);
   });
@@ -326,7 +321,7 @@ test.describe('Permisos: Consulta — rutas restringidas bloqueadas (P4)', () =>
     await page.waitForTimeout(1000);
 
     // El sidebar del operador NO debe mostrar usuarios
-    await page.waitForSelector('#sidebar-nav', { timeout: 5000 });
+    await ensureSidebarVisible(page);
     const usuariosLink = page.locator(`#sidebar-nav a[data-hash="#/usuarios"]`);
     await expect(usuariosLink).toHaveCount(0);
 

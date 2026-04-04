@@ -1,6 +1,8 @@
-import type { StorybookConfig } from '@storybook/html-vite';
 import { resolve } from 'path';
-import { getViteAliases, getScssOptions } from '../../apps/prototype-shell/config/vite-aliases';
+
+import type { StorybookConfig } from '@storybook/html-vite';
+
+import { getViteAliases, getScssOptions } from '../../../apps/prototype-shell/config/vite-aliases';
 
 // Configuración principal de Storybook 8 para el design system NGR Inventory
 const config: StorybookConfig = {
@@ -21,11 +23,11 @@ const config: StorybookConfig = {
     config.resolve ??= {};
     config.resolve.alias = {
       ...(config.resolve.alias as Record<string, string> | undefined),
-      ...getViteAliases(resolve(__dirname, '../..')),
+      ...getViteAliases(resolve(__dirname, '..')),
     };
 
     config.css ??= {};
-    config.css.preprocessorOptions = getScssOptions(resolve(__dirname, '../..'));
+    config.css.preprocessorOptions = getScssOptions(resolve(__dirname, '..'));
 
     return config;
   },

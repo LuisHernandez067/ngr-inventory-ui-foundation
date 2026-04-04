@@ -1,5 +1,5 @@
 import * as UiCore from '@ngr-inventory/ui-core';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest';
 
 import { render, mount } from '../patterns/confirmable-button';
 
@@ -39,7 +39,7 @@ describe('ConfirmableButton — render()', () => {
 });
 
 describe('ConfirmableButton — mount() + init()', () => {
-  let confirmSpy: ReturnType<typeof vi.spyOn>;
+  let confirmSpy: MockInstance;
 
   beforeEach(() => {
     // Mock del método confirm del namespace ConfirmDialog en ui-core

@@ -122,8 +122,8 @@ describe('auditoriaPage', () => {
     container = document.createElement('div');
     document.body.appendChild(container);
     vi.clearAllMocks();
-    // Por defecto: auditoría + usuarios (dos fetches al renderizar)
-    mockApiFetch.mockResolvedValueOnce(auditoriaResponse).mockResolvedValueOnce(usuariosResponse);
+    // Por defecto: usuarios (renderPage) + auditoría (fetchAndRender)
+    mockApiFetch.mockResolvedValueOnce(usuariosResponse).mockResolvedValueOnce(auditoriaResponse);
     window.location.hash = '';
   });
 
@@ -206,8 +206,8 @@ describe('auditoriaPage', () => {
 
   it('debe re-fetchear con ?accion= al aplicar el filtro de acción', async () => {
     mockApiFetch
-      .mockResolvedValueOnce(auditoriaResponse)
       .mockResolvedValueOnce(usuariosResponse)
+      .mockResolvedValueOnce(auditoriaResponse)
       .mockResolvedValueOnce(auditoriaResponse);
 
     auditoriaPage.render(container);
@@ -234,8 +234,8 @@ describe('auditoriaPage', () => {
 
   it('debe re-fetchear con ?modulo= al aplicar el filtro de módulo', async () => {
     mockApiFetch
-      .mockResolvedValueOnce(auditoriaResponse)
       .mockResolvedValueOnce(usuariosResponse)
+      .mockResolvedValueOnce(auditoriaResponse)
       .mockResolvedValueOnce(auditoriaResponse);
 
     auditoriaPage.render(container);
@@ -270,9 +270,10 @@ describe('auditoriaPage', () => {
   });
 
   it('debe mostrar "0 registros" cuando la respuesta está vacía', async () => {
+    mockApiFetch.mockReset();
     mockApiFetch
-      .mockResolvedValueOnce(auditoriaVaciaResponse)
-      .mockResolvedValueOnce(usuariosResponse);
+      .mockResolvedValueOnce(usuariosResponse)
+      .mockResolvedValueOnce(auditoriaVaciaResponse);
 
     auditoriaPage.render(container);
 
@@ -285,9 +286,10 @@ describe('auditoriaPage', () => {
   // ── Estado vacío ──────────────────────────────────────────────────────────────
 
   it('debe mostrar mensaje de "No se encontraron registros" cuando no hay entradas', async () => {
+    mockApiFetch.mockReset();
     mockApiFetch
-      .mockResolvedValueOnce(auditoriaVaciaResponse)
-      .mockResolvedValueOnce(usuariosResponse);
+      .mockResolvedValueOnce(usuariosResponse)
+      .mockResolvedValueOnce(auditoriaVaciaResponse);
 
     auditoriaPage.render(container);
 
@@ -299,9 +301,10 @@ describe('auditoriaPage', () => {
   // ── Estado de error ───────────────────────────────────────────────────────────
 
   it('debe mostrar mensaje de error cuando apiFetch falla', async () => {
+    mockApiFetch.mockReset();
     mockApiFetch
-      .mockRejectedValueOnce(new Error('Network error'))
-      .mockResolvedValueOnce(usuariosResponse);
+      .mockResolvedValueOnce(usuariosResponse)
+      .mockRejectedValueOnce(new Error('Network error'));
 
     auditoriaPage.render(container);
 

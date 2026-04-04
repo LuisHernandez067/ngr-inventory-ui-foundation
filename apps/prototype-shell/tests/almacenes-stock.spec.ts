@@ -84,9 +84,11 @@ test.describe('Journey: Almacenes — lista → detalle → editar → guardar',
   test('detalle del almacén muestra nombre y código', async ({ page }) => {
     // Navegar directamente al detalle del primer almacén del fixture
     await page.goto(`/#/almacenes/${ALMACEN_ID}`);
-    await page.waitForFunction(() => window.location.hash === `#/almacenes/${ALMACEN_ID}`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/almacenes/${ALMACEN_ID}`,
+      { timeout: 5000 }
+    );
 
     // Esperar que se renderice el h1 con el nombre del almacén
     await page.waitForSelector('h1', { timeout: 5000 });
@@ -100,9 +102,11 @@ test.describe('Journey: Almacenes — lista → detalle → editar → guardar',
   test('detalle del almacén con ubicaciones muestra alerta de impacto', async ({ page }) => {
     // alm-001 tiene múltiples ubicaciones en los fixtures
     await page.goto(`/#/almacenes/${ALMACEN_ID}`);
-    await page.waitForFunction(() => window.location.hash === `#/almacenes/${ALMACEN_ID}`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/almacenes/${ALMACEN_ID}`,
+      { timeout: 5000 }
+    );
 
     // Esperar que cargue la página
     await page.waitForSelector('h1', { timeout: 5000 });
@@ -132,9 +136,11 @@ test.describe('Journey: Almacenes — lista → detalle → editar → guardar',
     await editButton.click();
 
     // Debe navegar a la ruta de edición del almacén
-    await page.waitForFunction(() => window.location.hash === `#/almacenes/${ALMACEN_ID}/editar`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/almacenes/${ALMACEN_ID}/editar`,
+      { timeout: 5000 }
+    );
 
     expect(page.url()).toContain(`#/almacenes/${ALMACEN_ID}/editar`);
   });
@@ -171,9 +177,11 @@ test.describe('Journey: Almacenes — lista → detalle → editar → guardar',
     await page.click('#btn-submit');
 
     // Esperar a que se realice la navegación post-guardado
-    await page.waitForFunction(() => window.location.hash !== `#/almacenes/${ALMACEN_ID}/editar`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash !== expected,
+      `#/almacenes/${ALMACEN_ID}/editar`,
+      { timeout: 5000 }
+    );
 
     // Verificar que se realizó una llamada PUT al endpoint correcto
     expect(putCalls.length).toBeGreaterThan(0);
@@ -229,13 +237,14 @@ test.describe('Journey: Almacenes — lista → detalle → editar → guardar',
     const swalContent = await page.locator('.swal2-html-container').textContent();
     expect(swalContent).toContain('ubicaci');
 
-    // Cancelar el diálogo
-    const cancelButton = page.locator('.swal2-cancel');
-    if ((await cancelButton.count()) > 0) {
-      await cancelButton.click();
-    } else {
-      await page.keyboard.press('Escape');
-    }
+    // Cancelar el diálogo via JS — SweetAlert2 overlay puede interceptar clics nativos
+    await page.evaluate(() => {
+      const btn = document.querySelector<HTMLButtonElement>('.swal2-cancel');
+      btn?.click();
+    });
+
+    // Esperar a que el diálogo SweetAlert2 desaparezca completamente
+    await page.waitForSelector('.swal2-popup', { state: 'detached', timeout: 5000 });
 
     // Esperar un momento para asegurarse de que no se realizó ninguna llamada
     await page.waitForTimeout(500);
@@ -317,9 +326,11 @@ test.describe('Journey: Ubicaciones — lista con filtro → detalle → crear',
   test('detalle de ubicación muestra nombre y almacén padre', async ({ page }) => {
     // Navegar directamente al detalle de la primera ubicación del fixture
     await page.goto(`/#/ubicaciones/${UBICACION_ID}`);
-    await page.waitForFunction(() => window.location.hash === `#/ubicaciones/${UBICACION_ID}`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/ubicaciones/${UBICACION_ID}`,
+      { timeout: 5000 }
+    );
 
     // Esperar que se renderice el h1
     await page.waitForSelector('h1', { timeout: 5000 });
@@ -378,7 +389,8 @@ test.describe('Journey: Ubicaciones — lista con filtro → detalle → crear',
 
     // Debe navegar a la ruta de edición
     await page.waitForFunction(
-      () => window.location.hash === `#/ubicaciones/${UBICACION_ID}/editar`,
+      (expected) => window.location.hash === expected,
+      `#/ubicaciones/${UBICACION_ID}/editar`,
       { timeout: 5000 }
     );
 
@@ -420,7 +432,8 @@ test.describe('Journey: Ubicaciones — lista con filtro → detalle → crear',
 
     // Esperar a que se realice la navegación post-guardado
     await page.waitForFunction(
-      () => window.location.hash !== `#/ubicaciones/${UBICACION_ID}/editar`,
+      (expected) => window.location.hash !== expected,
+      `#/ubicaciones/${UBICACION_ID}/editar`,
       { timeout: 5000 }
     );
 

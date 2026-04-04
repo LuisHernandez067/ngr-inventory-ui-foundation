@@ -21,7 +21,7 @@ const columns: ColumnDef<Proveedor>[] = [
       const map: Record<string, string> = {
         active: 'bg-success',
         inactive: 'bg-secondary',
-        suspended: 'bg-warning text-dark',
+        suspended: 'bg-warning',
       };
       const labelMap: Record<string, string> = {
         active: 'Activo',

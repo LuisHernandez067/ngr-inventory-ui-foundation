@@ -140,7 +140,7 @@ function consolidadoBadge(item: StockConsolidadoEjemplo): string {
     return '<span class="badge bg-danger">Sin stock</span>';
   }
   if (item.bajoMinimo) {
-    return '<span class="badge bg-warning text-dark">Bajo mínimo</span>';
+    return '<span class="badge bg-warning">Bajo mínimo</span>';
   }
   return '<span class="badge bg-success">Disponible</span>';
 }

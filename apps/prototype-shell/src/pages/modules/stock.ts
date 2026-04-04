@@ -279,7 +279,7 @@ function renderPage(container: HTMLElement, almacenes: Almacen[]): void {
       </div>
 
       <!-- Tabla de stock -->
-      <div class="table-responsive">
+      <div class="table-responsive" tabindex="0">
         <table class="table table-hover">
           <thead>
             <tr>

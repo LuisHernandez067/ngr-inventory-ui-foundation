@@ -32,7 +32,7 @@ function buildDiferenciaBadge(diferencia: number): string {
     return `<span class="badge bg-danger" aria-label="Faltante: ${String(diferencia)}">${String(diferencia)}</span>`;
   }
   // Sobrante: se contaron más unidades de las esperadas
-  return `<span class="badge bg-warning text-dark" aria-label="Sobrante: +${String(diferencia)}">+${String(diferencia)}</span>`;
+  return `<span class="badge bg-warning" aria-label="Sobrante: +${String(diferencia)}">+${String(diferencia)}</span>`;
 }
 
 /**
@@ -91,7 +91,7 @@ function buildItemsTable(conteo: Conteo): string {
     .join('');
 
   return `
-    <div class="table-responsive">
+    <div class="table-responsive" tabindex="0">
       <table class="table table-sm table-hover align-middle" id="carga-items-table" aria-label="Ítems para carga de cantidades">
         <thead class="table-light">
           <tr>
@@ -177,7 +177,7 @@ function renderCarga(container: HTMLElement, conteo: Conteo): void {
               <p class="fw-semibold mb-0">${conteo.almacenNombre}</p>
             </div>
             <div class="ms-auto">
-              <span class="badge ${conteo.estado === 'en_curso' ? 'bg-primary' : 'bg-warning text-dark'}"
+              <span class="badge ${conteo.estado === 'en_curso' ? 'bg-primary' : 'bg-warning'}"
                 aria-label="Estado: ${conteo.estado === 'en_curso' ? 'En Curso' : conteo.estado}">
                 ${conteo.estado === 'en_curso' ? 'En Curso' : conteo.estado}
               </span>

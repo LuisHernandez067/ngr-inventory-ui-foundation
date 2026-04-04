@@ -76,9 +76,11 @@ test.describe('Journey: Productos — lista → detalle → editar → guardar',
   test('detalle de producto muestra nombre y código', async ({ page }) => {
     // Navegar directamente al detalle del primer producto del fixture
     await page.goto(`/#/productos/${PRODUCTO_ID}`);
-    await page.waitForFunction(() => window.location.hash === `#/productos/${PRODUCTO_ID}`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/productos/${PRODUCTO_ID}`,
+      { timeout: 5000 }
+    );
 
     // Esperar que se renderice el h1 con el nombre del producto
     await page.waitForSelector('h1', { timeout: 5000 });
@@ -106,9 +108,11 @@ test.describe('Journey: Productos — lista → detalle → editar → guardar',
     await editButton.click();
 
     // Debe navegar a la ruta de edición del producto
-    await page.waitForFunction(() => window.location.hash === `#/productos/${PRODUCTO_ID}/editar`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/productos/${PRODUCTO_ID}/editar`,
+      { timeout: 5000 }
+    );
 
     expect(page.url()).toContain(`#/productos/${PRODUCTO_ID}/editar`);
   });
@@ -149,9 +153,11 @@ test.describe('Journey: Productos — lista → detalle → editar → guardar',
     await page.click('#btn-submit');
 
     // Esperar a que se realice la llamada PUT
-    await page.waitForFunction(() => window.location.hash !== `#/productos/${PRODUCTO_ID}/editar`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash !== expected,
+      `#/productos/${PRODUCTO_ID}/editar`,
+      { timeout: 5000 }
+    );
 
     // Verificar que se realizó una llamada PUT al endpoint correcto
     expect(putCalls.length).toBeGreaterThan(0);
@@ -204,9 +210,11 @@ test.describe('Journey: Categorías — lista → detalle → eliminar con impac
     // Navegar al detalle de la categoría Periféricos que tiene productos asociados
     // cat-001 es "Periféricos" que tiene múltiples productos en los fixtures
     await page.goto(`/#/categorias/${CATEGORIA_ID}`);
-    await page.waitForFunction(() => window.location.hash === `#/categorias/${CATEGORIA_ID}`, {
-      timeout: 5000,
-    });
+    await page.waitForFunction(
+      (expected) => window.location.hash === expected,
+      `#/categorias/${CATEGORIA_ID}`,
+      { timeout: 5000 }
+    );
 
     // Esperar que se cargue la página (h1 con nombre de la categoría)
     await page.waitForSelector('h1', { timeout: 5000 });
@@ -264,17 +272,14 @@ test.describe('Journey: Categorías — lista → detalle → eliminar con impac
     const swalContent = await page.locator('.swal2-html-container').textContent();
     expect(swalContent).toContain('producto');
 
-    // Cancelar el diálogo — hacer clic en "Cancelar"
-    const cancelButton = page.locator('.swal2-cancel');
-    if ((await cancelButton.count()) > 0) {
-      await cancelButton.click();
-    } else {
-      // Si no hay botón cancelar, usar la tecla Escape
-      await page.keyboard.press('Escape');
-    }
+    // Cancelar el diálogo — hacer clic en "Cancelar" via JS para evitar intercepción del overlay
+    await page.evaluate(() => {
+      const btn = document.querySelector<HTMLButtonElement>('.swal2-cancel');
+      btn?.click();
+    });
 
-    // Esperar un momento para asegurarse de que no se realizó ninguna llamada
-    await page.waitForTimeout(500);
+    // Esperar a que el diálogo desaparezca
+    await page.waitForSelector('.swal2-popup', { state: 'detached', timeout: 5000 });
 
     // Verificar que NO se realizó ninguna llamada DELETE
     expect(deleteCalls).toHaveLength(0);

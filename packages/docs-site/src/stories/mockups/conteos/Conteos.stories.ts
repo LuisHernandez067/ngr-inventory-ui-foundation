@@ -343,7 +343,7 @@ function estadoBadge(estado: EstadoConteo): string {
   const config: Record<EstadoConteo, { cls: string; label: string }> = {
     planificado: { cls: 'bg-secondary', label: 'Planificado' },
     en_curso: { cls: 'bg-primary', label: 'En Curso' },
-    pausado: { cls: 'bg-warning text-dark', label: 'Pausado' },
+    pausado: { cls: 'bg-warning', label: 'Pausado' },
     completado: { cls: 'bg-success', label: 'Completado' },
     anulado: { cls: 'bg-danger', label: 'Anulado' },
   };

@@ -6,7 +6,7 @@ $sidebar-width: 260px;
 // En lg+: columna fija a la izquierda (anula el comportamiento offcanvas)
 // En mobile: se controla mediante Bootstrap offcanvas-lg
 .sidebar {
-  @media (min-width: 992px) {
+  @media (width >= 992px) {
     width: $sidebar-width;
     position: fixed;
     top: var(--navbar-height, 56px);
@@ -16,9 +16,10 @@ $sidebar-width: 260px;
     background-color: var(--bs-body-bg);
     border-right: 1px solid var(--bs-border-color);
     z-index: var(--z-sidebar, 1020);
+
     // Anula la transformación de offcanvas en desktop
-    transform: none !important;
-    visibility: visible !important;
+    transform: none;
+    visibility: visible;
   }
 }
 
@@ -43,7 +44,9 @@ $sidebar-width: 260px;
 
   &.active {
     background-color: var(--bs-primary-bg-subtle);
-    color: var(--bs-primary);
+
+    // brand-700 (#0f5a82) over subtle bg (#d0e3ec) → 5.8:1 ≥ WCAG AA 4.5:1
+    color: var(--color-brand-700, tokens.$color-brand-700);
     font-weight: tokens.$font-weight-semibold;
   }
 }

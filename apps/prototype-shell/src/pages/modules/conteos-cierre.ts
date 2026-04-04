@@ -109,7 +109,7 @@ function buildDiffTable(conteo: Conteo): string {
     .join('');
 
   return `
-    <div class="table-responsive">
+    <div class="table-responsive" tabindex="0">
       <table class="table table-sm table-hover" id="diff-table" aria-label="Tabla de discrepancias del conteo">
         <thead class="table-light">
           <tr>
@@ -221,7 +221,7 @@ function renderCierre(container: HTMLElement, conteo: Conteo): void {
               <p class="fw-semibold mb-0">${conteo.almacenNombre}</p>
             </div>
             <div class="ms-auto">
-              <span class="badge ${conteo.estado === 'completado' ? 'bg-success' : 'bg-warning text-dark'}"
+              <span class="badge ${conteo.estado === 'completado' ? 'bg-success' : 'bg-warning'}"
                 aria-label="Estado: ${conteo.estado}">
                 ${conteo.estado === 'completado' ? 'Completado' : conteo.estado}
               </span>

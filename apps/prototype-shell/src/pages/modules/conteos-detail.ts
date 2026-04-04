@@ -37,7 +37,7 @@ const ESTADO_NOMBRES: Record<EstadoConteo, string> = {
 const ESTADO_BADGE_CLASS: Record<EstadoConteo, string> = {
   planificado: 'bg-secondary',
   en_curso: 'bg-primary',
-  pausado: 'bg-warning text-dark',
+  pausado: 'bg-warning',
   completado: 'bg-success',
   anulado: 'bg-danger',
 };
@@ -84,7 +84,7 @@ function buildDiferenciaBadge(item: ConteoItem): string {
     return `<span class="badge bg-danger">${String(item.diferencia)}</span>`;
   }
   // Sobrante: se contaron más unidades de las esperadas
-  return `<span class="badge bg-warning text-dark">+${String(item.diferencia)}</span>`;
+  return `<span class="badge bg-warning">+${String(item.diferencia)}</span>`;
 }
 
 /**
@@ -126,7 +126,7 @@ function buildItemsTable(conteo: Conteo): string {
     .join('');
 
   return `
-    <div class="table-responsive">
+    <div class="table-responsive" tabindex="0">
       <table class="table table-sm table-hover" id="items-table" aria-label="Ítems del conteo">
         <thead>
           <tr>
@@ -254,7 +254,7 @@ function buildDiscrepanciasSummary(conteo: Conteo): string {
       <span>
         ${String(itemsConDiferencia.length)} ítem(s) con diferencias:
         ${faltantes > 0 ? `<span class="badge bg-danger ms-1">${String(faltantes)} faltante(s)</span>` : ''}
-        ${sobrantes > 0 ? `<span class="badge bg-warning text-dark ms-1">${String(sobrantes)} sobrante(s)</span>` : ''}
+        ${sobrantes > 0 ? `<span class="badge bg-warning ms-1">${String(sobrantes)} sobrante(s)</span>` : ''}
       </span>
     </div>
   `;

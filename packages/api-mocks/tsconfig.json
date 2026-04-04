@@ -4,8 +4,7 @@
   "compilerOptions": {
     // MSW v2 usa resolución bundler
     "moduleResolution": "Bundler",
-    "module": "ESNext",
-    "baseUrl": "."
+    "module": "ESNext"
   },
   "include": ["src", "vitest.config.ts"]
 }

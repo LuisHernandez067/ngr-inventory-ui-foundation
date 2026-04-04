@@ -136,7 +136,10 @@ test.describe('Journey: Conteos — crear nuevo conteo', () => {
     await page.waitForSelector('#conteos-nuevo-form', { timeout: 10000 });
 
     // Esperar que el select de almacén tenga opciones cargadas
-    await page.waitForSelector('#almacenId option:not([value=""])', { timeout: 8000 });
+    await page.waitForSelector('#almacenId option:not([value=""])', {
+      state: 'attached',
+      timeout: 8000,
+    });
 
     // Seleccionar el primer almacén disponible
     const almacenOptions = page.locator('#almacenId option:not([value=""])');
@@ -155,7 +158,10 @@ test.describe('Journey: Conteos — crear nuevo conteo', () => {
     await page.waitForSelector('.item-producto-select', { timeout: 5000 });
 
     // Esperar que el select de producto tenga opciones cargadas
-    await page.waitForSelector('.item-producto-select option:not([value=""])', { timeout: 8000 });
+    await page.waitForSelector('.item-producto-select option:not([value=""])', {
+      state: 'attached',
+      timeout: 8000,
+    });
 
     // Seleccionar el primer producto disponible
     const productoOptions = page.locator('.item-producto-select option:not([value=""])');
@@ -202,7 +208,8 @@ test.describe('Journey: Conteos — cierre y reconciliación', () => {
     // Navegar directamente al cierre del conteo completado cnt-001
     await page.goto(`/#/conteos/${CONTEO_COMPLETADO_ID}/cierre`);
     await page.waitForFunction(
-      () => window.location.hash === `#/conteos/${CONTEO_COMPLETADO_ID}/cierre`,
+      (expected) => window.location.hash === expected,
+      `#/conteos/${CONTEO_COMPLETADO_ID}/cierre`,
       { timeout: 5000 }
     );
 

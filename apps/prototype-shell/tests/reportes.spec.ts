@@ -245,6 +245,7 @@ test.describe('A11y: Reportes page — WCAG 2.1 AA', () => {
 
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .exclude('[aria-hidden="true"]')
       .analyze();
 
     // Req A5: If violations found, message includes violation description

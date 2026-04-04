@@ -35,7 +35,10 @@ async function navigateToKardex(page: Page): Promise<void> {
   await page.goto('/#/kardex');
   await page.waitForFunction(() => window.location.hash === '#/kardex', { timeout: 5000 });
   // Esperar que el selector de producto tenga opciones cargadas (productos activos del API)
-  await page.waitForSelector('#producto-select option:not([value=""])', { timeout: 8000 });
+  await page.waitForSelector('#producto-select option:not([value=""])', {
+    state: 'attached',
+    timeout: 8000,
+  });
 }
 
 // ── Suite 1: Página de Kardex — navegación y filtros ─────────────────────────

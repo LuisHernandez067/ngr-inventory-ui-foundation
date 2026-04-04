@@ -173,6 +173,10 @@ const exportJobError: ExportacionJob = {
   updatedAt: '2026-04-02T00:01:00.000Z',
 };
 
+/** Respuesta paginada vacía para populate de almacenes/productos (fire-and-forget) */
+const almacenesPopulateResponse = { data: [], total: 0, page: 1, pageSize: 100, totalPages: 0 };
+const productosPopulateResponse = { data: [], total: 0, page: 1, pageSize: 200, totalPages: 0 };
+
 // ---------------------------------------------------------------------------
 // Suite
 // ---------------------------------------------------------------------------
@@ -197,24 +201,25 @@ describe('reportesPage', () => {
 
   // ── Catálogo inicial ────────────────────────────────────────────────────────
 
-  it('debe renderizar el título "Reportes"', () => {
+  it('debe renderizar el título "Reportes"', async () => {
     mockApiFetch.mockResolvedValueOnce(reportesCatalogoResponse);
 
     reportesPage.render(container);
 
-    const h1 = q(container, 'h1');
-    expect(h1.textContent.trim()).toContain('Reportes');
+    await vi.waitFor(() => {
+      const h1 = q(container, 'h1');
+      expect(h1.textContent).toContain('Reportes');
+    });
   });
 
-  it('debe llamar a apiFetch con /api/reportes al inicializar', () => {
+  it('debe llamar a apiFetch con /api/reportes al inicializar', async () => {
     mockApiFetch.mockResolvedValueOnce(reportesCatalogoResponse);
 
     reportesPage.render(container);
 
-    expect(mockApiFetch).toHaveBeenCalledWith(
-      expect.stringContaining('/api/reportes'),
-      expect.any(Object)
-    );
+    await vi.waitFor(() => {
+      expect(mockApiFetch).toHaveBeenCalledWith(expect.stringContaining('/api/reportes'));
+    });
   });
 
   it('debe renderizar 4 tarjetas activas de reportes tras cargar el catálogo', async () => {
@@ -332,7 +337,9 @@ describe('reportesPage', () => {
   // ── Validación de campos requeridos (kardex) ──────────────────────────────────
 
   it('debe rechazar el botón "Vista previa" en kardex sin productoId (validación requerida)', async () => {
-    mockApiFetch.mockResolvedValueOnce(reportesCatalogoResponse);
+    mockApiFetch
+      .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(productosPopulateResponse);
 
     reportesPage.render(container);
 
@@ -350,8 +357,8 @@ describe('reportesPage', () => {
     const btnVista = q(container, '#btn-vista-previa') as HTMLButtonElement;
     btnVista.click();
 
-    // No debe haberse llamado apiFetch para el preview (solo la carga inicial del catálogo)
-    expect(mockApiFetch).toHaveBeenCalledTimes(1);
+    // No debe haberse llamado apiFetch para el preview (solo catálogo + productos populate)
+    expect(mockApiFetch).toHaveBeenCalledTimes(2);
   });
 
   it('debe mostrar el error de validación cuando productoId está vacío en kardex', async () => {
@@ -404,6 +411,7 @@ describe('reportesPage', () => {
   it('debe renderizar la tabla de preview con los datos del reporte', async () => {
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponse);
 
     reportesPage.render(container);
@@ -428,6 +436,7 @@ describe('reportesPage', () => {
   it('debe mostrar el conteo de registros en el panel de preview', async () => {
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponse);
 
     reportesPage.render(container);
@@ -452,6 +461,7 @@ describe('reportesPage', () => {
   it('debe mostrar el mensaje de estado vacío cuando no hay datos en la preview', async () => {
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosVacioResponse);
 
     reportesPage.render(container);
@@ -525,6 +535,7 @@ describe('reportesPage', () => {
     mockAuthService.hasPermission.mockReturnValue(true);
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponse);
 
     reportesPage.render(container);
@@ -548,6 +559,7 @@ describe('reportesPage', () => {
     mockAuthService.hasPermission.mockReturnValue(false);
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponse);
 
     reportesPage.render(container);
@@ -575,6 +587,7 @@ describe('reportesPage', () => {
     mockAuthService.hasPermission.mockReturnValue(true);
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente);
 
@@ -623,6 +636,7 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse) // GET /api/reportes
+      .mockResolvedValueOnce(almacenesPopulateResponse) // GET /api/almacenes (populate)
       .mockResolvedValueOnce(previewDatosResponseLarge) // GET /api/reportes/:id/datos
       .mockResolvedValueOnce(exportJobPendiente) // POST /exportar
       .mockResolvedValueOnce(exportJobListo); // GET /exportaciones/:jobId
@@ -673,6 +687,7 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente)
       .mockResolvedValueOnce(exportJobError);
@@ -721,6 +736,7 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
       .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente)
       .mockRejectedValueOnce(new Error('Connection lost'));
@@ -769,7 +785,8 @@ describe('reportesPage', () => {
 
     mockApiFetch
       .mockResolvedValueOnce(reportesCatalogoResponse)
-      .mockResolvedValueOnce(previewDatosResponse)
+      .mockResolvedValueOnce(almacenesPopulateResponse)
+      .mockResolvedValueOnce(previewDatosResponseLarge)
       .mockResolvedValueOnce(exportJobPendiente);
 
     vi.useFakeTimers();

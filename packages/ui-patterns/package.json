@@ -4,7 +4,8 @@
   "description": "Patrones de composición UI para NGR Inventory",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./patterns/*": "./src/patterns/*.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

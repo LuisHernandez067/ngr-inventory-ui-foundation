@@ -95,7 +95,7 @@ export function refreshNavbar(): void {
     user.perfil === 'admin'
       ? 'bg-danger'
       : user.perfil === 'operador'
-        ? 'bg-warning text-dark'
+        ? 'bg-warning'
         : 'bg-secondary';
 
   userArea.innerHTML = `

@@ -93,7 +93,7 @@ export function render<T = Record<string, unknown>>(props: DataTableProps<T>): s
     : '';
 
   const tableHtml = !loading
-    ? `<table class="table table-hover mb-0" role="grid"${ariaLabel !== undefined ? ` aria-label="${ariaLabel}"` : ''}>` +
+    ? `<table class="table table-hover mb-0"${ariaLabel !== undefined ? ` aria-label="${ariaLabel}"` : ''}>` +
       renderHeader(columns) +
       renderBody(rows, columns, onRowClick) +
       `</table>`

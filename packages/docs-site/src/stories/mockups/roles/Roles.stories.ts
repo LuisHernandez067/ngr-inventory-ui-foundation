@@ -44,7 +44,7 @@ function buildRolRows(roles: Rol[]): string {
       <tr style="cursor:pointer;" data-id="${r.id}">
         <td>
           <span class="fw-semibold">${r.nombre}</span>
-          ${r.esAdmin ? '<span class="badge bg-warning text-dark ms-2 small">Admin</span>' : ''}
+          ${r.esAdmin ? '<span class="badge bg-warning ms-2 small">Admin</span>' : ''}
         </td>
         <td class="text-muted small">${r.descripcion ?? '—'}</td>
         <td class="text-end">
@@ -145,7 +145,7 @@ function buildRolDetalleHtml(params: { rol: Rol; canGestionar?: boolean }): stri
 
         <div class="d-flex align-items-center gap-3 mb-1 flex-wrap">
           <h1 class="h3 mb-0">${rol.nombre}</h1>
-          ${rol.esAdmin ? '<span class="badge bg-warning text-dark">Administrador</span>' : ''}
+          ${rol.esAdmin ? '<span class="badge bg-warning">Administrador</span>' : ''}
         </div>
         ${rol.descripcion ? `<p class="text-muted small mb-4">${rol.descripcion}</p>` : '<p class="text-muted small mb-4">Sin descripción</p>'}
 

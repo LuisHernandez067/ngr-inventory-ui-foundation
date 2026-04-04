@@ -217,7 +217,7 @@ function renderPage(container: HTMLElement): void {
       </div>
 
       <!-- Tabla de usuarios -->
-      <div class="table-responsive">
+      <div class="table-responsive" tabindex="0">
         <table class="table table-hover">
           <thead>
             <tr>

@@ -20,13 +20,13 @@ let filterFechaHasta = '';
 /** Mapa de colores Bootstrap por tipo de acción */
 const accionColorMap: Record<string, string> = {
   crear: 'bg-success',
-  actualizar: 'bg-info text-dark',
-  editar: 'bg-info text-dark',
+  actualizar: 'bg-info',
+  editar: 'bg-info',
   eliminar: 'bg-danger',
   login: 'bg-primary',
   logout: 'bg-secondary',
-  exportar: 'bg-warning text-dark',
-  toggle: 'bg-warning text-dark',
+  exportar: 'bg-warning',
+  toggle: 'bg-warning',
 };
 
 /**
@@ -277,7 +277,7 @@ function renderPage(container: HTMLElement): void {
       </div>
 
       <!-- Tabla de auditoría -->
-      <div class="table-responsive">
+      <div class="table-responsive" tabindex="0">
         <table class="table table-hover table-sm">
           <thead>
             <tr>

@@ -22,7 +22,7 @@ function consolidadoBadge(item: StockConsolidado): string {
     return '<span class="badge bg-danger">Sin stock</span>';
   }
   if (item.bajoMinimo) {
-    return '<span class="badge bg-warning text-dark">Bajo mínimo</span>';
+    return '<span class="badge bg-warning">Bajo mínimo</span>';
   }
   return '<span class="badge bg-success">Disponible</span>';
 }
@@ -133,7 +133,7 @@ export const stockConsolidadoPage: PageModule = {
         </div>
 
         <!-- Tabla de stock consolidado -->
-        <div class="table-responsive">
+        <div class="table-responsive" tabindex="0">
           <table class="table table-hover">
             <thead>
               <tr>

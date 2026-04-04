@@ -130,8 +130,8 @@ describe('usuariosPage', () => {
     vi.clearAllMocks();
     // Por defecto: usuario con permiso de gestión
     mockAuthService.hasPermission.mockReturnValue(true);
-    // Por defecto: lista de usuarios + roles (dos fetches al renderizar)
-    mockApiFetch.mockResolvedValueOnce(usuariosResponse).mockResolvedValueOnce(rolesResponse);
+    // Por defecto: roles (renderPage) + usuarios (fetchAndRender)
+    mockApiFetch.mockResolvedValueOnce(rolesResponse).mockResolvedValueOnce(usuariosResponse);
     window.location.hash = '';
   });
 
@@ -188,8 +188,8 @@ describe('usuariosPage', () => {
 
   it('debe re-fetchear con ?rolId= al cambiar el filtro de rol', async () => {
     mockApiFetch
-      .mockResolvedValueOnce(usuariosResponse)
       .mockResolvedValueOnce(rolesResponse)
+      .mockResolvedValueOnce(usuariosResponse)
       .mockResolvedValueOnce(usuariosResponse);
 
     usuariosPage.render(container);
@@ -214,8 +214,8 @@ describe('usuariosPage', () => {
 
   it('debe re-fetchear con ?activo=true al filtrar por usuarios activos', async () => {
     mockApiFetch
-      .mockResolvedValueOnce(usuariosResponse)
       .mockResolvedValueOnce(rolesResponse)
+      .mockResolvedValueOnce(usuariosResponse)
       .mockResolvedValueOnce(usuariosResponse);
 
     usuariosPage.render(container);
@@ -285,9 +285,10 @@ describe('usuariosPage', () => {
   // ── Estado de error ───────────────────────────────────────────────────────────
 
   it('debe mostrar mensaje de error cuando apiFetch falla', async () => {
+    mockApiFetch.mockReset();
     mockApiFetch
-      .mockRejectedValueOnce(new Error('Network error'))
-      .mockResolvedValueOnce(rolesResponse);
+      .mockResolvedValueOnce(rolesResponse)
+      .mockRejectedValueOnce(new Error('Network error'));
 
     usuariosPage.render(container);
 
@@ -301,7 +302,8 @@ describe('usuariosPage', () => {
   // ── Tabla vacía ───────────────────────────────────────────────────────────────
 
   it('debe mostrar "Sin usuarios registrados" cuando no hay usuarios', async () => {
-    mockApiFetch.mockResolvedValueOnce(usuariosVaciosResponse).mockResolvedValueOnce(rolesResponse);
+    mockApiFetch.mockReset();
+    mockApiFetch.mockResolvedValueOnce(rolesResponse).mockResolvedValueOnce(usuariosVaciosResponse);
 
     usuariosPage.render(container);
 

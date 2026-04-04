@@ -12,8 +12,8 @@ let abortController: AbortController | null = null;
 const TIPO_BADGE_CLASS: Record<string, string> = {
   entrada: 'bg-success',
   salida: 'bg-danger',
-  ajuste: 'bg-warning text-dark',
-  saldo_inicial: 'bg-info text-dark',
+  ajuste: 'bg-warning',
+  saldo_inicial: 'bg-info',
 };
 
 /**
@@ -100,7 +100,7 @@ function renderKardexRows(entries: KardexEntry[]): string {
  */
 function renderKardexTable(tableArea: HTMLElement, entries: KardexEntry[]): void {
   tableArea.innerHTML = `
-    <div class="table-responsive mt-4">
+    <div class="table-responsive mt-4" tabindex="0">
       <table class="table table-sm table-hover table-bordered" id="kardex-table">
         <thead class="table-light">
           <tr>

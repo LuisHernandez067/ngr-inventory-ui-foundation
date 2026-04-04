@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call -- Los decoradores @Component y signal() son de @angular/core, no instalado aún */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment -- signal<T>() no puede resolverse sin @angular/core instalado */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access -- .set() en Signal no puede resolverse sin @angular/core instalado */
 import { NgFor, NgIf } from '@angular/common';
 import { Component, type OnInit, signal } from '@angular/core';
 import type { PaginatedResponse, Producto } from '@ngr-inventory/api-contracts';

@@ -25,7 +25,7 @@ let selectedAlmacenId = '';
 const ESTADO_BADGE_CLASS: Record<EstadoConteo, string> = {
   planificado: 'bg-secondary',
   en_curso: 'bg-primary',
-  pausado: 'bg-warning text-dark',
+  pausado: 'bg-warning',
   completado: 'bg-success',
   anulado: 'bg-danger',
 };
@@ -233,7 +233,7 @@ function renderPage(container: HTMLElement): void {
       </div>
 
       <!-- Tabla de conteos -->
-      <div class="table-responsive">
+      <div class="table-responsive" tabindex="0">
         <table class="table table-hover">
           <thead>
             <tr>

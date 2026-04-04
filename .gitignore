@@ -47,3 +47,6 @@ test-results/
 # Temporal
 *.tmp
 *.bak
+
+# Vite/Vitest timestamp cache files
+*.timestamp-*.mjs

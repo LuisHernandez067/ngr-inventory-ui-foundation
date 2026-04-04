@@ -264,8 +264,8 @@ const almacenesDisponibles: AlmacenSimple[] = [
 function estadoBadge(estado: MovimientoEjemplo['estado']): string {
   const config: Record<string, { cls: string; label: string }> = {
     borrador: { cls: 'bg-secondary', label: 'Borrador' },
-    pendiente: { cls: 'bg-warning text-dark', label: 'Pendiente' },
-    aprobado: { cls: 'bg-info text-dark', label: 'Aprobado' },
+    pendiente: { cls: 'bg-warning', label: 'Pendiente' },
+    aprobado: { cls: 'bg-info', label: 'Aprobado' },
     ejecutado: { cls: 'bg-success', label: 'Ejecutado' },
     anulado: { cls: 'bg-danger', label: 'Anulado' },
   };

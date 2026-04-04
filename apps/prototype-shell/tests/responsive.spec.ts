@@ -1,9 +1,19 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, expect, devices, type Page } from '@playwright/test';
 
 // ── Tests de comportamiento responsivo para prototype-shell ───────────────────
 // Verifican que las páginas principales no producen desbordamiento horizontal,
 // que el toggle de sidebar es visible en mobile, y que las tablas tienen scroll
 // horizontal disponible (overflow-x auto/scroll) en lugar de ocultar contenido.
+
+/** Autentica como administrador y espera el dashboard */
+async function loginAsAdmin(page: Page): Promise<void> {
+  await page.goto('/#/auth');
+  await page.waitForSelector('#login-form', { timeout: 5000 });
+  await page.fill('#login-email', 'administrador@ngr.com');
+  await page.fill('#login-password', 'admin123');
+  await page.click('#login-submit');
+  await page.waitForFunction(() => window.location.hash === '#/dashboard', { timeout: 8000 });
+}
 
 // ── Rutas a verificar para desbordamiento ────────────────────────────────────
 
@@ -33,17 +43,14 @@ test.describe('sin desbordamiento horizontal', () => {
 // ── Grupo 2: Sidebar toggle visible en mobile ─────────────────────────────────
 // El botón hamburguesa debe ser visible cuando el viewport es mobile
 
-test.describe('sidebar toggle visible en mobile', () => {
-  test.use({ ...devices['iPhone 12'] });
+test('el botón hamburguesa debe estar visible en el dashboard mobile', async ({ page }) => {
+  await page.setViewportSize(devices['iPhone 12'].viewport);
+  await page.goto('/');
 
-  test('el botón hamburguesa debe estar visible en el dashboard mobile', async ({ page }) => {
-    await page.goto('/');
+  // Selector del botón de toggle del sidebar (Bootstrap offcanvas o navbar-toggler)
+  const hamburgerButton = page.locator('.navbar-toggler, [data-bs-toggle="offcanvas"]').first();
 
-    // Selector del botón de toggle del sidebar (Bootstrap offcanvas o navbar-toggler)
-    const hamburgerButton = page.locator('.navbar-toggler, [data-bs-toggle="offcanvas"]').first();
-
-    await expect(hamburgerButton).toBeVisible();
-  });
+  await expect(hamburgerButton).toBeVisible();
 });
 
 // ── Grupo 3: Tablas con scroll horizontal disponible ─────────────────────────
@@ -54,6 +61,10 @@ test.describe('tablas con scroll horizontal disponible', () => {
     { path: '/#/productos', name: 'productos' },
     { path: '/#/almacenes', name: 'almacenes' },
   ];
+
+  test.beforeEach(async ({ page }) => {
+    await loginAsAdmin(page);
+  });
 
   for (const route of TABLE_ROUTES) {
     test(`la tabla en ${route.name} debe tener overflow-x accesible`, async ({ page }) => {

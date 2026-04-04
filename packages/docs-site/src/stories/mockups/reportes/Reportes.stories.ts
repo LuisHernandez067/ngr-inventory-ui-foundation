@@ -76,8 +76,8 @@ function buildFormatoBadges(formatos: ExportacionJob['formato'][]): string {
 const tipoColorMap: Record<string, string> = {
   stock_actual: 'bg-success',
   movimientos: 'bg-primary',
-  kardex: 'bg-info text-dark',
-  bajo_stock: 'bg-warning text-dark',
+  kardex: 'bg-info',
+  bajo_stock: 'bg-warning',
 };
 
 /** Iconos Bootstrap por tipo de reporte */

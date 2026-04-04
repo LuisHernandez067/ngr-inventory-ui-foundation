@@ -234,7 +234,7 @@ function renderForm(
             </button>
           </div>
           <div class="card-body p-0">
-            <div class="table-responsive">
+            <div class="table-responsive" tabindex="0">
               <table class="table table-sm table-hover mb-0" id="items-table"
                 aria-label="Productos seleccionados para el conteo">
                 <thead>

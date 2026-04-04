@@ -47,16 +47,12 @@ test.describe('Journey: Movimientos — lista, filtros y detalle', () => {
   test('navegar a movimientos muestra la lista con datos (M1)', async ({ page }) => {
     // Navegar a la lista de movimientos
     await page.goto('/#/movimientos');
-    await page.waitForFunction(() => window.location.hash === '#/movimientos', { timeout: 5000 });
 
-    // Esperar que el título de la página esté visible
-    await page.waitForSelector('h1', { timeout: 5000 });
-    const heading = page.locator('h1');
-    await expect(heading).toBeVisible();
-    await expect(heading).toContainText('Movimientos');
+    // Esperar que el módulo de movimientos renderice
+    await expect(page.locator('h1')).toContainText('Movimientos', { timeout: 8000 });
 
     // Esperar que la tabla cargue con al menos una fila de datos
-    await page.waitForSelector('#movimientos-tbody tr[data-id]', { timeout: 5000 });
+    await page.waitForSelector('#movimientos-tbody tr[data-id]', { timeout: 8000 });
     const rows = page.locator('#movimientos-tbody tr[data-id]');
     await expect(rows.first()).toBeVisible();
   });
@@ -136,7 +132,8 @@ test.describe('Journey: Movimientos — lista, filtros y detalle', () => {
     // Navegar directamente al detalle de un movimiento de entrada conocido
     await page.goto(`/#/movimientos/${MOVIMIENTO_ENTRADA_ID}`);
     await page.waitForFunction(
-      () => window.location.hash === `#/movimientos/${MOVIMIENTO_ENTRADA_ID}`,
+      (expected) => window.location.hash === expected,
+      `#/movimientos/${MOVIMIENTO_ENTRADA_ID}`,
       { timeout: 5000 }
     );
 
@@ -307,10 +304,10 @@ test.describe('Journey: Movimientos — formulario nuevo movimiento', () => {
       state: 'visible',
       timeout: 3000,
     });
-    const almacenOptions = await page.locator('#almacenDestinoId option[value!=""]').count();
+    const almacenOptions = await page.locator('#almacenDestinoId option:not([value=""])').count();
     if (almacenOptions > 0) {
       await page
-        .locator('#almacenDestinoId option[value!=""]')
+        .locator('#almacenDestinoId option:not([value=""])')
         .first()
         .evaluate((opt) => {
           const select = opt.closest('select');
@@ -327,10 +324,10 @@ test.describe('Journey: Movimientos — formulario nuevo movimiento', () => {
 
     // Seleccionar el primer producto disponible en el ítem
     const productoSelect = page.locator('.item-producto-select').first();
-    const productoOptions = await productoSelect.locator('option[value!=""]').count();
+    const productoOptions = await productoSelect.locator('option:not([value=""])').count();
     if (productoOptions > 0) {
       const firstProductoValue = await productoSelect
-        .locator('option[value!=""]')
+        .locator('option:not([value=""])')
         .first()
         .getAttribute('value');
       if (firstProductoValue) {

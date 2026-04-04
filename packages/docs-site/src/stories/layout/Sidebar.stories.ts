@@ -5,7 +5,7 @@ import {
   init,
   setActive,
   NAV_ITEMS,
-} from '../../../../apps/prototype-shell/src/layout/sidebar';
+} from '../../../../../apps/prototype-shell/src/layout/sidebar';
 
 // Story del componente Sidebar — barra lateral de navegación del admin shell
 const meta: Meta = {

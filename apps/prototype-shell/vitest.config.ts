@@ -1,5 +1,7 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
+
 import baseConfig from '../../vitest.config';
+
 import { getViteAliases, getScssOptions } from './config/vite-aliases';
 
 // Configuración Vitest para apps/prototype-shell

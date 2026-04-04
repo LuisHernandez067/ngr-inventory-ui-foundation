@@ -26,11 +26,12 @@ const rows: Producto[] = [
 
 // Tests del patrón DataTable
 describe('DataTable — render()', () => {
-  it('debe renderizar tabla con role="grid"', () => {
+  it('debe renderizar tabla sin role="grid" para evitar conflictos ARIA', () => {
     const html = render({ columns, rows });
     const el = document.createElement('div');
     el.innerHTML = html;
-    expect(el.querySelector('table[role="grid"]')).not.toBeNull();
+    expect(el.querySelector('table')).not.toBeNull();
+    expect(el.querySelector('table')?.getAttribute('role')).toBeNull();
   });
 
   it('debe renderizar encabezados de columna con scope="col"', () => {
@@ -90,7 +91,7 @@ describe('DataTable — render()', () => {
     const customColumns: ColumnDef<Producto>[] = [
       { key: 'estado', header: 'Estado', render: (val) => `<strong>${String(val)}</strong>` },
     ];
-    const html = render({ columns: customColumns, rows: [rows[0]] });
+    const html = render({ columns: customColumns, rows: rows.slice(0, 1) });
     expect(html).toContain('<strong>activo</strong>');
   });
 });

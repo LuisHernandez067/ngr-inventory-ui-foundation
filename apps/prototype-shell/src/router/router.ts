@@ -35,6 +35,8 @@ export class Router {
   private routes = new Map<string, RouteConfig>();
   private currentPage: PageModule | null = null;
   private container: HTMLElement;
+  /** Monotonically increasing counter to detect stale navigations */
+  private navigationId = 0;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -64,6 +66,9 @@ export class Router {
     const hashPath = hash.split('?')[0] ?? hash;
     // Normalizar '/' a '/dashboard' para la ruta raíz
     const resolvedHash = hashPath === '/' ? '/dashboard' : hashPath;
+
+    // Incrementar navigationId para invalidar navegaciones previas en vuelo
+    const navId = ++this.navigationId;
 
     // Auth guard — delegar la verificación al servicio de autenticación
     const isAuthenticated = authService.isAuthenticated();
@@ -95,6 +100,8 @@ export class Router {
     if (!matchResult) {
       // Sin coincidencia — renderizar página 404 directamente (sin redirect)
       const { page404 } = await import('../pages/errors/page404');
+      // Abortar si una navegación más nueva ya se inició
+      if (navId !== this.navigationId) return;
       this.currentPage = page404;
       this.container.innerHTML = '';
       page404.render(this.container);
@@ -103,10 +110,16 @@ export class Router {
     }
 
     const { config, params } = matchResult;
+
+    // Limpiar el contenedor antes del import dinámico para evitar contenido stale
+    this.container.innerHTML = '';
+
     const module = await Promise.resolve(config.factory());
 
+    // Abortar si una navegación más nueva ya se inició mientras esperábamos el import
+    if (navId !== this.navigationId) return;
+
     this.currentPage = module;
-    this.container.innerHTML = '';
     module.render(this.container, params);
 
     // Sincronizar breadcrumb y sidebar con la ruta actual

@@ -260,7 +260,7 @@ describe('api-mocks — handlers', () => {
       const response = await fetch('http://localhost/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'admin@ngr.com', password: 'secret' }),
+        body: JSON.stringify({ email: 'admin@ngr.com', password: 'admin123' }),
       });
       expect(response.status).toBe(200);
       const body = (await response.json()) as { token: string; user: unknown };
@@ -283,7 +283,9 @@ describe('api-mocks — handlers', () => {
 
   describe('GET /api/auth/me', () => {
     it('debe retornar el usuario autenticado mock', async () => {
-      const response = await fetch('http://localhost/api/auth/me');
+      const response = await fetch('http://localhost/api/auth/me', {
+        headers: { Authorization: 'Bearer mock-token-xyz' },
+      });
       expect(response.status).toBe(200);
       const body = (await response.json()) as { id: string; email: string; roles: string[] };
       expect(body.id).toBeDefined();

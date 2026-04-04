@@ -31,7 +31,7 @@ function buildTableRows(roles: Rol[]): string {
         <td class="fw-semibold">${r.nombre}</td>
         <td>${r.descripcion ?? '<span class="text-muted">—</span>'}</td>
         <td class="text-center">
-          <span class="badge bg-info text-dark" aria-label="${String(r.permisos.length)} permisos">
+          <span class="badge bg-info" aria-label="${String(r.permisos.length)} permisos">
             ${String(r.permisos.length)}
           </span>
         </td>
@@ -129,7 +129,7 @@ function renderPage(container: HTMLElement): void {
       </div>
 
       <!-- Tabla de roles -->
-      <div class="table-responsive">
+      <div class="table-responsive" tabindex="0">
         <table class="table table-hover">
           <thead>
             <tr>

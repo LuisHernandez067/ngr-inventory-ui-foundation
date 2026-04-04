@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call -- El decorador @Component es de @angular/core, no instalado aún */
 import { Component } from '@angular/core';
 
 import { ProductListComponent } from './pages/product-list/product-list.component';

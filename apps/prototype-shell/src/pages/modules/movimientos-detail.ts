@@ -38,8 +38,8 @@ const ESTADO_NOMBRES: Record<EstadoMovimiento, string> = {
 /** Clases Bootstrap para el badge de estado */
 const ESTADO_BADGE_CLASS: Record<EstadoMovimiento, string> = {
   borrador: 'bg-light text-dark border',
-  pendiente: 'bg-warning text-dark',
-  aprobado: 'bg-info text-dark',
+  pendiente: 'bg-warning',
+  aprobado: 'bg-info',
   ejecutado: 'bg-success',
   anulado: 'bg-danger',
 };
@@ -48,8 +48,8 @@ const ESTADO_BADGE_CLASS: Record<EstadoMovimiento, string> = {
 const TIPO_BADGE_CLASS: Record<TipoMovimiento, string> = {
   entrada: 'bg-success',
   salida: 'bg-danger',
-  transferencia: 'bg-info text-dark',
-  ajuste: 'bg-warning text-dark',
+  transferencia: 'bg-info',
+  ajuste: 'bg-warning',
   devolucion: 'bg-secondary',
 };
 

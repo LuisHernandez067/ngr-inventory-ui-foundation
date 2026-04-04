@@ -69,8 +69,8 @@ const state: ReportesState = {
 const tipoColorMap: Record<TipoReporteActivo, string> = {
   stock_actual: 'bg-success',
   movimientos: 'bg-primary',
-  kardex: 'bg-info text-dark',
-  bajo_stock: 'bg-warning text-dark',
+  kardex: 'bg-info',
+  bajo_stock: 'bg-warning',
 };
 
 /** Mapa de iconos Bootstrap por tipo de reporte */
@@ -152,8 +152,7 @@ function buildReporteCard(reporte: ReporteDefinicion): string {
         class="card h-100 ${cardBorderClass} ${cardOpacityClass} ${cursorClass}"
         role="${isProximo ? 'presentation' : 'button'}"
         tabindex="${isProximo ? '-1' : '0'}"
-        aria-label="${isProximo ? `${reporte.nombre} (próximamente)` : `Seleccionar reporte: ${reporte.nombre}`}"
-        aria-pressed="${String(isSelected)}"
+        ${isProximo ? `aria-hidden="true"` : `aria-label="Seleccionar reporte: ${reporte.nombre}" aria-pressed="${String(isSelected)}"`}
         data-reporte-id="${reporte.id}"
       >
         <div class="card-body">
@@ -368,7 +367,7 @@ function buildPreviewTable(rows: unknown[], total: number): string {
     .join('');
 
   return `
-    <div class="table-responsive">
+    <div class="table-responsive" tabindex="0">
       <table class="table table-sm table-hover" aria-label="Vista previa del reporte">
         <thead class="table-light">
           <tr>${headers}</tr>

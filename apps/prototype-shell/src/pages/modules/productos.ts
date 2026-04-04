@@ -26,7 +26,7 @@ const columns: ColumnDef<Producto>[] = [
       const map: Record<string, string> = {
         active: 'bg-success',
         inactive: 'bg-secondary',
-        discontinued: 'bg-warning text-dark',
+        discontinued: 'bg-warning',
       };
       const labelMap: Record<string, string> = {
         active: 'Activo',

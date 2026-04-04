@@ -15,10 +15,10 @@ test.describe('Prototype Shell — smoke test', () => {
   test('debe mostrar el título de la aplicación', async ({ page }) => {
     await page.goto('/');
 
-    // Verificar que se renderiza el encabezado principal
-    const heading = page.locator('h1');
-    await expect(heading).toBeVisible();
-    await expect(heading).toContainText('NGR Inventory');
+    // Verificar que se renderiza el nombre de la app en la barra de navegación
+    const brand = page.locator('.navbar-brand');
+    await expect(brand).toBeVisible();
+    await expect(brand).toContainText('NGR Inventory');
   });
 
   test('debe tener data-bs-theme con valor "light" por defecto', async ({ page }) => {

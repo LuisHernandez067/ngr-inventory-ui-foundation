@@ -1,4 +1,5 @@
 // Punto de entrada principal de la aplicación prototipo
+import 'bootstrap';
 import './styles/main.scss';
 import { initLayout } from './layout/index';
 import { Router } from './router/router';

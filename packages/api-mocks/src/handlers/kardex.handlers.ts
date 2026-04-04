@@ -16,6 +16,8 @@ export const kardexHandlers = [
     const productoId = url.searchParams.get('productoId') ?? '';
     const page = Number(url.searchParams.get('page') ?? '1');
     const pageSize = Number(url.searchParams.get('pageSize') ?? '20');
+    const fechaDesde = url.searchParams.get('fechaDesde') ?? '';
+    const fechaHasta = url.searchParams.get('fechaHasta') ?? '';
 
     // productoId es requerido — retorna lista vacía si no se provee
     if (!productoId) {
@@ -29,7 +31,15 @@ export const kardexHandlers = [
       return HttpResponse.json(response);
     }
 
-    const filtered = kardexFixtures.filter((k) => k.productoId === productoId);
+    let filtered = kardexFixtures.filter((k) => k.productoId === productoId);
+
+    // Filtrar por rango de fechas si se proporcionan
+    if (fechaDesde) {
+      filtered = filtered.filter((k) => k.fecha >= fechaDesde);
+    }
+    if (fechaHasta) {
+      filtered = filtered.filter((k) => k.fecha <= `${fechaHasta}T23:59:59`);
+    }
 
     const start = (page - 1) * pageSize;
     const data = filtered.slice(start, start + pageSize);

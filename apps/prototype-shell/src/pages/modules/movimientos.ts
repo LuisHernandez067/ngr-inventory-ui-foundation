@@ -7,6 +7,7 @@ import type {
 } from '@ngr-inventory/api-contracts';
 
 import type { PageModule } from '../../router/router';
+import { authService } from '../../services/authService';
 import { apiFetch } from '../_shared/apiFetch';
 
 /** Controlador de cancelación para peticiones en vuelo */
@@ -33,16 +34,16 @@ let selectedFechaHasta = '';
 const tipoColorMap: Record<TipoMovimiento, string> = {
   entrada: 'bg-success',
   salida: 'bg-danger',
-  transferencia: 'bg-info text-dark',
-  ajuste: 'bg-warning text-dark',
+  transferencia: 'bg-info',
+  ajuste: 'bg-warning',
   devolucion: 'bg-secondary',
 };
 
 /** Mapa de colores Bootstrap para el estado del movimiento */
 const estadoColorMap: Record<EstadoMovimiento, string> = {
   borrador: 'bg-light text-dark border',
-  pendiente: 'bg-warning text-dark',
-  aprobado: 'bg-info text-dark',
+  pendiente: 'bg-warning',
+  aprobado: 'bg-info',
   ejecutado: 'bg-success',
   anulado: 'bg-danger',
 };
@@ -181,15 +182,21 @@ function fetchAndRender(): void {
  * Renderiza el layout completo de la página de movimientos con filtros.
  */
 function renderPage(container: HTMLElement): void {
+  const allowed = authService.getAllowedModules();
+  const canCreate = allowed === 'all' || allowed.includes('movimientos');
   container.innerHTML = `
     <div class="p-4">
       <!-- Encabezado con título y botón crear -->
       <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0">Movimientos</h1>
-        <button type="button" class="btn btn-primary" id="btn-nuevo-movimiento">
+        ${
+          canCreate
+            ? `<button type="button" class="btn btn-primary" id="btn-nuevo-movimiento">
           <i class="bi bi-plus-lg" aria-hidden="true"></i>
           Nuevo Movimiento
-        </button>
+        </button>`
+            : ''
+        }
       </div>
 
       <!-- Barra de filtros -->
@@ -243,7 +250,7 @@ function renderPage(container: HTMLElement): void {
       </div>
 
       <!-- Tabla de movimientos -->
-      <div class="table-responsive">
+      <div class="table-responsive" tabindex="0">
         <table class="table table-hover">
           <thead>
             <tr>

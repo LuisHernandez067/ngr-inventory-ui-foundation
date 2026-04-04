@@ -127,8 +127,8 @@ describe('conteosPage', () => {
     container = document.createElement('div');
     document.body.appendChild(container);
     vi.clearAllMocks();
-    // Por defecto: lista de conteos + almacenes
-    mockApiFetch.mockResolvedValueOnce(conteosResponse).mockResolvedValueOnce(almacenesResponse);
+    // Por defecto: almacenes (filter) + conteos (tabla) — en orden real de llamada
+    mockApiFetch.mockResolvedValueOnce(almacenesResponse).mockResolvedValueOnce(conteosResponse);
     window.location.hash = '';
   });
 
@@ -219,8 +219,8 @@ describe('conteosPage', () => {
 
   it('debe re-fetchear sin ?estado= al seleccionar "Todos los estados"', async () => {
     mockApiFetch
-      .mockResolvedValueOnce(conteosResponse)
       .mockResolvedValueOnce(almacenesResponse)
+      .mockResolvedValueOnce(conteosResponse)
       .mockResolvedValueOnce(conteosResponse)
       .mockResolvedValueOnce(conteosResponse);
 
@@ -252,8 +252,8 @@ describe('conteosPage', () => {
 
   it('debe re-fetchear con ?almacenId= al cambiar el filtro de almacén', async () => {
     mockApiFetch
-      .mockResolvedValueOnce(conteosResponse)
       .mockResolvedValueOnce(almacenesResponse)
+      .mockResolvedValueOnce(conteosResponse)
       .mockResolvedValueOnce(conteosResponse);
 
     conteosPage.render(container);
@@ -303,9 +303,10 @@ describe('conteosPage', () => {
   // ── Estado de error ───────────────────────────────────────────────────────────
 
   it('debe mostrar mensaje de error cuando apiFetch falla', async () => {
+    mockApiFetch.mockReset();
     mockApiFetch
-      .mockRejectedValueOnce(new Error('Network error'))
-      .mockResolvedValueOnce(almacenesResponse);
+      .mockResolvedValueOnce(almacenesResponse)
+      .mockRejectedValueOnce(new Error('Network error'));
 
     conteosPage.render(container);
 
@@ -319,9 +320,10 @@ describe('conteosPage', () => {
   // ── Tabla vacía ───────────────────────────────────────────────────────────────
 
   it('debe mostrar "Sin conteos registrados" cuando no hay conteos', async () => {
+    mockApiFetch.mockReset();
     mockApiFetch
-      .mockResolvedValueOnce(conteosVaciosResponse)
-      .mockResolvedValueOnce(almacenesResponse);
+      .mockResolvedValueOnce(almacenesResponse)
+      .mockResolvedValueOnce(conteosVaciosResponse);
 
     conteosPage.render(container);
 

@@ -1,4 +1,5 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
+
 import baseConfig from '../../vitest.config';
 
 // Configuración Vitest para packages/api-mocks

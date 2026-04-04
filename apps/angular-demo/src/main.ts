@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call -- bootstrapApplication es de @angular/platform-browser, no instalado aún */
 import 'zone.js';
 import '@ngr-inventory/design-tokens/css';
 

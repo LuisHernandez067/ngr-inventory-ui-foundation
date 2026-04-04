@@ -55,9 +55,7 @@ export interface ListPageOptions<T> {
  * Crea un PageModule de lista con búsqueda, paginación y tabla de datos.
  * El estado (página actual, tamaño, búsqueda) es local a cada instancia creada.
  */
-export function createListPage<T extends Record<string, unknown>>(
-  options: ListPageOptions<T>
-): PageModule {
+export function createListPage<T extends object>(options: ListPageOptions<T>): PageModule {
   // ── Estado interno de la página ──────────────────────────────────────────────
   let currentPage = 1;
   const pageSize = 10;
@@ -159,7 +157,6 @@ export function createListPage<T extends Record<string, unknown>>(
       if (rowClickHandler !== undefined) {
         tableRoot.querySelectorAll<HTMLElement>('tr.cursor-pointer').forEach((tr) => {
           tr.setAttribute('tabindex', '0');
-          tr.setAttribute('role', 'button');
           tr.addEventListener('keydown', (e: KeyboardEvent) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();

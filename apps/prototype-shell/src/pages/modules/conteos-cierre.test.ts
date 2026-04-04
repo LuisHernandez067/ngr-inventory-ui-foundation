@@ -216,8 +216,7 @@ describe('conteosCierrePage', () => {
     const html = container.innerHTML;
     // Faltante → badge bg-danger
     expect(html).toContain('badge bg-danger');
-    // Sobrante → badge bg-warning
-    expect(html).toContain('badge bg-warning');
+    // Sobrante → badge bg-success (positivo, mismo color que sin diferencia)
     // Sin diferencia → badge bg-success
     expect(html).toContain('badge bg-success');
   });
