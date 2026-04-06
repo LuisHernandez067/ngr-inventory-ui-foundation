@@ -50,3 +50,7 @@ test-results/
 
 # Vite/Vitest timestamp cache files
 *.timestamp-*.mjs
+
+# Cualquier carpeta que inicie con "log" o "temp"
+log*/
+temp*/
