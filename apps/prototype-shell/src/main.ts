@@ -1,4 +1,6 @@
 // Punto de entrada principal de la aplicación prototipo
+// Importar estilos del paquete ui-core — incluye SweetAlert2, avatares y badges
+import '@ngr-inventory/ui-core/styles';
 import 'bootstrap';
 import './styles/main.scss';
 import { initLayout } from './layout/index';
