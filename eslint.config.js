@@ -17,6 +17,7 @@ export default tseslint.config(
       '**/coverage/**',
       '**/.cache/**',
       '**/*.tsbuildinfo',
+      '**/*.timestamp-*.mjs',
       'storybook-static/**',
       '**/storybook-static/**',
       '**/public/**',
